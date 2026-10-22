@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/course-detail/course-detail').then((m) => m.CourseDetail),
   },
   {
+    path: 'ava/:slug',
+    loadComponent: () => import('./pages/learning/learning').then((m) => m.Learning),
+  },
+  {
     path: '**',
     title: 'Página não encontrada | TEST DEV SESI Indústria',
     loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),

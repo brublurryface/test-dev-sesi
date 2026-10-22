@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "test": "node --experimental-strip-types --test src/app/core/course-query.spec.ts",
+    "test": "node --experimental-strip-types --test src/app/core/course-query.spec.ts src/app/core/learning-progress.spec.ts",
     "format": "prettier --write src \"*.json\" public/data/courses.json",
     "format:check": "prettier --check src \"*.json\" public/data/courses.json"
   },
