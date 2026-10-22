@@ -8,6 +8,7 @@
 :root {
   --red: #d00602;
   --red-dark: #b70502;
+  --red-section: #890000;
   --ink: #0c0c0d;
   --muted: #555557;
   --beige: #fcd19c;
@@ -70,7 +71,7 @@ h3 {
 h1,
 h2 {
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: 0;
 }
 h2 {
   font-size: clamp(36px, 2.92vw, 56px);
@@ -97,24 +98,61 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(20px, 2.2vw, 42px);
-  border-radius: 99px;
+  gap: 24px;
+  border-radius: 12px;
   border: 1px solid transparent;
-  min-height: 52px;
-  padding: 12px 27px;
+  min-height: 56px;
+  padding: 12px 22px;
   font-weight: 600;
   font-size: clamp(16px, 1.15vw, 22px);
   line-height: 1.25;
   text-decoration: none;
-  transition:
-    background 0.18s,
-    transform 0.18s;
+  transition: background 0.18s;
 }
-.button:hover {
-  transform: translateY(-2px);
+.button-arrow {
+  display: inline-block;
+  flex: 0 0 1.4em;
+  width: 1.4em;
+  height: 1.2em;
+  overflow: hidden;
 }
+.button-arrow:before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  mask: url('/assets/arrow-navigation-1.svg') center / contain no-repeat;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :is(.button, .text-link):not(:disabled):hover .button-arrow:before {
+    /* Dois segundos em repouso; a saída e o retorno ocupam o restante do ciclo. */
+    animation: button-arrow-run 3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+@keyframes button-arrow-run {
+  0%,
+  66.66%,
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  76% {
+    transform: translateX(125%);
+    opacity: 0;
+  }
+  76.01% {
+    transform: translateX(-125%);
+    opacity: 0;
+  }
+  90% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .button span[aria-hidden] {
-  font-size: 1.4em;
+  font-size: 1.2em;
   line-height: 1;
 }
 .button-white {
@@ -154,10 +192,20 @@ button:disabled {
   justify-content: center;
   border: 0;
   background: transparent;
-  width: 45px;
+  width: 64px;
   min-height: 44px;
-  font-size: 38px;
+  font-size: 0;
   line-height: 1;
+}
+.arrow-button:before {
+  content: '';
+  width: 64px;
+  height: 64px;
+  background: currentColor;
+  mask: url('/assets/arrow-navigation-1.svg') center / contain no-repeat;
+}
+.arrow-button[aria-label$='anterior']:before {
+  mask-image: url('/assets/arrow-navigation.svg');
 }
 .bleed-track {
   padding-left: var(--gutter);
@@ -279,6 +327,7 @@ button:disabled {
   padding: 7px 12px;
   font-size: 15px;
   font-weight: 600;
+  text-transform: uppercase;
 }
 .category-tag.nature {
   background: #ddd5f9;
@@ -296,7 +345,7 @@ button:disabled {
   border: 0;
   padding: 0;
   width: 100%;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   background: #121212;
   aspect-ratio: 16/9;
@@ -311,7 +360,7 @@ button:disabled {
   content: '';
   position: absolute;
   inset: 0;
-  background: #0003;
+  background: #0006;
 }
 .play-circle {
   position: absolute;
@@ -319,14 +368,14 @@ button:disabled {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  width: 70px;
-  height: 70px;
+  width: clamp(70px, 5.84vw, 112px);
+  height: clamp(70px, 5.84vw, 112px);
   border-radius: 50%;
-  background: #fff;
+  background: #fffc;
   display: grid;
   place-items: center;
   color: #111;
-  font-size: 25px;
+  font-size: clamp(25px, 2.2vw, 42px);
   padding-left: 5px;
   box-shadow: 0 4px 20px #0002;
 }
@@ -362,6 +411,13 @@ button:disabled {
     min-height: 48px;
     padding: 12px 22px;
     font-size: 16px;
+  }
+  .arrow-button {
+    width: 44px;
+  }
+  .arrow-button:before {
+    width: 44px;
+    height: 44px;
   }
   .app-dialog {
     padding: 38px 25px 28px;

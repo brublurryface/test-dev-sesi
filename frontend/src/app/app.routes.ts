@@ -1,3 +1,16 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+// O carregamento sob demanda mantém as páginas fora do pacote inicial até serem acessadas.
+export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    title: 'TEST DEV SESI Indústria | Conhecimento que transforma',
+    loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+  },
+  {
+    path: '**',
+    title: 'Página não encontrada | TEST DEV SESI Indústria',
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
+  },
+];

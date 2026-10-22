@@ -1,0 +1,36 @@
+<section class="testimonials" [class.light]="light()" aria-labelledby="depoimentos-titulo">
+  <div class="container">
+    <p class="eyebrow">Depoimentos</p>
+    <h2 id="depoimentos-titulo">Quem fez recomenda</h2>
+  </div>
+  <div
+    class="testimonial-track bleed-track"
+    #track
+    tabindex="0"
+    aria-label="Depoimentos do protótipo; role para explorar"
+  >
+    @for (item of testimonials; track item.name) {
+    <article class="testimonial">
+      <p class="quote">“{{ item.quote }}”</p>
+      <div class="person"><strong>{{ item.name }}</strong><span>{{ item.role }}</span></div>
+      <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
+    </article>
+    }
+  </div>
+  <div class="container carousel-controls">
+    <span class="reference-note">Depoimentos ilustrativos do protótipo.</span>
+    <div class="arrow-group">
+      <button
+        type="button"
+        class="arrow-button"
+        aria-label="Depoimento anterior"
+        (click)="move(-1)"
+      >
+        ←
+      </button>
+      <button type="button" class="arrow-button" aria-label="Próximo depoimento" (click)="move(1)">
+        →
+      </button>
+    </div>
+  </div>
+</section>

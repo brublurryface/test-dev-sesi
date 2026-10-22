@@ -1,0 +1,80 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a routerLink="/" aria-label="SESI Indústria — início"
+        ><img
+          src="assets/logo-sesi-industria-white.svg"
+          width="266"
+          height="43"
+          alt="SESI Indústria"
+          loading="lazy"
+      /></a>
+      <a href="mailto:contato@sesiindustria.com.br">contato&#64;sesiindustria.com.br</a>
+      <p>Av. Paulista, 1313</p>
+      <small>Projeto demonstrativo de processo seletivo.</small>
+    </div>
+    <div>
+      <h2>Navegação</h2>
+      <nav aria-label="Navegação do rodapé">
+        <a routerLink="/">Início</a>
+        <button type="button" (click)="openInfo('Certificação')">Certificação</button
+        ><a routerLink="/cursos">Cursos</a><a routerLink="/" fragment="sobre">Sobre</a>
+        <button type="button" (click)="openInfo('Blog')">Blog</button>
+      </nav>
+    </div>
+    <div>
+      <h2>Cursos populares</h2>
+      <nav aria-label="Cursos populares">
+        <a routerLink="/cursos/matematica-para-a-precisao">Matemática para a Precisão</a>
+        <a routerLink="/cursos/geometria-e-modelagem">Geometria e Modelagem no Design Têxtil</a>
+        <a routerLink="/cursos/estatistica-e-qualidade">Estatística e Controle de Qualidade</a>
+        <a routerLink="/cursos/fisica-do-movimento">Física do Movimento e da Energia</a>
+        <a routerLink="/cursos/quimica-e-sustentabilidade">Química e Sustentabilidade</a>
+        <a routerLink="/cursos/ciencia-dos-materiais">Ciência dos Materiais na Metalurgia</a>
+        <a routerLink="/cursos/gestao-de-residuos">Gestão de Resíduos na Indústria</a>
+      </nav>
+    </div>
+    <div>
+      <h2>Suporte</h2>
+      <nav aria-label="Suporte">
+        <button type="button" (click)="openInfo('Termos de Uso')">Termos de Uso</button>
+        <button type="button" (click)="openInfo('Política de Privacidade')">
+          Política de Privacidade
+        </button>
+        <button type="button" (click)="openInfo('Trabalhe Conosco')">Trabalhe Conosco</button>
+        <a href="mailto:contato@sesiindustria.com.br">Fale Conosco</a>
+        <button type="button" (click)="openInfo('Central de Ajuda')">Central de Ajuda</button>
+      </nav>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <div>
+      <img src="assets/logo-sesi.svg" width="94" height="30" alt="SESI" loading="lazy" /><span
+        >Todos os direitos reservados.</span
+      >
+    </div>
+    <div class="social-links" aria-label="Redes sociais do protótipo">
+      @for (network of ['linkedIn', 'instagram', 'facebook']; track network) {
+      <button type="button" [attr.aria-label]="network" (click)="openInfo('Redes sociais')">
+        <img
+          [src]="'assets/icon-' + network + '-24px.svg'"
+          width="24"
+          height="24"
+          alt=""
+          loading="lazy"
+        />
+      </button>
+      }
+    </div>
+  </div>
+</footer>
+<dialog #info class="app-dialog" aria-labelledby="footer-dialog-title">
+  <button type="button" class="dialog-close" aria-label="Fechar" (click)="closeInfo()">×</button>
+  <p class="eyebrow">SESI Indústria</p>
+  <h2 id="footer-dialog-title">{{ infoTitle() }}</h2>
+  <p>
+    Este conteúdo não está disponível neste ambiente de demonstração. Não há cadastro, cobrança ou
+    coleta de dados pessoais.
+  </p>
+  <button type="button" class="button button-dark" (click)="closeInfo()">Entendi</button>
+</dialog>

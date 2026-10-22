@@ -1,0 +1,141 @@
+<app-header [transparent]="true" />
+<main id="conteudo">
+  <section class="hero" aria-labelledby="hero-title">
+    <img
+      class="hero-image"
+      src="assets/hero-image.png"
+      alt="Profissional trabalhando em uma indústria têxtil"
+      fetchpriority="high"
+      width="1920"
+      height="1080"
+    />
+    <div class="container hero-inner">
+      <h1 id="hero-title">Impulsione<br />sua carreira<br />na indústria</h1>
+      <p>
+        Amplie seus conhecimentos com excelência na melhor<br class="desktop-break" />
+        plataforma de estudos da indústria brasileira
+      </p>
+      <a class="button button-white" routerLink="/" fragment="principais-cursos"
+        >Conhecer cursos <span class="button-arrow" aria-hidden="true"></span
+      ></a>
+    </div>
+  </section>
+  <section class="featured section" aria-labelledby="principais-cursos">
+    <div class="container"><h2 id="principais-cursos">Principais cursos</h2></div>
+    @if (store.loading()) {
+    <div class="container state-panel" role="status">
+      <span class="loading-spinner" aria-hidden="true"></span>
+      <p>Carregando cursos…</p>
+    </div>
+    } @else if (store.error()) {
+    <div class="container state-panel" role="alert">
+      <h3>Não conseguimos carregar os cursos.</h3>
+      <p>Verifique sua conexão e tente novamente.</p>
+      <button type="button" class="button button-outline" (click)="store.load()">
+        Tentar novamente
+      </button>
+    </div>
+    } @else {
+    <div
+      class="course-track bleed-track"
+      #courseTrack
+      tabindex="0"
+      aria-label="Cursos em destaque; role para explorar"
+    >
+      @for (course of featured(); track course.id) { <app-course-card [course]="course" /> }
+      <a class="catalog-card" routerLink="/cursos">
+        <span class="catalog-card-content">
+          <span>Todos os cursos</span><span class="catalog-card-arrow" aria-hidden="true"></span>
+        </span>
+      </a>
+    </div>
+    }
+    <div class="container featured-bottom">
+      <a class="button button-outline" routerLink="/cursos">Ver todos os cursos</a>
+      <div>
+        <button type="button" class="arrow-button" aria-label="Curso anterior" (click)="move(-1)">
+          ←</button
+        ><button type="button" class="arrow-button" aria-label="Próximo curso" (click)="move(1)">
+          →
+        </button>
+      </div>
+    </div>
+  </section>
+  <section class="impact container section" id="sobre" aria-labelledby="impact-title">
+    <div class="impact-intro">
+      <h2 id="impact-title">Impacto transformador</h2>
+      <p>
+        Resultados que demonstram o sucesso da nossa metodologia de capacitação contínua para a
+        indústria.
+      </p>
+      <small class="demo-note"
+        >Indicadores ilustrativos apresentados no protótipo de referência.</small
+      >
+    </div>
+    <div class="impact-content">
+      <dl class="stats">
+        <div>
+          <dt>Profissionais Capacitados</dt>
+          <dd>25.000+</dd>
+        </div>
+        <div>
+          <dt>Empresas parceiras</dt>
+          <dd>500+</dd>
+        </div>
+        <div>
+          <dt>Avaliação média</dt>
+          <dd>4.8/5</dd>
+        </div>
+        <div>
+          <dt>Horas de capacitação</dt>
+          <dd>2.5M+</dd>
+        </div>
+      </dl>
+      <app-benefits />
+    </div>
+  </section>
+  <app-testimonials />
+  <section class="career-cta">
+    <div class="container career-grid">
+      <div>
+        <h2>Pronto para transformar sua carreira?</h2>
+        <p>
+          Junte-se a milhares de profissionais que já estão transformando a indústria através dos
+          nossos cursos. Invista no seu futuro hoje mesmo!
+        </p>
+        <a class="button button-white" routerLink="/cursos/matematica-para-a-precisao"
+          >Matricule-se <span class="button-arrow" aria-hidden="true"></span
+        ></a>
+      </div>
+      <button
+        type="button"
+        class="video-poster"
+        aria-label="Informações sobre o vídeo de apresentação"
+        (click)="showVideoInfo()"
+      >
+        <img
+          src="assets/video-thumb.png"
+          alt="Profissionais com equipamentos de proteção em um ambiente industrial"
+          width="1920"
+          height="1080"
+          loading="lazy"
+        /><span class="play-circle" aria-hidden="true">▶</span>
+      </button>
+    </div>
+  </section>
+</main>
+<app-footer />
+<dialog #videoInfo class="app-dialog" aria-labelledby="home-video-title">
+  <button type="button" class="dialog-close" aria-label="Fechar" (click)="closeVideoInfo()">
+    ×
+  </button>
+  <p class="eyebrow">Apresentação</p>
+  <h2 id="home-video-title">Vídeo em breve</h2>
+  <p>
+    O vídeo de apresentação ainda não está disponível. Enquanto isso, conheça os cursos e seus
+    conteúdos.
+  </p>
+  <a class="button button-dark" routerLink="/cursos"
+    >Explorar cursos <span class="button-arrow" aria-hidden="true"></span
+  ></a>
+</dialog>

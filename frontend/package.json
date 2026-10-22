@@ -6,8 +6,8 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "format": "prettier --write src \"*.json\"",
-    "format:check": "prettier --check src \"*.json\""
+    "format": "prettier --write src \"*.json\" public/data/courses.json",
+    "format:check": "prettier --check src \"*.json\" public/data/courses.json"
   },
   "dependencies": {
     "@angular/common": "22.2.3",

@@ -1,0 +1,511 @@
+[
+  {
+    "id": 1,
+    "slug": "matematica-para-a-precisao",
+    "name": "Matemática para a Precisão: Medidas e Escalas na Metalurgia",
+    "shortName": "Matemática para a Precisão",
+    "description": "Aplicação de grandezas, proporções e escalas em processos de corte, furação e usinagem.",
+    "about": "Explore nosso curso de Matemática para a Precisão: Medidas e Escalas na Metalurgia, perfeito para quem deseja se destacar nesse campo! Este programa abrangente foi desenvolvido para capacitar profissionais com as habilidades e conhecimentos fundamentais para garantir medições precisas e eficientes no ambiente metalúrgico.",
+    "category": "Matemática",
+    "modality": "Online",
+    "hours": 40,
+    "audience": "Estudantes, operadores e profissionais da metalurgia que desejam desenvolver conhecimentos sobre medidas e escalas.",
+    "status": "Disponível",
+    "image": "assets/banner-ava.png",
+    "imageAlt": "Paquímetro medindo uma peça metálica",
+    "availableAt": "2026-01-05",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Introdução à Matemática na Metalurgia",
+        "description": "Conceitos fundamentais de medidas e escalas aplicados à metalurgia.",
+        "topics": [
+          "Conceitos fundamentais de medidas e escalas aplicados à metalurgia.",
+          "Importância da precisão nas medições e controle de qualidade.",
+          "Panorama das normas e regulamentos no Brasil relacionados à metalurgia."
+        ],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos fundamentais de medidas e escalas aplicados à metalurgia."
+          }
+        ]
+      },
+      {
+        "title": "Identificação e Avaliação de Medidas",
+        "description": "Tipos de medidas utilizadas: comprimento, massa, volume e temperatura.",
+        "topics": [
+          "Tipos de medidas utilizadas: comprimento, massa, volume e temperatura.",
+          "Técnicas de análise de precisão nas medições.",
+          "Elaboração de gráficos e tabelas de medidas."
+        ],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Tipos de medidas utilizadas: comprimento, massa, volume e temperatura."
+          }
+        ]
+      },
+      {
+        "title": "Normas e Regulamentações",
+        "description": "Estudo das principais normas aplicáveis à metalurgia (ABNT, ISO, entre outras).",
+        "topics": [
+          "Estudo das principais normas aplicáveis à metalurgia (ABNT, ISO, entre outras).",
+          "Interpretação e aplicação prática das normas de medição.",
+          "Atualizações e impactos legais nas práticas de medição."
+        ],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das principais normas aplicáveis à metalurgia (ABNT, ISO, entre outras)."
+          }
+        ]
+      },
+      {
+        "title": "Instrumentos de Medição",
+        "description": "Tipos de instrumentos utilizados na metalurgia: paquímetros, micrômetros e balanças.",
+        "topics": [
+          "Tipos de instrumentos utilizados na metalurgia: paquímetros, micrômetros e balanças.",
+          "Critérios de seleção, uso e calibração.",
+          "Responsabilidades legais de operadores e supervisores."
+        ],
+        "lessons": [
+          {
+            "id": "m4-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Tipos de instrumentos utilizados na metalurgia: paquímetros, micrômetros e balanças."
+          }
+        ]
+      },
+      {
+        "title": "Prevenção de Erros de Medição",
+        "description": "Tipos de erros e incertezas nas medições.",
+        "topics": [
+          "Tipos de erros e incertezas nas medições.",
+          "Procedimentos para garantir a precisão e exatidão.",
+          "Treinamento prático em técnicas de medição."
+        ],
+        "lessons": [
+          {
+            "id": "m5-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Tipos de erros e incertezas nas medições."
+          }
+        ]
+      },
+      {
+        "title": "Ergonomia e Eficiência na Medição",
+        "description": "Princípios ergonômicos aplicados ao uso de instrumentos de medição.",
+        "topics": [
+          "Princípios ergonômicos aplicados ao uso de instrumentos de medição.",
+          "Prevenção de lesões por uso inadequado de ferramentas.",
+          "Qualidade de vida no ambiente de trabalho."
+        ],
+        "lessons": [
+          {
+            "id": "m6-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Princípios ergonômicos aplicados ao uso de instrumentos de medição."
+          }
+        ]
+      },
+      {
+        "title": "Análise de Resultados de Medição",
+        "description": "Técnicas de análise de dados de medições.",
+        "topics": [
+          "Técnicas de análise de dados de medições.",
+          "Elaboração de relatórios e planos de ação para melhorias.",
+          "Indicadores de precisão e melhoria contínua."
+        ],
+        "lessons": [
+          {
+            "id": "m7-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Técnicas de análise de dados de medições."
+          }
+        ]
+      },
+      {
+        "title": "Cultura de Precisão e Comportamento Seguro",
+        "description": "Desenvolvimento de uma cultura organizacional voltada à precisão nas medições.",
+        "topics": [
+          "Desenvolvimento de uma cultura organizacional voltada à precisão nas medições.",
+          "Comunicação eficaz e liderança em práticas de medição.",
+          "Programas de conscientização e engajamento dos colaboradores."
+        ],
+        "lessons": [
+          {
+            "id": "m8-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Desenvolvimento de uma cultura organizacional voltada à precisão nas medições."
+          }
+        ]
+      },
+      {
+        "title": "Tecnologias Aplicadas à Medição",
+        "description": "Uso de plataformas digitais, sensores e automação na medição de precisão.",
+        "topics": [
+          "Uso de plataformas digitais, sensores e automação na medição de precisão.",
+          "Sistemas de gestão de qualidade.",
+          "Tendências e inovações no setor metalúrgico."
+        ],
+        "lessons": [
+          {
+            "id": "m9-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Uso de plataformas digitais, sensores e automação na medição de precisão."
+          }
+        ]
+      },
+      {
+        "title": "Avaliação Final e Certificação",
+        "description": "Teste de conhecimentos adquiridos sobre medidas e escalas.",
+        "topics": [
+          "Teste de conhecimentos adquiridos sobre medidas e escalas.",
+          "Atividades práticas e estudos de caso.",
+          "Emissão de certificado digital de conclusão."
+        ],
+        "lessons": [
+          {
+            "id": "m10-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Teste de conhecimentos adquiridos sobre medidas e escalas."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "geometria-e-modelagem",
+    "name": "Geometria e Modelagem no Design Têxtil",
+    "shortName": "Geometria e Modelagem",
+    "description": "Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+    "about": "Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+    "category": "Matemática",
+    "modality": "Presencial",
+    "hours": 24,
+    "audience": "Estudantes de design, profissionais da indústria têxtil e pessoas interessadas em modelagem.",
+    "status": "Em breve",
+    "image": "assets/hero-image.png",
+    "imageAlt": "Trabalho em uma indústria têxtil",
+    "availableAt": "2026-11-09",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "estatistica-e-qualidade",
+    "name": "Estatística e Controle de Qualidade na Produção",
+    "shortName": "Estatística e Qualidade",
+    "description": "Leitura e interpretação de dados de controle de qualidade e produtividade.",
+    "about": "Leitura e interpretação de dados de controle de qualidade e produtividade.",
+    "category": "Matemática",
+    "modality": "Online",
+    "hours": 32,
+    "audience": "Assistentes, analistas e profissionais que acompanham indicadores de produção e qualidade.",
+    "status": "Disponível",
+    "image": "assets/video-thumb.png",
+    "imageAlt": "Profissionais analisando equipamentos em uma indústria",
+    "availableAt": "2026-09-01",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Leitura e interpretação de dados de controle de qualidade e produtividade."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Leitura e interpretação de dados de controle de qualidade e produtividade."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Leitura e interpretação de dados de controle de qualidade e produtividade."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "fisica-do-movimento",
+    "name": "Física do Movimento e da Energia na Metalurgia",
+    "shortName": "Física do Movimento",
+    "description": "Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+    "about": "Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+    "category": "Ciências da Natureza",
+    "modality": "Presencial",
+    "hours": 48,
+    "audience": "Estudantes de cursos técnicos e profissionais que operam máquinas e equipamentos industriais.",
+    "status": "Encerrado",
+    "image": "assets/banner-ava.png",
+    "imageAlt": "Medição de uma peça em equipamento metalúrgico",
+    "availableAt": null,
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "quimica-e-sustentabilidade",
+    "name": "Química e Sustentabilidade",
+    "shortName": "Química e Sustentabilidade",
+    "description": "Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+    "about": "Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+    "category": "Ciências da Natureza",
+    "modality": "Online",
+    "hours": 30,
+    "audience": "Estudantes e profissionais da indústria têxtil interessados em química, tinturaria e sustentabilidade.",
+    "status": "Em breve",
+    "image": "assets/video-thumb.png",
+    "imageAlt": "Profissionais no ambiente de produção industrial",
+    "availableAt": "2026-11-16",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "ciencia-dos-materiais",
+    "name": "Ciência dos Materiais na Metalurgia",
+    "shortName": "Ciência dos Materiais",
+    "description": "Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+    "about": "Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+    "category": "Ciências da Natureza",
+    "modality": "Presencial",
+    "hours": 24,
+    "audience": "Estudantes, operadores e profissionais da metalurgia interessados nas propriedades e na seleção de metais.",
+    "status": "Disponível",
+    "image": "assets/banner-ava.png",
+    "imageAlt": "Medição de uma peça metálica com paquímetro",
+    "availableAt": "2026-10-01",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos básicos de estrutura, resistência e propriedades dos metais."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos básicos de estrutura, resistência e propriedades dos metais."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos básicos de estrutura, resistência e propriedades dos metais."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "gestao-de-residuos",
+    "name": "Gestão de Resíduos e Economia Circular na Indústria",
+    "shortName": "Gestão de Resíduos",
+    "description": "Planejamento, redução e reaproveitamento de resíduos para transformar a produção.",
+    "about": "",
+    "category": "Sustentabilidade",
+    "modality": "Online",
+    "hours": 20,
+    "audience": "Profissionais de produção, equipes de meio ambiente e pessoas interessadas em economia circular.",
+    "status": "Disponível",
+    "image": "assets/hero-image.png",
+    "imageAlt": "Processo de produção em uma indústria têxtil",
+    "availableAt": "2026-10-01",
+    "featured": false,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Planejamento, redução e reaproveitamento de resíduos para transformar a produção."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Planejamento, redução e reaproveitamento de resíduos para transformar a produção."
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Planejamento, redução e reaproveitamento de resíduos para transformar a produção."
+          }
+        ]
+      }
+    ]
+  }
+]
