@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/catalog/catalog').then((m) => m.Catalog),
   },
   {
+    path: 'cursos/:slug',
+    loadComponent: () => import('./pages/course-detail/course-detail').then((m) => m.CourseDetail),
+  },
+  {
     path: '**',
     title: 'Página não encontrada | TEST DEV SESI Indústria',
     loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
