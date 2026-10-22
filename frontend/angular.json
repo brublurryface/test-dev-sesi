@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": { "analytics": false },
+  "projects": {
+    "test-dev-sesi-industria": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "index": "src/index.html",
+            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/test-dev-sesi-industria",
+            "assets": [{ "glob": "**/*", "input": "public" }],
+            "styles": ["src/styles.css"]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "650kB", "maximumError": "900kB" },
+                { "type": "anyComponentStyle", "maximumWarning": "15kB", "maximumError": "25kB" }
+              ],
+              "outputHashing": "all"
+            },
+            "development": { "optimization": false, "extractLicenses": false, "sourceMap": true }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": { "allowedHosts": ["terminal.local"] },
+          "configurations": {
+            "development": { "buildTarget": "test-dev-sesi-industria:build:development" },
+            "production": { "buildTarget": "test-dev-sesi-industria:build:production" }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  }
+}
