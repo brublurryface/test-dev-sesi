@@ -1,18 +1,18 @@
 # Decisões técnicas e oportunidades de evolução
 
-Registro da versão de frontend de 22/10/2026. O estado da integração e as instruções de execução estão no README.
+Registro de 23/10/2026. O frontend consulta uma API ASP.NET Core com SQLite. As decisões de persistência e contratos estão em [DECISOES_INTEGRACAO.md](DECISOES_INTEGRACAO.md); a execução está no README.
 
 ## Arquitetura
 
 | Decisão | Motivo | Consequência |
 | --- | --- | --- |
 | Componentes standalone e páginas carregadas sob demanda | Organizar cada área da aplicação e distribuir o carregamento por rota | Páginas e componentes têm responsabilidades delimitadas |
-| Serviço compartilhado para os cursos | Concentrar o acesso à origem de dados e os estados de carregamento e erro | As páginas observam a mesma coleção; a futura integração fica concentrada nessa camada |
-| Estado por signals e listas derivadas por computed | Manter contagens e resultados coerentes com a consulta | A lista filtrada é recalculada quando a seleção ou os dados mudam |
-| Consulta em função pura | Isolar a regra de busca e combinação de critérios | A regra pode ser testada sem renderizar componentes ou iniciar o Angular |
-| Filtros na URL | Permitir endereços que representem uma seleção do catálogo | A restauração em acesso direto exige o redirecionamento de SPA descrito no README |
+| Serviço HTTP e stores por página | Centralizar o contrato e isolar os estados de cada consulta | As páginas consultam a API; filtros e resultados de uma tela não interferem em outra |
+| Estado por signals e listas derivadas por computed | Refletir a resposta HTTP e manter progresso e seleção coerentes | A contagem vem da consulta do servidor; grupos de aulas e progresso são derivados dos dados recebidos |
+| Consulta no servidor e testes de integração | Exercitar filtros combinados com o banco utilizado pela aplicação | A listagem é filtrada no SQL e validada por HTTP com SQLite real |
+| Filtros na URL | Permitir endereços que representem uma seleção do catálogo | A publicação integrada resolve as rotas da SPA e preserva endpoints de API |
 | Controles nativos de HTML | Aproveitar os comportamentos de teclado e foco oferecidos pelo navegador | Painéis independentes usam details/summary; avisos usam dialog |
-| Progresso local por identificador de aula | Permitir a demonstração de navegação entre aulas | O progresso pertence ao navegador e ao curso; autenticação e sincronização não fazem parte desta implementação |
+| Progresso local por identificador de aula | Demonstrar navegação e conclusão de uma aula por um controle acrescentado à implementação | O progresso pertence ao navegador e ao curso; autenticação e sincronização não fazem parte desta implementação |
 
 ## Melhorias incorporadas
 
@@ -24,21 +24,19 @@ Registro da versão de frontend de 22/10/2026. O estado da integração e as ins
 - **Recuperação de registro local inválido:** dados antigos ou JSON inválido iniciam um progresso vazio; falhas de acesso ao armazenamento mantêm a navegação disponível na sessão.
 - **Legibilidade do código:** comentários registram motivos, contratos e limites de integração; a formatação padroniza a leitura dos arquivos.
 
-## Prioridades para a entrega completa
+## Integração e entrega
 
-O enunciado exige backend C#/.NET, banco open source e integração efetiva. Essas atividades permanecem previstas para a próxima etapa, junto com a publicação e sua documentação de execução.
+Backend C#/.NET, banco SQLite, migration, carga inicial e integração HTTP estão implementados. Detalhes, módulos, aulas e textos são fornecidos pelo servidor. A geração do pacote integrado foi verificada; publicação e conferência do endereço público permanecem pendentes.
 
-Na integração, é necessário definir o contrato dos endpoints, validar os dados no servidor, persistir cursos/módulos/aulas, configurar o endereço da API e verificar os estados de erro com requisições reais. O dataset JSON desta versão deve ser substituído pela origem integrada.
+O botão “Marcar como concluída” não consta no Figma e foi acrescentado para demonstrar a conclusão de uma aula e a atualização do progresso, como em cursos online. A marcação é reversível e fica apenas no navegador.
 
 ## Melhorias recomendadas além do mínimo
 
 | Oportunidade | Benefício | Quando aplicar |
 | --- | --- | --- |
 | Imagens dimensionadas por contexto e formatos mais compactos | Reduzir o volume transferido em cartões e telas estreitas, preservando a referência visual | Após obter as imagens definitivas e comparar qualidade e tamanho |
-| Paginação e consultas no servidor | Manter o custo da listagem previsível quando o catálogo crescer | Ao definir os endpoints e o volume esperado de cursos |
-| Pequeno intervalo antes de enviar uma busca à API | Evitar uma requisição por caractere durante a digitação | Quando a consulta passar a depender do servidor |
-| Testes de integração dos endpoints e do fluxo de consulta | Conferir a combinação de filtros com os dados persistidos | Após implementar a API e o banco |
-| Verificação de acesso direto e recarga das rotas publicadas | Garantir que links compartilhados funcionem no ambiente de entrega | Durante a configuração da hospedagem e sua validação |
+| Paginação | Manter o custo da listagem previsível quando o catálogo crescer | Quando o volume ultrapassar a coleção demonstrativa |
+| Verificação de acesso direto e recarga das rotas publicadas | Garantir que links compartilhados funcionem no ambiente de entrega | Durante a configuração da hospedagem; o fallback já foi conferido por HTTP no pacote integrado |
 | Revisão de acessibilidade com ferramenta automatizada e leitor de tela | Ampliar a verificação de semântica, contraste, foco e mensagens de estado | Antes da entrega final, além das verificações de teclado já registradas |
 
 As recomendações desta seção são propostas de evolução. Os resultados efetivamente verificados constam em `VALIDACAO.md`.
