@@ -64,7 +64,7 @@
   </div>
   <nav class="curriculum" aria-label="Aulas do curso">
     @for (group of visibleGroups(); track group.id) {
-    <details [open]="group.id === 'introducao' || !!search()">
+    <details [open]="group.id === 'introducao' || !!search() || group.id === selectedGroupId()">
       <summary>{{ group.number }}. {{ group.title }}</summary>
       <ol>
         @for (lesson of group.lessons; track lesson.id; let index = $index) {
@@ -114,14 +114,18 @@
       <span>Aula demonstrativa</span><span>{{ course.shortName }}</span>
     </div>
     <h2>{{ lesson().title }}</h2>
-    @if (lesson().id === 'boas-praticas' && studyGuide(); as guide) { @for (paragraph of
-    guide.paragraphs; track $index) {
-    <p>{{ paragraph }}</p>
-    }
-    <h3>Recomendações</h3>
-    @for (paragraph of guide.recommendations; track $index) {
-    <p>{{ paragraph }}</p>
-    } } @else if (lesson().description) {
+    @if (lesson().content.length) { @for (block of lesson().content; track $index) { @switch
+    (block.kind) { @case ('heading') {
+    <h3>{{ block.text }}</h3>
+    } @case ('list') {
+    <ul>
+      @for (item of block.items; track $index) {
+      <li>{{ item }}</li>
+      }
+    </ul>
+    } @default {
+    <p>{{ block.text }}</p>
+    } } } } @else if (lesson().description) {
     <p>{{ lesson().description }}</p>
     }
     <div class="lesson-actions">

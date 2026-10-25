@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { Course } from '../../core/course.model';
+import type { CourseSummary } from '../../core/course.model';
 
 @Component({
   selector: 'app-course-card',
@@ -44,6 +44,6 @@ import type { Course } from '../../core/course.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseCard {
-  readonly course = input.required<Course>();
+  readonly course = input.required<CourseSummary>();
   readonly showMeta = input(false);
 }

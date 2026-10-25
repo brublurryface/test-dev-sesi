@@ -17,8 +17,8 @@
     <div class="catalog-heading">
       <h2 id="catalog-title">Todos os cursos</h2>
       <span class="catalog-count" aria-live="polite"
-        >@if (!store.loading() && !store.error()) { {{ filtered().length }} {{ filtered().length ===
-        1 ? 'curso encontrado' : 'cursos encontrados' }} }</span
+        >@if (!store.loading() && !store.error()) { {{ store.total() }} {{ store.total() === 1 ?
+        'curso encontrado' : 'cursos encontrados' }} }</span
       >
     </div>
     <form class="filters" (submit)="$event.preventDefault()" aria-label="Buscar e filtrar cursos">
@@ -29,6 +29,7 @@
           ><input
             id="course-search"
             type="search"
+            [maxlength]="site.courseSearchMaxLength"
             placeholder="O que você quer aprender?"
             autocomplete="off"
             [ngModel]="query().search"

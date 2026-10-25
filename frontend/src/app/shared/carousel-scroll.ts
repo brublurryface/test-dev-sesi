@@ -3,6 +3,10 @@ type CarouselAnimation = { target: number; cancel: () => void };
 const animations = new WeakMap<HTMLElement, CarouselAnimation>();
 const DURATION_MS = 700;
 
+/**
+ * Compartilha o movimento horizontal entre cursos e depoimentos.
+ * Limita o destino à faixa disponível, respeita redução de movimento e libera o controle ao usuário.
+ */
 export function scrollCarouselBy(track: HTMLElement, distance: number): void {
   const previous = animations.get(track);
   // Cliques rápidos somam cartões ao destino, sem interromper o movimento com um salto.
@@ -26,6 +30,7 @@ export function scrollCarouselBy(track: HTMLElement, distance: number): void {
   let startedAt: number | undefined;
   let finished = false;
 
+  // Encerramento único para fim da animação, novo comando ou interação manual.
   const finish = (): void => {
     if (finished) return;
     finished = true;

@@ -29,7 +29,7 @@
       >
       <a routerLink="/" fragment="principais-cursos" (click)="closeMenu()">Cursos</a>
       <a href="#" aria-disabled="true" (click)="$event.preventDefault(); closeMenu()">Sobre</a>
-      <a class="student-link" routerLink="/ava/matematica-para-a-precisao" (click)="closeMenu()"
+      <a class="student-link" [routerLink]="['/ava', courseSlug()]" (click)="closeMenu()"
         >Área do aluno</a
       >
     </nav>

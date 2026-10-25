@@ -30,3 +30,15 @@ export function calculateLearningProgress(
   const count = [...validIds].filter((id) => completed.has(id)).length;
   return Math.round((count / validIds.size) * 100);
 }
+
+/**
+ * Ao abrir o curso, seleciona a primeira aula ainda não concluída na ordem recebida da API.
+ * Se o curso já foi concluído, volta à primeira aula para permitir revisão.
+ */
+export function findInitialLesson(
+  lessonIds: readonly string[],
+  completedIds: readonly string[]
+): string {
+  const completed = new Set(completedIds);
+  return lessonIds.find((id) => !completed.has(id)) ?? lessonIds[0] ?? '';
+}

@@ -32,7 +32,7 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-          "options": { "allowedHosts": ["terminal.local"] },
+          "options": { "allowedHosts": ["terminal.local"], "proxyConfig": "proxy.conf.json" },
           "configurations": {
             "development": { "buildTarget": "test-dev-sesi-industria:build:development" },
             "production": { "buildTarget": "test-dev-sesi-industria:build:production" }

@@ -87,10 +87,6 @@
   line-height: 1.15;
   text-decoration: none;
 }
-.catalog-card:hover {
-  text-decoration: underline;
-  text-underline-offset: 6px;
-}
 .catalog-card-content {
   display: flex;
   align-items: center;

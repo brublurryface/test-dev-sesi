@@ -9,7 +9,7 @@
           alt="SESI Indústria"
           loading="lazy"
       /></a>
-      <a href="mailto:contato@sesiindustria.com.br">contato&#64;sesiindustria.com.br</a>
+      <a [href]="'mailto:' + site.contactEmail">{{ site.contactEmail }}</a>
       <p>Av. Paulista, 1313</p>
       <small>Projeto demonstrativo de processo seletivo.</small>
     </div>
@@ -25,13 +25,11 @@
     <div>
       <h2>Cursos populares</h2>
       <nav aria-label="Cursos populares">
-        <a routerLink="/cursos/matematica-para-a-precisao">Matemática para a Precisão</a>
-        <a routerLink="/cursos/geometria-e-modelagem">Geometria e Modelagem no Design Têxtil</a>
-        <a routerLink="/cursos/estatistica-e-qualidade">Estatística e Controle de Qualidade</a>
-        <a routerLink="/cursos/fisica-do-movimento">Física do Movimento e da Energia</a>
-        <a routerLink="/cursos/quimica-e-sustentabilidade">Química e Sustentabilidade</a>
-        <a routerLink="/cursos/ciencia-dos-materiais">Ciência dos Materiais na Metalurgia</a>
-        <a routerLink="/cursos/gestao-de-residuos">Gestão de Resíduos na Indústria</a>
+        @for (course of store.courses(); track course.id) {
+        <a [routerLink]="['/cursos', course.slug]">{{ course.shortName }}</a>
+        } @empty {
+        <a routerLink="/cursos">Explorar cursos</a>
+        }
       </nav>
     </div>
     <div>
@@ -42,7 +40,7 @@
           Política de Privacidade
         </button>
         <button type="button" (click)="openInfo('Trabalhe Conosco')">Trabalhe Conosco</button>
-        <a href="mailto:contato@sesiindustria.com.br">Fale Conosco</a>
+        <a [href]="'mailto:' + site.contactEmail">Fale Conosco</a>
         <button type="button" (click)="openInfo('Central de Ajuda')">Central de Ajuda</button>
       </nav>
     </div>

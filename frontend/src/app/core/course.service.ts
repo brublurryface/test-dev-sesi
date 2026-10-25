@@ -1,37 +1,30 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import type { Course } from './course.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import type { Observable } from 'rxjs';
+import type { Course, CoursePage } from './course.model';
+import type { CourseQuery } from './course-query';
 
+/**
+ * Cliente HTTP do catálogo. Envia os filtros à API e tipa as respostas conforme course.model.ts.
+ * O estado de carregamento, os erros e os dados exibidos pertencem aos stores de cada página.
+ */
 @Injectable({ providedIn: 'root' })
-/** Centraliza o carregamento para que as páginas compartilhem a mesma coleção de cursos. */
 export class CourseService {
   private readonly http = inject(HttpClient);
-  private readonly items = signal<Course[]>([]);
-  private readonly pending = signal(true);
-  private readonly failure = signal(false);
-  // As páginas observam o estado; a atualização dos signals fica concentrada no serviço.
-  readonly courses = this.items.asReadonly();
-  readonly loading = this.pending.asReadonly();
-  readonly error = this.failure.asReadonly();
 
-  constructor() {
-    void this.load();
+  /** Consulta o resumo dos cursos; a busca e os filtros são aplicados pelo backend. */
+  list(query: Partial<CourseQuery> & { featured?: boolean } = {}): Observable<CoursePage> {
+    let params = new HttpParams();
+    // HttpParams codifica os valores da URL; featured=false também é um filtro válido.
+    for (const [name, value] of Object.entries(query)) {
+      if (value !== undefined && value !== '') params = params.set(name, value);
+    }
+    // O caminho relativo funciona com o proxy local e com a publicação de origem única.
+    return this.http.get<CoursePage>('/api/courses', { params });
   }
 
-  async load(): Promise<void> {
-    this.pending.set(true);
-    this.failure.set(false);
-    try {
-      // A origem desta etapa é o dataset local. A integração .NET deve preservar o contrato Course.
-      // HttpClient emite uma resposta por requisição; firstValueFrom permite aguardar esse resultado.
-      const courses = await firstValueFrom(this.http.get<Course[]>('/data/courses.json'));
-      this.items.set(courses);
-    } catch {
-      this.failure.set(true);
-    } finally {
-      // O estado de carregamento deve terminar tanto no sucesso quanto na falha.
-      this.pending.set(false);
-    }
+  /** Obtém módulos, aulas e demais textos usados pelos detalhes e pela AVA. */
+  getCourse(slug: string): Observable<Course> {
+    return this.http.get<Course>(`/api/courses/${encodeURIComponent(slug)}`);
   }
 }

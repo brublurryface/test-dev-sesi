@@ -1,4 +1,4 @@
-<app-header />
+<app-header [courseSlug]="course()?.slug ?? site.referenceCourseSlug" />
 <main id="conteudo" class="detail-page">
   @if (store.loading()) {
   <div class="container section">
@@ -55,7 +55,7 @@
                 fill="currentColor"
               /></svg
           ></span>
-          Certificação: <strong>SESI</strong>
+          Certificação: <strong>{{ course.certification }}</strong>
         </p>
       </div>
       <button
@@ -133,62 +133,30 @@
           }
         </div>
       </details>
-      @if (isReferenceCourse()) {
+      @if (course.onlineInformation.length) {
       <details class="course-accordion">
         <summary>
           <h2>Aulas online e avaliações</h2>
           <span aria-hidden="true" class="toggle-symbol"></span>
         </summary>
         <div class="accordion-body">
-          <h3>Aulas online</h3>
-          <p>
-            As aulas são organizadas em módulos temáticos e disponibilizadas em formato multimídia,
-            combinando:
-          </p>
+          @for (block of course.onlineInformation; track $index) { @switch (block.kind) { @case
+          ('heading') {
+          <h3>{{ block.text }}</h3>
+          } @case ('list') {
           <ul>
-            <li>
-              Vídeo-aulas com especialistas da área, gravadas em alta qualidade e com recursos
-              visuais que facilitam a compreensão dos conteúdos técnicos.
-            </li>
-            <li>
-              Materiais complementares como apostilas digitais, infográficos, artigos e estudos de
-              caso.
-            </li>
-            <li>
-              Atividades interativas, como quizzes, simulações e fóruns de discussão, que promovem o
-              engajamento e a troca de experiências entre os participantes.
-            </li>
-            <li>
-              Acesso multiplataforma, permitindo que os alunos estudem pelo computador, tablet ou
-              celular, a qualquer hora e de qualquer lugar.
-            </li>
+            @for (item of block.items; track $index) {
+            <li>{{ item }}</li>
+            }
           </ul>
-          <p>
-            Cada aula é acompanhada de recursos de acessibilidade, como legendas, transcrição de
-            áudio e navegação intuitiva, garantindo inclusão e autonomia para todos os perfis de
-            usuários.
-          </p>
-          <h3>Provas e Avaliações</h3>
-          <p>
-            O programa de referência propõe avaliações para verificar o aprendizado e a aplicação
-            prática dos conhecimentos adquiridos:
-          </p>
-          <ul>
-            <li>
-              Provas objetivas ao final de cada módulo, com correção automática e feedback imediato.
-            </li>
-            <li>
-              Estudos de caso e atividades práticas, que simulam situações reais da indústria e
-              exigem análise crítica e tomada de decisão.
-            </li>
-            <li>Avaliação final integradora, que consolida os conteúdos do curso.</li>
-          </ul>
-          <p class="content-note">
-            Este ambiente apresenta o conteúdo e a navegação do curso. As provas e a emissão de
-            certificados não estão disponíveis na demonstração.
-          </p>
+          } @case ('note') {
+          <p class="content-note">{{ block.text }}</p>
+          } @default {
+          <p>{{ block.text }}</p>
+          } } }
         </div>
       </details>
+      } @if (faqs().length) {
       <details class="course-accordion">
         <summary>
           <h2>Dúvidas frequentes</h2>
@@ -211,7 +179,7 @@
     <div class="container">
       <p class="eyebrow">Precisa de ajuda para decidir?</p>
       <h2>Fale com a gente</h2>
-      <a href="mailto:contato@sesiindustria.com.br" class="button button-white"
+      <a [href]="'mailto:' + site.contactEmail" class="button button-white"
         >Mandar uma mensagem <span class="button-arrow" aria-hidden="true"></span
       ></a>
     </div>
