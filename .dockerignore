@@ -1,0 +1,26 @@
+# Enviar somente os arquivos usados nas etapas do Dockerfile.
+**
+!Dockerfile
+!.dockerignore
+!global.json
+!Directory.Build.props
+!frontend/
+!frontend/**
+!backend/
+!backend/SesiIndustria.Api/
+!backend/SesiIndustria.Api/**
+
+# Não incorporar dependências locais, resultados de build ou bancos existentes.
+**/node_modules
+**/.angular
+**/dist
+**/out-tsc
+**/bin
+**/obj
+**/App_Data
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.log
+**/.env
+**/.env.*
