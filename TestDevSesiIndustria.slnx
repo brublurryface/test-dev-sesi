@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="backend/SesiIndustria.Api/SesiIndustria.Api.csproj" />
+  <Project Path="backend/SesiIndustria.Api.Tests/SesiIndustria.Api.Tests.csproj" />
 </Solution>
