@@ -1,6 +1,6 @@
 # Pacote integrado e publicação
 
-O pacote de publicação reúne API, dependências, carga inicial e frontend compilado. A hospedagem pública ainda não foi configurada. Além da execução local, este documento descreve a opção preparada para publicar a demonstração no plano gratuito do Render.
+O pacote de publicação reúne API, dependências, carga inicial e frontend compilado. A demonstração está publicada em [test-dev-sesi.onrender.com](https://test-dev-sesi.onrender.com/) no plano gratuito do Render. Este documento descreve a execução local, a configuração efetiva da hospedagem e seus limites.
 
 ## Gerar o pacote
 
@@ -41,7 +41,7 @@ Não são necessários serviços pagos, chaves, contas de alunos ou servidor de 
 
 ## Conferência do ambiente público
 
-Após configurar a hospedagem, conferir o endereço da página, o health check, a busca com filtros combinados e os detalhes. Abrir diretamente e recarregar `/cursos` e `/ava/matematica-para-a-precisao`; verificar carregamento, falha e nova tentativa, comportamento em tela estreita e navegação por teclado. Registrar a URL efetiva e os resultados em `VALIDACAO.md` antes da entrega final.
+A publicação passou por 15 verificações HTTP, incluindo `/api/health`, consultas com filtros, detalhes, OpenAPI, acesso direto às rotas e respostas 400/404 em JSON. No navegador público, foram conferidos busca com filtros combinados, recarga da seleção, estado vazio, limpeza, acesso à AVA do curso selecionado e retomada da primeira aula pendente. Os resultados e o alcance estão em [VALIDACAO.md](VALIDACAO.md). A recuperação após indisponibilidade da API não foi provocada nesse ambiente.
 
 ## Execução em Docker
 
@@ -58,24 +58,24 @@ Abra `http://localhost:5080`. A variável `PORT` define a porta interna, com pad
 
 O Docker não é necessário para executar o ZIP integrado localmente com .NET.
 
-## Opção de hospedagem: Render gratuito
+## Publicação no Render gratuito
 
-A publicação exige primeiro um repositório remoto com a versão revisada. No Render, criar um **Web Service** a partir desse repositório, com as seguintes configurações:
+O **Web Service** `test-dev-sesi` foi criado no workspace `TEST-DEV-SESI`, a partir do repositório [brublurryface/test-dev-sesi](https://github.com/brublurryface/test-dev-sesi). A primeira publicação validada utiliza o commit `ee40f19`, de `feat/backend`; seu conteúdo foi integrado à `main` na [PR #1](https://github.com/brublurryface/test-dev-sesi/pull/1). Configurações efetivas:
 
-| Campo                        | Valor proposto                                           |
-| ---------------------------- | -------------------------------------------------------- |
-| Nome                         | `test-dev-sesi`                                          |
-| Branch                       | `main`, depois da revisão e do merge da versão integrada |
-| Linguagem/runtime            | Docker                                                   |
-| Diretório raiz               | Raiz do repositório                                      |
-| Dockerfile                   | `./Dockerfile`                                           |
-| Contexto de build            | Raiz do repositório                                      |
-| Plano da instância           | **Free**                                                 |
-| Health check                 | `/api/health`                                            |
-| Deploy automático            | Desativado; novas publicações passam por revisão         |
-| Comando Docker personalizado | Vazio; usar o comando definido no Dockerfile             |
+| Campo                        | Valor configurado                                |
+| ---------------------------- | ------------------------------------------------ |
+| Nome                         | `test-dev-sesi`                                  |
+| Branch                       | `feat/backend` no deploy validado                |
+| Linguagem/runtime            | Docker                                           |
+| Diretório raiz               | Raiz do repositório                              |
+| Dockerfile                   | `./Dockerfile`                                   |
+| Contexto de build            | Raiz do repositório                              |
+| Plano da instância           | **Free**                                         |
+| Health check                 | TCP padrão; `/api/health` verificado por HTTP    |
+| Deploy automático            | Desativado; novas publicações passam por revisão |
+| Comando Docker personalizado | Vazio; usar o comando definido no Dockerfile     |
 
-O provedor fornece `PORT`; não é necessário cadastrar chaves ou serviços de banco adicionais. O caminho padrão `App_Data/catalog.db` é suficiente para esta demonstração. O endereço público deve ser copiado do serviço efetivamente criado e registrado no README e na validação, sem presumir antecipadamente um subdomínio.
+O provedor fornece `PORT`; não é necessário cadastrar chaves ou serviços de banco adicionais. O caminho padrão `App_Data/catalog.db` é suficiente para esta demonstração. O endereço atribuído ao serviço é `https://test-dev-sesi.onrender.com/`. O deploy automático está desativado; novas versões exigem uma publicação manual. A troca da branch de origem e a configuração opcional de health check HTTP podem ser feitas em Settings; o deploy validado usa as configurações da tabela.
 
 ### Limites do plano gratuito
 
@@ -91,4 +91,4 @@ Usar somente a instância Free, sem serviços adicionais pagos. Os limites de ho
 - [Plano gratuito e suas limitações](https://render.com/docs/free)
 - [Health checks](https://render.com/docs/health-checks)
 
-A imagem Docker e o endereço público ainda precisam ser validados no ambiente de hospedagem. A existência dos arquivos de configuração não representa uma publicação concluída.
+A imagem Docker foi construída e executada no Render em 25/10/2026. Os logs confirmaram a aplicação das duas migrations, a inicialização em `0.0.0.0:10000` e o deploy no estado `live`. A consulta pública `/api/health` respondeu 200 com `{"status":"ok"}` e o catálogo retornou os sete cursos.

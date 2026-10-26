@@ -4,9 +4,11 @@
 
 Catálogo de cursos fictícios desenvolvido para a atividade prática de Desenvolvedor de Sistemas I — 519/2026. Angular apresenta os cursos fornecidos por uma API C#/.NET com persistência em SQLite. A interface segue as referências da landing page, dos detalhes de curso e da área de aprendizagem (AVA).
 
-**Estado desta versão:** frontend, API e banco integrados. Os arquivos para hospedagem em Docker e as instruções para o plano gratuito do Render estão preparados. A publicação e a validação do endereço público estão pendentes.
+**Estado desta versão:** frontend, API e banco integrados, com demonstração publicada no plano gratuito do Render e validada por HTTP e no navegador.
 
 **Repositório:** [brublurryface/test-dev-sesi](https://github.com/brublurryface/test-dev-sesi).
+
+**Demonstração:** [test-dev-sesi.onrender.com](https://test-dev-sesi.onrender.com/). Após inatividade, o primeiro acesso pode levar aproximadamente um minuto para reativar a instância gratuita.
 
 ## Executar localmente
 
@@ -152,7 +154,7 @@ Essas medidas não equivalem a uma certificação de conformidade. Os limites da
 - Indicadores, depoimentos e dados de contato reproduzem conteúdo ilustrativo da referência. O projeto não é um serviço oficial de cursos.
 - As descrições das aulas são exemplos fictícios para demonstrar o campo previsto no item 4(b) do enunciado. Reutilizam o primeiro tópico fornecido de cada módulo de Matemática e as descrições curtas dos cartões nas demais ofertas. A associação desses textos à “Aula 1” é demonstrativa e não representa uma grade de aulas fornecida pelo teste.
 - O botão “Marcar como concluída” foi acrescentado à AVA e não faz parte do Figma. Ele demonstra a conclusão de uma aula e a atualização do progresso, seguindo uma interação comum em cursos online. A marcação pode ser desfeita e o progresso pode ser reiniciado. Os dados ficam apenas neste navegador, sem sincronização com o servidor ou efeito de matrícula, avaliação ou certificação.
-- A publicação e a conferência do endereço público permanecem pendentes. O plano gratuito do Render, proposto em [docs/PUBLICACAO.md](docs/PUBLICACAO.md), suspende a instância após inatividade e usa armazenamento temporário. O catálogo SQLite é reconstruído com as migrations e a carga inicial quando o arquivo é perdido; alterações manuais no banco não são conservadas nessas condições. O progresso demonstrativo continua no navegador. O pacote integrado também pode ser executado localmente com as instruções deste README.
+- A demonstração está publicada no plano gratuito do Render, documentado em [docs/PUBLICACAO.md](docs/PUBLICACAO.md), que suspende a instância após inatividade e usa armazenamento temporário. O catálogo SQLite é reconstruído com as migrations e a carga inicial quando o arquivo é perdido; alterações manuais no banco não são conservadas nessas condições. O progresso demonstrativo continua no navegador. O pacote integrado também pode ser executado localmente com as instruções deste README.
 
 ## Uso de IA
 
