@@ -10,6 +10,12 @@ Catálogo de cursos fictícios desenvolvido para a atividade prática de Desenvo
 
 **Demonstração:** [test-dev-sesi.onrender.com](https://test-dev-sesi.onrender.com/). Após inatividade, o primeiro acesso pode levar aproximadamente um minuto para reativar a instância gratuita.
 
+## Diferencial: integração com Moodle
+
+Integração opcional em C#/.NET com um ambiente Moodle real, hospedado gratuitamente na MooDIY. O backend importa o conteúdo do curso de Matemática para a Precisão para o SQLite, mantendo a interface da AVA, os identificadores das aulas e o progresso demonstrativo existente no navegador. O curso reúne dez módulos e treze páginas, incluindo Boas práticas com o conteúdo de referência.
+
+As três funções de leitura foram verificadas com consultas autenticadas na instância real. A implementação passou nos testes automatizados de importação e de preservação do catálogo em caso de falha. **A ativação no site publicado depende da implantação desta versão e da configuração privada da credencial no Render.** Consulte [configuração, validação e limites da integração](docs/MOODLE.md).
+
 ## Executar localmente
 
 Requisitos: Node.js 24.19.0, npm 11 e SDK .NET 10.0.402, ou versões compatíveis com as configurações do projeto. O arquivo `global.json` fixa a versão de referência do SDK. O SQLite funciona como arquivo local; não exige instalação de um servidor, conta ou chave.
@@ -61,6 +67,7 @@ O diretório `artifacts/publish` contém a publicação executável e o catálog
 - Abertura na primeira aula pendente, respeitando a ordem do curso e o progresso salvo.
 - Área do aluno vinculada ao curso exibido nos detalhes e links de cursos do rodapé fornecidos pela API.
 - Estados de carregamento, erro com nova tentativa, resultado vazio e curso não encontrado.
+- Importação opcional do conteúdo de um curso Moodle para o SQLite, com diagnóstico e preservação do catálogo em caso de falha; configuração e alcance em [docs/MOODLE.md](docs/MOODLE.md).
 
 ## Organização e fluxo de dados
 
@@ -72,6 +79,7 @@ backend/
     Contracts/           contratos das respostas HTTP
     Courses/             validação da consulta e acesso ao catálogo
     Data/                entidades, contexto, migration e carga inicial
+    Moodle/              cliente REST, conversão de texto e importação opcional
     Program.cs           configuração e endpoints
   SesiIndustria.Api.Tests/ testes de integração HTTP com SQLite real
 frontend/
@@ -91,12 +99,13 @@ As páginas Angular são standalone e carregadas sob demanda. Signals representa
 
 ## API e banco
 
-| Método e caminho          | Resposta                                                                           |
-| ------------------------- | ---------------------------------------------------------------------------------- |
-| `GET /api/courses`        | `{ items, total }`; aceita `search`, `category`, `modality`, `status` e `featured` |
-| `GET /api/courses/{slug}` | Curso com módulos, aulas, introdução, FAQ e blocos de texto                        |
-| `GET /api/health`         | Estado da conexão com o banco                                                      |
-| `GET /openapi/v1.json`    | Descrição OpenAPI dos endpoints                                                    |
+| Método e caminho               | Resposta                                                                           |
+| ------------------------------ | ---------------------------------------------------------------------------------- |
+| `GET /api/courses`             | `{ items, total }`; aceita `search`, `category`, `modality`, `status` e `featured` |
+| `GET /api/courses/{slug}`      | Curso com módulos, aulas, introdução, FAQ e blocos de texto                        |
+| `GET /api/health`              | Estado da conexão com o banco                                                      |
+| `GET /api/integrations/moodle` | Estado da importação Moodle nesta inicialização, sem credenciais                   |
+| `GET /openapi/v1.json`         | Descrição OpenAPI dos endpoints                                                    |
 
 Exemplo de consulta com os critérios combinados:
 
