@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SesiIndustria.Api.Contracts;
 using SesiIndustria.Api.Courses;
 using SesiIndustria.Api.Data;
+using SesiIndustria.Api.Moodle;
 
 // Ponto de entrada da API. A inicialização segue a ordem abaixo:
 // configuração -> serviços -> aplicação -> banco -> endpoints -> servidor.
@@ -31,6 +32,12 @@ var connectionString = new SqliteConnectionStringBuilder
 // DbContext e repositório têm escopo de requisição: pedidos diferentes não compartilham contexto.
 builder.Services.AddDbContext<CatalogDbContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<CourseRepository>();
+// A chave é lida do ambiente do servidor (Moodle__Token); não existe chave no código distribuído.
+builder.Services.Configure<MoodleOptions>(builder.Configuration.GetSection("Moodle"));
+builder.Services.AddSingleton<MoodleImportStatus>();
+builder.Services.AddHttpClient<MoodleClient>(client => client.Timeout = TimeSpan.FromSeconds(10))
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
+builder.Services.AddScoped<MoodleImporter>();
 
 // 3. Construir a aplicação e definir o tratamento comum de erros HTTP.
 var app = builder.Build();
@@ -45,11 +52,14 @@ await using (var scope = app.Services.CreateAsyncScope())
     var db = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
     await db.Database.MigrateAsync();
     await CatalogSeeder.SeedAsync(db, Path.Combine(app.Environment.ContentRootPath, "Data", "Seed", "courses.json"));
+    await scope.ServiceProvider.GetRequiredService<MoodleImporter>().ImportAsync();
 }
 
 // 5. Registrar os endpoints. Nesta Minimal API, cada MapGet liga uma URL à função que a atende.
 // O OpenAPI fica em /openapi/v1.json, conforme a configuração padrão de AddOpenApi.
 app.MapOpenApi();
+app.MapGet("/api/integrations/moodle", (MoodleImportStatus status) => Results.Ok(status))
+    .WithName("GetMoodleImportStatus").WithSummary("Informa o resultado da importação Moodle nesta inicialização.");
 
 // Listagem: os parâmetros opcionais vêm da URL (?search=...&category=...).
 // O ASP.NET fornece o repositório registrado acima e o sinal de cancelamento da requisição.
