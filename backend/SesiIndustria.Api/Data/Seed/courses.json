@@ -1,0 +1,832 @@
+[
+  {
+    "id": 1,
+    "slug": "matematica-para-a-precisao",
+    "name": "Matemática para a Precisão: Medidas e Escalas na Metalurgia",
+    "shortName": "Matemática para a Precisão",
+    "description": "Aplicação de grandezas, proporções e escalas em processos de corte, furação e usinagem.",
+    "about": "Explore nosso curso de Matemática para a Precisão: Medidas e Escalas na Metalurgia, perfeito para quem deseja se destacar nesse campo! Este programa abrangente foi desenvolvido para capacitar profissionais com as habilidades e conhecimentos fundamentais para garantir medições precisas e eficientes no ambiente metalúrgico.",
+    "category": "Matemática",
+    "modality": "Online",
+    "hours": 40,
+    "audience": "Estudantes, operadores e profissionais da metalurgia que desejam desenvolver conhecimentos sobre medidas e escalas.",
+    "status": "Disponível",
+    "image": "assets/banner-ava.png",
+    "imageAlt": "Paquímetro medindo uma peça metálica",
+    "availableAt": "2026-01-05",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Introdução à Matemática na Metalurgia",
+        "description": "Conceitos fundamentais de medidas e escalas aplicados à metalurgia.",
+        "topics": [
+          "Conceitos fundamentais de medidas e escalas aplicados à metalurgia.",
+          "Importância da precisão nas medições e controle de qualidade.",
+          "Panorama das normas e regulamentos no Brasil relacionados à metalurgia."
+        ],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos fundamentais de medidas e escalas aplicados à metalurgia.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Identificação e Avaliação de Medidas",
+        "description": "Tipos de medidas utilizadas: comprimento, massa, volume e temperatura.",
+        "topics": [
+          "Tipos de medidas utilizadas: comprimento, massa, volume e temperatura.",
+          "Técnicas de análise de precisão nas medições.",
+          "Elaboração de gráficos e tabelas de medidas."
+        ],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Tipos de medidas utilizadas: comprimento, massa, volume e temperatura.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Normas e Regulamentações",
+        "description": "Estudo das principais normas aplicáveis à metalurgia (ABNT, ISO, entre outras).",
+        "topics": [
+          "Estudo das principais normas aplicáveis à metalurgia (ABNT, ISO, entre outras).",
+          "Interpretação e aplicação prática das normas de medição.",
+          "Atualizações e impactos legais nas práticas de medição."
+        ],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das principais normas aplicáveis à metalurgia (ABNT, ISO, entre outras).",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Instrumentos de Medição",
+        "description": "Tipos de instrumentos utilizados na metalurgia: paquímetros, micrômetros e balanças.",
+        "topics": [
+          "Tipos de instrumentos utilizados na metalurgia: paquímetros, micrômetros e balanças.",
+          "Critérios de seleção, uso e calibração.",
+          "Responsabilidades legais de operadores e supervisores."
+        ],
+        "lessons": [
+          {
+            "id": "m4-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Tipos de instrumentos utilizados na metalurgia: paquímetros, micrômetros e balanças.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Prevenção de Erros de Medição",
+        "description": "Tipos de erros e incertezas nas medições.",
+        "topics": [
+          "Tipos de erros e incertezas nas medições.",
+          "Procedimentos para garantir a precisão e exatidão.",
+          "Treinamento prático em técnicas de medição."
+        ],
+        "lessons": [
+          {
+            "id": "m5-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Tipos de erros e incertezas nas medições.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Ergonomia e Eficiência na Medição",
+        "description": "Princípios ergonômicos aplicados ao uso de instrumentos de medição.",
+        "topics": [
+          "Princípios ergonômicos aplicados ao uso de instrumentos de medição.",
+          "Prevenção de lesões por uso inadequado de ferramentas.",
+          "Qualidade de vida no ambiente de trabalho."
+        ],
+        "lessons": [
+          {
+            "id": "m6-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Princípios ergonômicos aplicados ao uso de instrumentos de medição.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Análise de Resultados de Medição",
+        "description": "Técnicas de análise de dados de medições.",
+        "topics": [
+          "Técnicas de análise de dados de medições.",
+          "Elaboração de relatórios e planos de ação para melhorias.",
+          "Indicadores de precisão e melhoria contínua."
+        ],
+        "lessons": [
+          {
+            "id": "m7-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Técnicas de análise de dados de medições.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Cultura de Precisão e Comportamento Seguro",
+        "description": "Desenvolvimento de uma cultura organizacional voltada à precisão nas medições.",
+        "topics": [
+          "Desenvolvimento de uma cultura organizacional voltada à precisão nas medições.",
+          "Comunicação eficaz e liderança em práticas de medição.",
+          "Programas de conscientização e engajamento dos colaboradores."
+        ],
+        "lessons": [
+          {
+            "id": "m8-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Desenvolvimento de uma cultura organizacional voltada à precisão nas medições.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Tecnologias Aplicadas à Medição",
+        "description": "Uso de plataformas digitais, sensores e automação na medição de precisão.",
+        "topics": [
+          "Uso de plataformas digitais, sensores e automação na medição de precisão.",
+          "Sistemas de gestão de qualidade.",
+          "Tendências e inovações no setor metalúrgico."
+        ],
+        "lessons": [
+          {
+            "id": "m9-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Uso de plataformas digitais, sensores e automação na medição de precisão.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Avaliação Final e Certificação",
+        "description": "Teste de conhecimentos adquiridos sobre medidas e escalas.",
+        "topics": [
+          "Teste de conhecimentos adquiridos sobre medidas e escalas.",
+          "Atividades práticas e estudos de caso.",
+          "Emissão de certificado digital de conclusão."
+        ],
+        "lessons": [
+          {
+            "id": "m10-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Teste de conhecimentos adquiridos sobre medidas e escalas.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [
+      {
+        "question": "O curso é totalmente online?",
+        "answer": "Sim. Todas as aulas, atividades e avaliações são realizadas pela plataforma digital, permitindo que o aluno estude de onde estiver, no seu próprio ritmo."
+      },
+      {
+        "question": "Preciso estar disponível em horários específicos?",
+        "answer": "Não. As aulas são gravadas e ficam disponíveis 24 horas por dia. O aluno pode acessar o conteúdo quando for mais conveniente, respeitando os prazos de cada módulo."
+      },
+      {
+        "question": "Como são feitas as avaliações?",
+        "answer": "As avaliações são realizadas diretamente na plataforma, por meio de provas objetivas, estudos de caso e atividades práticas. Algumas avaliações podem ter tempo limitado e exigem atenção às instruções."
+      },
+      {
+        "question": "O curso oferece certificado?",
+        "answer": "Sim. Ao concluir todos os módulos e ser aprovado nas avaliações, o aluno recebe um certificado digital de conclusão, válido em todo o território nacional."
+      },
+      {
+        "question": "Quem são os professores?",
+        "answer": "O corpo docente é formado por especialistas, engenheiros e professores com ampla experiência em segurança do trabalho e atuação direta na indústria. Os perfis dos docentes estão disponíveis na plataforma."
+      },
+      {
+        "question": "Há suporte para dúvidas durante o curso?",
+        "answer": "Sim. Os alunos podem enviar dúvidas por meio dos fóruns de discussão, chats da plataforma ou durante os webinários ao vivo. A equipe pedagógica está disponível para auxiliar durante todo o curso."
+      },
+      {
+        "question": "O curso exige algum conhecimento prévio?",
+        "answer": "Não é obrigatório, mas é recomendado que o aluno tenha interesse ou alguma familiaridade com o ambiente industrial. O curso foi estruturado para atender tanto iniciantes quanto profissionais em busca de atualização."
+      },
+      {
+        "question": "Posso acessar o curso pelo celular?",
+        "answer": "Sim. A plataforma é responsiva e compatível com computadores, tablets e smartphones, garantindo uma experiência completa em qualquer dispositivo."
+      },
+      {
+        "question": "Quanto tempo tenho para concluir o curso?",
+        "answer": "O prazo para conclusão varia conforme o plano escolhido. Em geral, o aluno tem entre 3 a 6 meses para finalizar todos os módulos e avaliações."
+      },
+      {
+        "question": "O curso é reconhecido por órgãos oficiais?",
+        "answer": "O curso segue as diretrizes das Normas Regulamentadoras (NRs) e boas práticas da área, sendo reconhecido como formação complementar. Para certificações oficiais, é necessário verificar os requisitos específicos de cada órgão regulador."
+      }
+    ],
+    "onlineInformation": [
+      {
+        "kind": "heading",
+        "text": "Aulas online",
+        "items": []
+      },
+      {
+        "kind": "paragraph",
+        "text": "As aulas são organizadas em módulos temáticos e disponibilizadas em formato multimídia, combinando:",
+        "items": []
+      },
+      {
+        "kind": "list",
+        "text": "",
+        "items": [
+          "Vídeo-aulas com especialistas da área, gravadas em alta qualidade e com recursos visuais que facilitam a compreensão dos conteúdos técnicos.",
+          "Materiais complementares como apostilas digitais, infográficos, artigos e estudos de caso.",
+          "Atividades interativas, como quizzes, simulações e fóruns de discussão, que promovem o engajamento e a troca de experiências entre os participantes.",
+          "Acesso multiplataforma, permitindo que os alunos estudem pelo computador, tablet ou celular, a qualquer hora e de qualquer lugar."
+        ]
+      },
+      {
+        "kind": "paragraph",
+        "text": "Cada aula é acompanhada de recursos de acessibilidade, como legendas, transcrição de áudio e navegação intuitiva, garantindo inclusão e autonomia para todos os perfis de usuários.",
+        "items": []
+      },
+      {
+        "kind": "heading",
+        "text": "Provas e Avaliações",
+        "items": []
+      },
+      {
+        "kind": "paragraph",
+        "text": "O programa de referência propõe avaliações para verificar o aprendizado e a aplicação prática dos conhecimentos adquiridos:",
+        "items": []
+      },
+      {
+        "kind": "list",
+        "text": "",
+        "items": [
+          "Provas objetivas ao final de cada módulo, com correção automática e feedback imediato.",
+          "Estudos de caso e atividades práticas, que simulam situações reais da indústria e exigem análise crítica e tomada de decisão.",
+          "Avaliação final integradora, que consolida os conteúdos do curso."
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "Este ambiente apresenta o conteúdo e a navegação do curso. As provas e a emissão de certificados não estão disponíveis na demonstração.",
+        "items": []
+      }
+    ],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "",
+        "content": [
+          {
+            "kind": "paragraph",
+            "text": "Se você está interessado em se aprofundar em Matemática para a Precisão, especialmente em Medidas e Escalas na Metalurgia, aqui estão algumas dicas para maximizar sua experiência online. Primeiro, crie um espaço de estudo livre de distrações, onde você possa se concentrar totalmente no material.",
+            "items": []
+          },
+          {
+            "kind": "paragraph",
+            "text": "Estabeleça uma rotina de estudos, reservando horários específicos para assistir às aulas e realizar as atividades. Além disso, interaja com seus colegas e instrutores nos fóruns e chats disponíveis, pois isso enriquece o aprendizado e ajuda a esclarecer dúvidas. Não se esqueça de revisar o conteúdo regularmente e aplicar os conhecimentos em situações práticas sempre que possível.",
+            "items": []
+          },
+          {
+            "kind": "paragraph",
+            "text": "Por fim, mantenha-se atualizado sobre as novas técnicas e normas em medidas e escalas na metalurgia, já que essa área está sempre evoluindo. Com dedicação e as estratégias corretas, você estará preparado para se destacar no setor!",
+            "items": []
+          },
+          {
+            "kind": "heading",
+            "text": "Recomendações",
+            "items": []
+          },
+          {
+            "kind": "paragraph",
+            "text": "Se você está interessado em se aprofundar na matemática aplicada à metalurgia, aqui estão algumas dicas valiosas. Primeiro, escolha um curso que ofereça uma abordagem prática, com aulas que incluam exercícios e estudos de caso. Isso ajudará a entender como aplicar medidas e escalas na prática. Além disso, verifique se o curso é reconhecido por instituições relevantes, pois isso pode impactar sua formação e carreira.",
+            "items": []
+          },
+          {
+            "kind": "paragraph",
+            "text": "Outro aspecto importante é a experiência dos instrutores. Procure cursos que tenham profissionais com experiência no setor, pois eles podem compartilhar insights valiosos que vão além da teoria.",
+            "items": []
+          },
+          {
+            "kind": "paragraph",
+            "text": "Considere também a carga horária e a flexibilidade do curso. Se você trabalha, um curso que ofereça aulas noturnas ou aos finais de semana pode ser mais conveniente.",
+            "items": []
+          },
+          {
+            "kind": "paragraph",
+            "text": "Por fim, não se esqueça de se conectar com outros alunos e profissionais da área. Isso pode abrir portas e proporcionar um aprendizado ainda mais enriquecedor. Investir em um bom curso de matemática para a metalurgia é essencial para garantir precisão e eficiência no trabalho.",
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "geometria-e-modelagem",
+    "name": "Geometria e Modelagem no Design Têxtil",
+    "shortName": "Geometria e Modelagem",
+    "description": "Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+    "about": "Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+    "category": "Matemática",
+    "modality": "Presencial",
+    "hours": 24,
+    "audience": "Estudantes de design, profissionais da indústria têxtil e pessoas interessadas em modelagem.",
+    "status": "Em breve",
+    "image": "assets/hero-image.png",
+    "imageAlt": "Trabalho em uma indústria têxtil",
+    "availableAt": "2026-11-09",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Explora formas geométricas, simetria e padrões matemáticos presentes em tecidos e estampas.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [],
+    "onlineInformation": [],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "Exemplo fictício: orientações gerais para organizar os estudos e acompanhar as aulas.",
+        "content": []
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "estatistica-e-qualidade",
+    "name": "Estatística e Controle de Qualidade na Produção",
+    "shortName": "Estatística e Qualidade",
+    "description": "Leitura e interpretação de dados de controle de qualidade e produtividade.",
+    "about": "Leitura e interpretação de dados de controle de qualidade e produtividade.",
+    "category": "Matemática",
+    "modality": "Online",
+    "hours": 32,
+    "audience": "Assistentes, analistas e profissionais que acompanham indicadores de produção e qualidade.",
+    "status": "Disponível",
+    "image": "assets/video-thumb.png",
+    "imageAlt": "Profissionais analisando equipamentos em uma indústria",
+    "availableAt": "2026-09-01",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Leitura e interpretação de dados de controle de qualidade e produtividade.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Leitura e interpretação de dados de controle de qualidade e produtividade.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Leitura e interpretação de dados de controle de qualidade e produtividade.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [],
+    "onlineInformation": [],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "Exemplo fictício: orientações gerais para organizar os estudos e acompanhar as aulas.",
+        "content": []
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "fisica-do-movimento",
+    "name": "Física do Movimento e da Energia na Metalurgia",
+    "shortName": "Física do Movimento",
+    "description": "Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+    "about": "Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+    "category": "Ciências da Natureza",
+    "modality": "Presencial",
+    "hours": 48,
+    "audience": "Estudantes de cursos técnicos e profissionais que operam máquinas e equipamentos industriais.",
+    "status": "Encerrado",
+    "image": "assets/banner-ava.png",
+    "imageAlt": "Medição de uma peça em equipamento metalúrgico",
+    "availableAt": null,
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo de forças, atrito, calor e energia em máquinas, fornos e prensas.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [],
+    "onlineInformation": [],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "Exemplo fictício: orientações gerais para organizar os estudos e acompanhar as aulas.",
+        "content": []
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "quimica-e-sustentabilidade",
+    "name": "Química e Sustentabilidade",
+    "shortName": "Química e Sustentabilidade",
+    "description": "Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+    "about": "Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+    "category": "Ciências da Natureza",
+    "modality": "Online",
+    "hours": 30,
+    "audience": "Estudantes e profissionais da indústria têxtil interessados em química, tinturaria e sustentabilidade.",
+    "status": "Em breve",
+    "image": "assets/video-thumb.png",
+    "imageAlt": "Profissionais no ambiente de produção industrial",
+    "availableAt": "2026-11-16",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Estudo das reações químicas envolvidas na tinturaria e acabamento de tecidos.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [],
+    "onlineInformation": [],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "Exemplo fictício: orientações gerais para organizar os estudos e acompanhar as aulas.",
+        "content": []
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "ciencia-dos-materiais",
+    "name": "Ciência dos Materiais na Metalurgia",
+    "shortName": "Ciência dos Materiais",
+    "description": "Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+    "about": "Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+    "category": "Ciências da Natureza",
+    "modality": "Presencial",
+    "hours": 24,
+    "audience": "Estudantes, operadores e profissionais da metalurgia interessados nas propriedades e na seleção de metais.",
+    "status": "Disponível",
+    "image": "assets/banner-ava.png",
+    "imageAlt": "Medição de uma peça metálica com paquímetro",
+    "availableAt": "2026-10-01",
+    "featured": true,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Conceitos básicos de estrutura, resistência e propriedades dos metais.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [],
+    "onlineInformation": [],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "Exemplo fictício: orientações gerais para organizar os estudos e acompanhar as aulas.",
+        "content": []
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "gestao-de-residuos",
+    "name": "Gestão de Resíduos e Economia Circular na Indústria",
+    "shortName": "Gestão de Resíduos",
+    "description": "Planejamento, redução e reaproveitamento de resíduos para transformar a produção.",
+    "about": "",
+    "category": "Sustentabilidade",
+    "modality": "Online",
+    "hours": 20,
+    "audience": "Profissionais de produção, equipes de meio ambiente e pessoas interessadas em economia circular.",
+    "status": "Disponível",
+    "image": "assets/hero-image.png",
+    "imageAlt": "Processo de produção em uma indústria têxtil",
+    "availableAt": "2026-10-01",
+    "featured": false,
+    "modules": [
+      {
+        "title": "Módulo 1",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m1-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Planejamento, redução e reaproveitamento de resíduos para transformar a produção.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 2",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m2-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Planejamento, redução e reaproveitamento de resíduos para transformar a produção.",
+            "content": []
+          }
+        ]
+      },
+      {
+        "title": "Módulo 3",
+        "description": "",
+        "topics": [],
+        "lessons": [
+          {
+            "id": "m3-a1",
+            "title": "Aula 1",
+            "description": "Exemplo fictício: Planejamento, redução e reaproveitamento de resíduos para transformar a produção.",
+            "content": []
+          }
+        ]
+      }
+    ],
+    "certification": "SESI",
+    "faqs": [],
+    "onlineInformation": [],
+    "introduction": [
+      {
+        "id": "introducao",
+        "title": "Introdução",
+        "description": "Exemplo fictício: apresentação do curso e de sua organização em módulos e aulas.",
+        "content": []
+      },
+      {
+        "id": "boas-praticas",
+        "title": "Boas práticas",
+        "description": "Exemplo fictício: orientações gerais para organizar os estudos e acompanhar as aulas.",
+        "content": []
+      },
+      {
+        "id": "extras",
+        "title": "Extras",
+        "description": "Exemplo fictício: espaço de materiais complementares para consulta ao longo do curso.",
+        "content": []
+      }
+    ]
+  }
+]

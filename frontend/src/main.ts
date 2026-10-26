@@ -1,13 +1,24 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { ViewportScroller } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
+import { inject, provideAppInitializer } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { App } from './app/app';
 import { routes } from './app/app.routes';
 
+// Entrada do Angular: registra HTTP e navegação e monta App na página.
+// A preparação do servidor e do banco pertence a backend/SesiIndustria.Api/Program.cs.
 bootstrapApplication(App, {
   providers: [
     provideHttpClient(),
-    // Preserva a posição ao voltar e permite que links como /#sobre alcancem a seção de destino.
+    provideAppInitializer(() => {
+      // Desconta a altura atual do header fixo para manter os títulos das âncoras visíveis.
+      inject(ViewportScroller).setOffset(() => [
+        0,
+        (document.querySelector('app-header header')?.getBoundingClientRect().height ?? 0) + 24,
+      ]);
+    }),
+    // Preserva a posição ao voltar e permite abrir as seções da página por links com fragmento.
     provideRouter(
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })

@@ -1,0 +1,159 @@
+<a class="skip-link" href="#conteudo">Pular para a aula</a>
+@if (store.loading()) {
+<main id="conteudo" class="container section">
+  <div class="state-panel" role="status">
+    <span class="loading-spinner" aria-hidden="true"></span>
+    <p>Preparando sua área de estudos…</p>
+  </div>
+</main>
+} @else if (store.error()) {
+<main id="conteudo" class="container section">
+  <div class="state-panel" role="alert">
+    <h1>Não foi possível carregar o curso.</h1>
+    <button type="button" class="button button-dark" (click)="store.load()">
+      Tentar novamente
+    </button>
+  </div>
+</main>
+} @else if (course(); as course) {
+<header class="learning-mobile-header">
+  <a [routerLink]="['/cursos', course.slug]" aria-label="Voltar ao curso">←</a
+  ><span>Área do aluno</span
+  ><button
+    type="button"
+    (click)="sidebarOpen.set(!sidebarOpen())"
+    aria-controls="learning-sidebar"
+    [attr.aria-expanded]="sidebarOpen()"
+  >
+    {{ sidebarOpen() ? 'Fechar' : 'Conteúdo' }}
+  </button>
+</header>
+@if (sidebarOpen()) {
+<button
+  type="button"
+  class="sidebar-scrim"
+  aria-label="Fechar conteúdo do curso"
+  (click)="sidebarOpen.set(false)"
+></button>
+}
+<aside
+  id="learning-sidebar"
+  class="learning-sidebar"
+  [class.is-open]="sidebarOpen()"
+  aria-label="Navegação do curso"
+>
+  <a class="learning-back" [routerLink]="['/cursos', course.slug]"
+    ><span aria-hidden="true">←</span><span class="sr-only">Voltar aos detalhes do curso</span></a
+  >
+  <div class="sidebar-course">
+    <p>Certificação</p>
+    <h1>{{ course.name }}</h1>
+    <label for="course-progress"
+      >Progresso neste dispositivo <strong>{{ progress() }}%</strong></label
+    ><progress id="course-progress" [value]="progress()" max="100">{{ progress() }}%</progress>
+  </div>
+  <div class="sidebar-search">
+    <label class="sr-only" for="lesson-search">Buscar aula</label><span aria-hidden="true">⌕</span
+    ><input
+      id="lesson-search"
+      type="search"
+      placeholder="Buscar aula"
+      [value]="search()"
+      (input)="setSearch($event)"
+    />
+  </div>
+  <nav class="curriculum" aria-label="Aulas do curso">
+    @for (group of visibleGroups(); track group.id) {
+    <details [open]="group.id === 'introducao' || !!search() || group.id === selectedGroupId()">
+      <summary>{{ group.number }}. {{ group.title }}</summary>
+      <ol>
+        @for (lesson of group.lessons; track lesson.id; let index = $index) {
+        <li>
+          <button
+            type="button"
+            [class.selected]="lesson.id === selectedId()"
+            [attr.aria-current]="lesson.id === selectedId() ? 'page' : null"
+            (click)="selectLesson(lesson.id)"
+          >
+            <span
+              class="lesson-state"
+              [class.complete]="completed().includes(lesson.id)"
+              aria-hidden="true"
+              >{{ completed().includes(lesson.id) ? '✓' : lesson.id === selectedId() ? '▶' : ''
+              }}</span
+            ><span>{{ group.number }}.{{ index + 1 }} {{ lesson.title }}</span
+            ><span class="sr-only"
+              >{{ completed().includes(lesson.id) ? ' — concluída' : '' }}</span
+            >
+          </button>
+        </li>
+        }
+      </ol>
+    </details>
+    } @empty {
+    <p class="no-lessons" role="status">Nenhuma aula encontrada.</p>
+    }
+  </nav>
+  <div class="sidebar-bottom">
+    <span>Demonstração de navegação</span
+    ><button type="button" (click)="resetProgress()">Reiniciar progresso</button>
+  </div>
+</aside>
+<main id="conteudo" class="learning-main" tabindex="-1">
+  <article class="lesson-article">
+    <div class="lesson-banner">
+      <img
+        src="assets/banner-ava.png"
+        alt="Uso de um paquímetro para medir uma peça metálica"
+        width="1940"
+        height="1080"
+        fetchpriority="high"
+      /><img class="banner-logo" src="assets/logo-sesi.svg" width="94" height="30" alt="SESI" />
+    </div>
+    <div class="lesson-topline">
+      <span>Aula demonstrativa</span><span>{{ course.shortName }}</span>
+    </div>
+    <h2>{{ lesson().title }}</h2>
+    @if (lesson().content.length) { @for (block of lesson().content; track $index) { @switch
+    (block.kind) { @case ('heading') {
+    <h3>{{ block.text }}</h3>
+    } @case ('list') {
+    <ul>
+      @for (item of block.items; track $index) {
+      <li>{{ item }}</li>
+      }
+    </ul>
+    } @default {
+    <p>{{ block.text }}</p>
+    } } } } @else if (lesson().description) {
+    <p>{{ lesson().description }}</p>
+    }
+    <div class="lesson-actions">
+      <button
+        type="button"
+        class="button"
+        [class.button-dark]="!isComplete()"
+        [class.button-outline]="isComplete()"
+        (click)="toggleComplete()"
+      >
+        {{ isComplete() ? '✓ Aula concluída' : 'Marcar como concluída' }}</button
+      ><button type="button" class="text-link" [disabled]="!hasNext()" (click)="next()">
+        Próxima aula <span class="button-arrow" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="progress-note" aria-live="polite">
+      {{ storageAvailable() ? 'Seu progresso é salvo somente neste navegador. Não há matrícula ou
+      emissão de certificado nesta demonstração.' : 'O navegador não permitiu salvar o progresso.
+      Você pode continuar estudando nesta sessão.' }}
+    </p>
+  </article>
+</main>
+} @else {
+<main id="conteudo" class="container section">
+  <div class="state-panel">
+    <h1>Curso não encontrado</h1>
+    <p>Escolha um curso do catálogo para explorar a área de estudos.</p>
+    <a class="button button-dark" routerLink="/cursos">Voltar ao catálogo</a>
+  </div>
+</main>
+}

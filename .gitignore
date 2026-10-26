@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 .angular/
 dist/
 out-tsc/
@@ -6,3 +6,11 @@ out-tsc/
 .env
 *.log
 .openai/
+bin/
+obj/
+TestResults/
+App_Data/
+*.db
+*.db-shm
+*.db-wal
+artifacts/

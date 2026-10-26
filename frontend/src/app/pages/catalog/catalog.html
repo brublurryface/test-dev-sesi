@@ -1,0 +1,131 @@
+<app-header />
+<main id="conteudo">
+  <section class="catalog-intro">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Localização">
+        <a routerLink="/">Início</a><span aria-hidden="true">/</span
+        ><span aria-current="page">Cursos</span>
+      </nav>
+      <p class="eyebrow">Conhecimento que transforma</p>
+      <h1>Seu próximo passo<br />começa aqui.</h1>
+      <p class="intro-copy">
+        Explore os cursos e encontre novas possibilidades para sua carreira na indústria.
+      </p>
+    </div>
+  </section>
+  <section class="container catalog-body" aria-labelledby="catalog-title">
+    <div class="catalog-heading">
+      <h2 id="catalog-title">Todos os cursos</h2>
+      <span class="catalog-count" aria-live="polite"
+        >@if (!store.loading() && !store.error()) { {{ store.total() }} {{ store.total() === 1 ?
+        'curso encontrado' : 'cursos encontrados' }} }</span
+      >
+    </div>
+    <form class="filters" (submit)="$event.preventDefault()" aria-label="Buscar e filtrar cursos">
+      <div class="search-field">
+        <label for="course-search">Buscar por nome</label>
+        <div class="search-input">
+          <span aria-hidden="true">⌕</span
+          ><input
+            id="course-search"
+            type="search"
+            [maxlength]="site.courseSearchMaxLength"
+            placeholder="O que você quer aprender?"
+            autocomplete="off"
+            [ngModel]="query().search"
+            (ngModelChange)="update('search', $event)"
+            name="search"
+          />
+        </div>
+      </div>
+      <div>
+        <label for="category">Categoria</label
+        ><select
+          id="category"
+          name="category"
+          [ngModel]="query().category"
+          (ngModelChange)="update('category', $event)"
+        >
+          <option value="">Todas as categorias</option>
+          @for (category of categories; track category) {
+          <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="modality">Modalidade</label
+        ><select
+          id="modality"
+          name="modality"
+          [ngModel]="query().modality"
+          (ngModelChange)="update('modality', $event)"
+        >
+          <option value="">Todas as modalidades</option>
+          @for (modality of modalities; track modality) {
+          <option [value]="modality">{{ modality }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label for="status">Status</label
+        ><select
+          id="status"
+          name="status"
+          [ngModel]="query().status"
+          (ngModelChange)="update('status', $event)"
+        >
+          <option value="">Todos os status</option>
+          @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+    </form>
+    @if (hasFilters()) {
+    <div class="filter-summary">
+      <span>Resultados para os filtros selecionados</span
+      ><button type="button" class="text-link" (click)="clear()">
+        Limpar filtros <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    } @if (store.loading()) {
+    <div class="state-panel" role="status">
+      <span class="loading-spinner" aria-hidden="true"></span>
+      <h2>Buscando novas possibilidades…</h2>
+      <p>Estamos carregando os cursos.</p>
+    </div>
+    } @else if (store.error()) {
+    <div class="state-panel" role="alert">
+      <span class="state-icon" aria-hidden="true">↻</span>
+      <h2>Os cursos não carregaram.</h2>
+      <p>Verifique sua conexão e tente mais uma vez.</p>
+      <button type="button" class="button button-dark" (click)="store.load()">
+        Tentar novamente
+      </button>
+    </div>
+    } @else if (filtered().length === 0) {
+    <div class="state-panel" role="status">
+      <span class="state-icon" aria-hidden="true">⌕</span>
+      <h2>Nenhum curso encontrado</h2>
+      <p>Tente outro nome ou ajuste os filtros para explorar mais opções.</p>
+      <button type="button" class="button button-dark" (click)="clear()">Limpar filtros</button>
+    </div>
+    } @else {
+    <div class="course-grid">
+      @for (course of filtered(); track course.id) {
+      <app-course-card [course]="course" [showMeta]="true" /> }
+    </div>
+    }
+  </section>
+  <section class="catalog-help">
+    <div class="container">
+      <p class="eyebrow">Precisa de ajuda para decidir?</p>
+      <h2>O conhecimento abre caminhos.</h2>
+      <p>Conheça os conteúdos, as modalidades e o público de cada curso antes de escolher.</p>
+      <a class="button button-white" routerLink="/" fragment="sobre"
+        >Conheça nossa proposta <span class="button-arrow" aria-hidden="true"></span
+      ></a>
+    </div>
+  </section>
+</main>
+<app-footer />

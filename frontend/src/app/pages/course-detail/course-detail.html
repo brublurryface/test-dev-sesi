@@ -1,0 +1,229 @@
+<app-header [courseSlug]="course()?.slug ?? site.referenceCourseSlug" />
+<main id="conteudo" class="detail-page">
+  @if (store.loading()) {
+  <div class="container section">
+    <div class="state-panel" role="status">
+      <span class="loading-spinner" aria-hidden="true"></span>
+      <p>Carregando detalhes do curso…</p>
+    </div>
+  </div>
+  } @else if (store.error()) {
+  <div class="container section">
+    <div class="state-panel" role="alert">
+      <h2>Não conseguimos carregar este curso.</h2>
+      <p>Verifique sua conexão e tente novamente.</p>
+      <button type="button" class="button button-dark" (click)="store.load()">
+        Tentar novamente
+      </button>
+    </div>
+  </div>
+  } @else if (course(); as course) {
+  <section class="container course-hero">
+    <div class="course-heading">
+      <a routerLink="/cursos" class="back-link">← Todos os cursos</a>
+      <div>
+        <span
+          class="category-tag"
+          [class.nature]="course.category === 'Ciências da Natureza'"
+          [class.sustainable]="course.category === 'Sustentabilidade'"
+          ><img
+            [src]="course.category === 'Matemática' ? 'assets/icon-matematica-20px.svg' : course.category === 'Sustentabilidade' ? 'assets/icon-sustentabilidade-20px.svg' : 'assets/icon-ciencias-natureza-20px.svg'"
+            alt=""
+          />{{ course.category }}</span
+        >
+      </div>
+      <h1>{{ course.name }}</h1>
+      <div class="primary-meta">
+        @if (course.availableAt) {
+        <p>
+          <span aria-hidden="true"
+            ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M7 2v4M17 2v4M3 10h18M11 21H3V5h18v9M14 19l3 3 6-7" /></svg
+          ></span>
+          {{ course.status === 'Em breve' ? 'Disponível a partir de:' : 'Início do curso:' }}
+          <strong>{{ course.availableAt | date:'dd/MM/yyyy':'UTC' }}</strong>
+        </p>
+        }
+        <p>
+          <span aria-hidden="true"
+            ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="8" r="6" />
+              <path d="m8 13-1 9 5-3 5 3-1-9" />
+              <path
+                d="m12 4 1 2.5 2.5.2-2 1.6.7 2.5L12 9.3l-2.2 1.5.7-2.5-2-1.6 2.5-.2z"
+                stroke="none"
+                fill="currentColor"
+              /></svg
+          ></span>
+          Certificação: <strong>{{ course.certification }}</strong>
+        </p>
+      </div>
+      <button
+        type="button"
+        class="button button-dark"
+        [disabled]="course.status !== 'Disponível'"
+        (click)="showDialog('enroll')"
+      >
+        {{ course.status === 'Disponível' ? 'Matricule-se' : course.status === 'Em breve' ? 'Em
+        breve' : 'Inscrições encerradas' }} <span class="button-arrow" aria-hidden="true"></span>
+      </button>
+    </div>
+    <button
+      type="button"
+      class="video-poster"
+      aria-label="Informações sobre o vídeo deste curso"
+      (click)="showDialog('video')"
+    >
+      <img
+        src="assets/video-thumb.png"
+        alt="Profissionais observando um processo industrial"
+        width="1920"
+        height="1080"
+        fetchpriority="high"
+      /><span class="play-circle" aria-hidden="true">▶</span>
+    </button>
+  </section>
+  <section class="container detail-benefits" aria-label="Benefícios apresentados no protótipo">
+    <app-benefits [horizontal]="true" />
+  </section>
+  <div class="container course-facts" aria-label="Informações do curso">
+    <div><span>Carga horária</span><strong>{{ course.hours }} horas</strong></div>
+    <div><span>Modalidade</span><strong>{{ course.modality }}</strong></div>
+    <div><span>Status</span><strong>{{ course.status }}</strong></div>
+    <div><span>Público-alvo</span><strong>{{ course.audience }}</strong></div>
+  </div>
+  <section class="container course-content" aria-labelledby="about-course-title">
+    <aside class="about-course">
+      <h2 id="about-course-title">Sobre o curso</h2>
+      @if (course.about) {
+      <p>{{ course.about }}</p>
+      }
+    </aside>
+    <div class="accordions">
+      <details class="course-accordion">
+        <summary>
+          <h2>Módulos</h2>
+          <span aria-hidden="true" class="toggle-symbol"></span>
+        </summary>
+        <div class="accordion-body modules-list">
+          @for (module of course.modules; track module.title; let index = $index) {
+          <section>
+            <h3>{{ index + 1 }}. {{ module.title }}</h3>
+            @if (module.topics.length) {
+            <ul>
+              @for (topic of module.topics; track topic) {
+              <li>{{ topic }}</li>
+              }
+            </ul>
+            }
+            <details class="lesson-descriptions">
+              <summary>Ver aulas deste módulo</summary>
+              <ol>
+                @for (lesson of module.lessons; track lesson.id) {
+                <li>
+                  <strong>{{ lesson.title }}</strong>
+                  @if (lesson.description) {
+                  <p>{{ lesson.description }}</p>
+                  }
+                </li>
+                }
+              </ol>
+            </details>
+          </section>
+          }
+        </div>
+      </details>
+      @if (course.onlineInformation.length) {
+      <details class="course-accordion">
+        <summary>
+          <h2>Aulas online e avaliações</h2>
+          <span aria-hidden="true" class="toggle-symbol"></span>
+        </summary>
+        <div class="accordion-body">
+          @for (block of course.onlineInformation; track $index) { @switch (block.kind) { @case
+          ('heading') {
+          <h3>{{ block.text }}</h3>
+          } @case ('list') {
+          <ul>
+            @for (item of block.items; track $index) {
+            <li>{{ item }}</li>
+            }
+          </ul>
+          } @case ('note') {
+          <p class="content-note">{{ block.text }}</p>
+          } @default {
+          <p>{{ block.text }}</p>
+          } } }
+        </div>
+      </details>
+      } @if (faqs().length) {
+      <details class="course-accordion">
+        <summary>
+          <h2>Dúvidas frequentes</h2>
+          <span aria-hidden="true" class="toggle-symbol"></span>
+        </summary>
+        <div class="accordion-body faq-list">
+          @for (faq of faqs(); track faq.question; let index = $index) {
+          <section>
+            <h3>{{ index + 1 }}. {{ faq.question }}</h3>
+            <p>{{ faq.answer }}</p>
+          </section>
+          }
+        </div>
+      </details>
+      }
+    </div>
+  </section>
+  <app-testimonials [light]="true" />
+  <section class="contact-cta">
+    <div class="container">
+      <p class="eyebrow">Precisa de ajuda para decidir?</p>
+      <h2>Fale com a gente</h2>
+      <a [href]="'mailto:' + site.contactEmail" class="button button-white"
+        >Mandar uma mensagem <span class="button-arrow" aria-hidden="true"></span
+      ></a>
+    </div>
+  </section>
+  } @else {
+  <div class="container section">
+    <div class="state-panel">
+      <h1>Curso não encontrado</h1>
+      <p>Esse endereço não corresponde a um curso do catálogo.</p>
+      <a routerLink="/cursos" class="button button-dark">Explorar cursos</a>
+    </div>
+  </div>
+  }
+</main>
+<app-footer />
+@if (course(); as course) {
+<aside class="enrollment-bar" aria-label="Inscrição no curso">
+  <strong>{{ course.name }}</strong>
+  @if (course.status === 'Disponível') {
+  <a class="button button-white" [routerLink]="['/ava', course.slug]">
+    Matricule-se <span class="button-arrow" aria-hidden="true"></span>
+  </a>
+  } @else {
+  <button type="button" class="button button-white" disabled>
+    {{ course.status }}
+    <span class="button-arrow" aria-hidden="true"></span>
+  </button>
+  }
+</aside>
+}
+<dialog #dialog class="app-dialog" aria-labelledby="course-dialog-title">
+  <button type="button" class="dialog-close" aria-label="Fechar" (click)="closeDialog()">×</button>
+  <p class="eyebrow">{{ dialogMode() === 'enroll' ? 'Conheça a experiência' : 'Apresentação' }}</p>
+  <h2 id="course-dialog-title">
+    {{ dialogMode() === 'enroll' ? 'Explore uma aula do curso' : 'Vídeo em breve' }}
+  </h2>
+  <p>
+    {{ dialogMode() === 'enroll' ? 'Você pode conhecer a área de estudos deste curso. O acesso é
+    demonstrativo e não efetiva uma matrícula.' : 'O vídeo de apresentação ainda não está
+    disponível. Você pode conferir os módulos e conhecer uma aula demonstrativa.' }}
+  </p>
+  @if (course(); as course) {
+  <a class="button button-dark" [routerLink]="['/ava', course.slug]" (click)="closeDialog()"
+    >Acessar demonstração <span class="button-arrow" aria-hidden="true"></span
+  ></a>
+  }
+</dialog>

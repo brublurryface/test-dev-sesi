@@ -1,0 +1,141 @@
+:host {
+  display: block;
+  height: var(--header-height);
+}
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  background: #fff;
+  box-shadow: 0 1px 0 #00000010;
+  transition:
+    background 0.2s,
+    color 0.2s;
+  color: var(--ink);
+}
+.site-header.on-hero {
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+.header-inner {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.brand {
+  flex-shrink: 0;
+}
+.brand img {
+  width: clamp(196px, 13.86vw, 266px);
+  height: auto;
+  display: block;
+}
+nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 2.1vw, 40px);
+  font-size: clamp(16px, 1.25vw, 24px);
+  font-weight: 600;
+}
+nav a,
+.nav-label {
+  text-decoration: none;
+  position: relative;
+}
+nav a:not(.student-link):after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s;
+}
+nav a:hover:after {
+  transform: scaleX(1);
+}
+.student-link {
+  border: 1px solid #0005;
+  border-radius: 12px;
+  padding: clamp(8px, 0.55vw, 11px) clamp(16px, 1.15vw, 22px);
+  display: flex;
+  align-items: center;
+  line-height: 1.5;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+.student-link:hover {
+  background: #00000008;
+  border-color: #00000026;
+}
+/* O contorno permanece visível; o fundo acompanha o header e escurece no hover. */
+.on-hero .student-link {
+  border-color: #fff3;
+}
+.on-hero .student-link:hover {
+  background: rgb(128 0 0 / 35%);
+  border-color: #fff3;
+}
+.menu-toggle {
+  display: none;
+}
+@media (max-width: 760px) {
+  .header-inner {
+    gap: 16px;
+  }
+  .brand img {
+    width: 181px;
+  }
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    padding: 9px 0;
+  }
+  .menu-toggle span:last-child {
+    font-size: 25px;
+  }
+  nav {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    padding: 16px 6% 24px;
+    background: #fff;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    box-shadow: 0 15px 20px #00000012;
+  }
+  nav.is-open {
+    display: flex;
+  }
+  nav a,
+  .nav-label {
+    padding: 14px 0;
+  }
+  nav a:after {
+    display: none;
+  }
+  .student-link {
+    margin-top: 12px;
+    justify-content: center;
+    padding: 12px;
+  }
+  .on-hero nav {
+    color: var(--ink);
+  }
+}

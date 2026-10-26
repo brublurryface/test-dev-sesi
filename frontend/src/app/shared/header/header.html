@@ -1,0 +1,37 @@
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header" [class.on-hero]="transparent() && !scrolled() && !menuOpen()">
+  <div class="container header-inner">
+    <a routerLink="/" class="brand" aria-label="SESI Indústria — início" (click)="closeMenu()">
+      <img
+        [src]="transparent() && !scrolled() && !menuOpen() ? 'assets/logo-sesi-industria-white.svg' : 'assets/logo-sesi-industria-primary.svg'"
+        width="266"
+        height="43"
+        alt="SESI Indústria"
+      />
+    </a>
+    <button
+      type="button"
+      class="menu-toggle"
+      aria-controls="navegacao-principal"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="menuOpen.set(!menuOpen())"
+    >
+      <span>{{ menuOpen() ? 'Fechar' : 'Menu' }}</span
+      ><span aria-hidden="true">{{ menuOpen() ? '×' : '☰' }}</span>
+    </button>
+    <nav id="navegacao-principal" aria-label="Navegação principal" [class.is-open]="menuOpen()">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: true}"
+        (click)="closeMenu()"
+        >Início</a
+      >
+      <a routerLink="/" fragment="principais-cursos" (click)="closeMenu()">Cursos</a>
+      <a href="#" aria-disabled="true" (click)="$event.preventDefault(); closeMenu()">Sobre</a>
+      <a class="student-link" [routerLink]="['/ava', courseSlug()]" (click)="closeMenu()"
+        >Área do aluno</a
+      >
+    </nav>
+  </div>
+</header>
