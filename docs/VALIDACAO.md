@@ -2,6 +2,14 @@
 
 Verificações executadas pelo agente Nemo, do ChatGPT/Codex, entre 22 e 25/10/2026. Este registro distingue os testes da versão integrada, a revisão visual inicial do frontend e a conferência da aplicação publicada no Render.
 
+## Diferencial Moodle — 26/10/2026
+
+- As três funções de leitura foram consultadas na instância real pelo PowerShell da Bruna: curso ID 3, seção geral e dez módulos, além da página Aula 1 inicialmente cadastrada. O cadastro foi depois completado e conferido no navegador, com dez páginas Aula 1 e três itens introdutórios; Boas práticas preserva o texto fornecido nas capturas.
+- Os 25 testes do backend passaram: 17 testes anteriores da API/SQLite e oito novos casos para importação Moodle. Os novos casos usam HTTP simulado e SQLite real: importação bem-sucedida, preservação de IDs e de outros cursos, conteúdo de referência, página ausente, curso incorreto, erro Moodle com HTTP 200, falha HTTP, cancelamento, configuração desativada/inválida e conversão de HTML em texto.
+- A API compilou e foi publicada em Release no executor, com verificação estrita de avisos. Não houve alteração no frontend nem inclusão de pacotes de terceiros.
+- O processo Release foi iniciado com a integração desativada e passou em cinco verificações HTTP: diagnóstico `disabled`, sete cursos, dez módulos de Matemática, oito blocos de Boas práticas e saúde do banco. O projeto continua executável sem credenciais Moodle.
+- A integração desta versão ainda depende de revisão, implantação e configuração privada do token no Render. Os testes automatizados não substituem a verificação dessa implantação. Detalhes, estados e limites estão em [MOODLE.md](MOODLE.md).
+
 ## Versão integrada
 
 | Verificação                                     | Resultado observado                                                                                                                                   |

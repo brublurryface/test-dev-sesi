@@ -6,6 +6,8 @@ Projeto **TEST DEV SESI Indústria**. Registro referente à versão integrada, a
 
 Foi utilizado o **agente Nemo, do ChatGPT/Codex**, como apoio à análise dos requisitos, à implementação e à verificação do projeto. A contribuição incluiu geração e adaptação de componentes Angular, estilos, API C#/.NET, modelo SQLite, migrations, carga demonstrativa, integração HTTP, testes e documentação técnica.
 
+O diferencial Moodle foi acrescentado com apoio do agente Nemo na configuração do curso e do serviço de leitura, implementação do cliente REST, importação para SQLite, diagnóstico, testes e documentação. Bruna criou e confirmou a conta de hospedagem, aceitou os termos, autorizou o acesso e executou as consultas autenticadas de verificação no PowerShell. A chave foi mantida fora da conversa e do repositório. O alcance e a situação da validação estão registrados em [docs/MOODLE.md](docs/MOODLE.md).
+
 ## Referências fornecidas pela Bruna
 
 Bruna forneceu o enunciado, os arquivos de apoio e as capturas do protótipo, incluindo a landing page, os detalhes do curso, os painéis expandidos e a AVA. Esses materiais orientaram a estrutura das páginas, os conteúdos e os comportamentos implementados nesta versão.
