@@ -1,6 +1,6 @@
 # TEST DEV SESI Indústria — Validação
 
-Verificações executadas pelo agente Nemo, do ChatGPT/Codex, entre 22 e 25/10/2026. Este registro distingue os testes da versão integrada da revisão visual realizada no build do frontend.
+Verificações executadas pelo agente Nemo, do ChatGPT/Codex, entre 22 e 25/10/2026. Este registro distingue os testes da versão integrada, a revisão visual inicial do frontend e a conferência da aplicação publicada no Render.
 
 ## Versão integrada
 
@@ -65,15 +65,35 @@ Após atualizar o pacote de publicação e executar a aplicação em `http://loc
 - Acesso à AVA de Geometria e Modelagem pelos detalhes do próprio curso, mantendo o curso correto após recarregar a página.
 - Funcionamento satisfatório do layout móvel, sem registro de uma dimensão ou aparelho específico nessa confirmação.
 
-Essas confirmações complementam os testes automatizados e a revisão do frontend. A recarga com busca e filtros e a recuperação após indisponibilidade da API ainda precisam de confirmação no navegador integrado.
+Essas confirmações complementam os testes automatizados e a revisão do frontend. A recarga com busca e filtros foi posteriormente conferida no endereço público, conforme a seção seguinte. A recuperação após indisponibilidade da API não foi provocada no navegador integrado.
 
 ## Preparação da hospedagem em Docker — 25/10
 
 O Dockerfile compila frontend e API em etapas separadas, utiliza as versões de referência de Node.js e .NET, entrega ambos pelo ASP.NET Core e prepara escrita no SQLite para um usuário sem privilégios. O .dockerignore exclui bancos e resultados locais do contexto de build. As três tags de imagens utilizadas foram consultadas nos registros oficiais e oferecem Linux amd64.
 
-A configuração proposta para Render Free e seus limites de armazenamento temporário e suspensão por inatividade estão em [PUBLICACAO.md](PUBLICACAO.md). A imagem completa ainda precisa ser construída e executada com Docker; o ambiente desta revisão não possui Docker. O serviço e o endereço público ainda não foram criados.
+A configuração do Render Free e seus limites de armazenamento temporário e suspensão por inatividade estão em [PUBLICACAO.md](PUBLICACAO.md). A construção da imagem e a execução do serviço foram concluídas no Render, conforme o registro da publicação abaixo.
 
-O pacote integrado foi executado com ASP.NET Core Runtime 10.0.13 e o comando de entrada do Dockerfile, fora de um contêiner. Nove verificações passaram: health check nas portas padrão e configurada, carga inicial de sete cursos, rota direta da AVA, encerramento por SIGTERM em ambas as execuções, conservação do catálogo no reinício, aplicação das duas migrations e integridade das chaves estrangeiras. Este teste não substitui a construção da imagem. A execução como usuário sem privilégios permanece pendente, pois o ambiente de verificação não permite atribuir a pasta ao UID 1654.
+O pacote integrado foi executado com ASP.NET Core Runtime 10.0.13 e o comando de entrada do Dockerfile, fora de um contêiner. Nove verificações passaram: health check nas portas padrão e configurada, carga inicial de sete cursos, rota direta da AVA, encerramento por SIGTERM em ambas as execuções, conservação do catálogo no reinício, aplicação das duas migrations e integridade das chaves estrangeiras. Essas verificações locais foram complementadas pela construção e execução da imagem no Render. O Dockerfile define `USER 1654:1654`; a inicialização do contêiner e a criação do SQLite ocorreram com sucesso. Não houve inspeção independente do UID do processo hospedado.
+
+## Publicação integrada no Render — 25/10
+
+Endereço: [test-dev-sesi.onrender.com](https://test-dev-sesi.onrender.com/). A imagem foi construída do commit `ee40f19`, cujo conteúdo foi integrado à `main` pela [PR #1](https://github.com/brublurryface/test-dev-sesi/pull/1). Serviço Free, runtime Docker, região Virginia, publicação automática desativada e monitoramento TCP padrão do Render.
+
+| Verificação                     | Resultado observado                                                                                                                       |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Construção e inicialização      | Imagem construída; duas migrations aplicadas; aplicação ouvindo em `0.0.0.0:10000`; deploy `live`                                         |
+| Health check e catálogo         | `/api/health`: 200 e `status: ok`; listagem com sete cursos e seis destaques                                                              |
+| Consulta pública                | Busca sem acento e três filtros retornaram um curso; combinação incompatível retornou zero                                                |
+| Validação e rotas de API        | Busca longa: 400; curso e endpoint inexistentes: 404; respostas em JSON                                                                   |
+| Detalhes e conteúdo             | Dez módulos no curso de referência; três em Geometria; descrições introdutórias e das aulas disponíveis                                   |
+| Rotas e OpenAPI                 | Página inicial, catálogo, detalhes e AVA de outro curso responderam ao acesso direto; OpenAPI disponível                                  |
+| Resultado das verificações HTTP | 15 de 15 verificações aprovadas                                                                                                           |
+| Catálogo no navegador           | Filtros combinados, seleção preservada após recarregar, estado vazio e limpeza para sete cursos conferidos                                |
+| Curso selecionado               | Detalhes de Geometria abriram a AVA de Geometria; controles Em breve desabilitados nos detalhes                                           |
+| Progresso da AVA                | Introdução concluída: 17%; após recarregar, abertura em Boas práticas; Introdução e Extras com exemplos fictícios; reinício retornou a 0% |
+| Alcance visual público          | Navegador desktop em 1363 × 936 px; os testes móveis anteriores permanecem registrados abaixo                                             |
+
+A indisponibilidade da API não foi provocada no navegador público; a recuperação de falha continua sem confirmação nesse ambiente. A suspensão por inatividade e a perda do disco temporário são limites documentados do plano Free, sem simulação de todo o ciclo de suspensão nesta validação.
 
 ## Histórico da revisão visual do frontend
 
@@ -122,7 +142,7 @@ As observações desta seção foram feitas no navegador usando o build do front
 
 ## Alcance e pendências
 
-A prévia gerenciada do navegador não oferece o runtime .NET instalado no executor. Por isso, a integração foi verificada pelos testes HTTP com SQLite e pelo processo do pacote Release no executor; a inspeção visual pelo agente Nemo utilizou o build do frontend. Bruna conferiu parte do fluxo integrado no Windows, conforme o registro acima. Permanecem pendentes a recarga dos filtros, a recuperação de falha de rede no navegador integrado e a validação da hospedagem pública. A entrega não está publicada.
+A integração foi verificada pelos testes HTTP com SQLite, pelo processo do pacote Release no executor e, após a publicação, por HTTP e no navegador público. A revisão visual inicial utilizou o build do frontend; Bruna também conferiu parte do fluxo integrado no Windows. A aplicação está publicada e a recarga dos filtros foi conferida. A recuperação após indisponibilidade da API permanece sem confirmação no navegador integrado.
 
 A revisão não equivale a uma auditoria completa com leitores de tela nem a testes exaustivos em dispositivos físicos. A preferência de redução de movimento é tratada no código; não foi emulada nesta revisão.
 
