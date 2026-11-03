@@ -96,6 +96,20 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px 24px;
 }
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+.pagination .button {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 14px;
+}
 .catalog-help {
   background: var(--red);
   color: #fff;

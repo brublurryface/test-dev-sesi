@@ -9,4 +9,8 @@ export const SITE_CONFIG = {
   contactEmail: 'contato@sesiindustria.com.br',
   // Deve acompanhar CourseQuery.MaxSearchLength, validado novamente no backend.
   courseSearchMaxLength: 120,
+  // A API aceita até CourseQuery.MaxPageSize; o catálogo usa páginas de 20 resumos.
+  coursePageSize: 20,
+  featuredCourseLimit: 6,
+  footerCourseLimit: 7,
 } as const;

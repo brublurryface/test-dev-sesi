@@ -10,7 +10,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { Lesson } from '../../core/course.model';
-import { normalizeText } from '../../core/course-query';
+import { filterLearningGroups } from '../../core/learning-navigation';
 import {
   calculateLearningProgress,
   findInitialLesson,
@@ -59,19 +59,7 @@ export class Learning {
       this.groups().find((group) => group.lessons.some((lesson) => lesson.id === this.selectedId()))
         ?.id
   );
-  readonly visibleGroups = computed(() => {
-    const term = normalizeText(this.search());
-    // Encontrar o título de um módulo mantém suas aulas; buscar uma aula restringe a lista interna.
-    return this.groups()
-      .map((group, index) => ({
-        ...group,
-        number: index + 1,
-        lessons: normalizeText(group.title).includes(term)
-          ? group.lessons
-          : group.lessons.filter((lesson) => normalizeText(lesson.title).includes(term)),
-      }))
-      .filter((group) => group.lessons.length);
-  });
+  readonly visibleGroups = computed(() => filterLearningGroups(this.groups(), this.search()));
   // Enquanto não há curso/aulas, o objeto vazio mantém o template seguro; não cria uma aula no banco.
   readonly lesson = computed(
     () =>

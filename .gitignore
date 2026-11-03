@@ -4,6 +4,8 @@ dist/
 out-tsc/
 .DS_Store
 .env
+.env.*
+!.env.example
 *.log
 .openai/
 bin/

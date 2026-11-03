@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import type { Observable } from 'rxjs';
 import type { Course, CoursePage } from './course.model';
-import type { CourseQuery } from './course-query';
+import type { CourseListQuery } from './course-query';
 
 /**
  * Cliente HTTP do catálogo. Envia os filtros à API e tipa as respostas conforme course.model.ts.
@@ -13,7 +13,7 @@ export class CourseService {
   private readonly http = inject(HttpClient);
 
   /** Consulta o resumo dos cursos; a busca e os filtros são aplicados pelo backend. */
-  list(query: Partial<CourseQuery> & { featured?: boolean } = {}): Observable<CoursePage> {
+  list(query: CourseListQuery = {}): Observable<CoursePage> {
     let params = new HttpParams();
     // HttpParams codifica os valores da URL; featured=false também é um filtro válido.
     for (const [name, value] of Object.entries(query)) {

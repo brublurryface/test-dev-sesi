@@ -26,10 +26,7 @@
           class="category-tag"
           [class.nature]="course.category === 'Ciências da Natureza'"
           [class.sustainable]="course.category === 'Sustentabilidade'"
-          ><img
-            [src]="course.category === 'Matemática' ? 'assets/icon-matematica-20px.svg' : course.category === 'Sustentabilidade' ? 'assets/icon-sustentabilidade-20px.svg' : 'assets/icon-ciencias-natureza-20px.svg'"
-            alt=""
-          />{{ course.category }}</span
+          ><img [src]="categoryIcon(course.category)" alt="" />{{ course.category }}</span
         >
       </div>
       <h1>{{ course.name }}</h1>
@@ -64,8 +61,7 @@
         [disabled]="course.status !== 'Disponível'"
         (click)="showDialog('enroll')"
       >
-        {{ course.status === 'Disponível' ? 'Matricule-se' : course.status === 'Em breve' ? 'Em
-        breve' : 'Inscrições encerradas' }} <span class="button-arrow" aria-hidden="true"></span>
+        {{ enrollmentLabel(course.status) }} <span class="button-arrow" aria-hidden="true"></span>
       </button>
     </div>
     <button

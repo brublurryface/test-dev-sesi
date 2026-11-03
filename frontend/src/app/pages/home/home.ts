@@ -26,7 +26,7 @@ export class Home {
   readonly videoInfo = viewChild.required<ElementRef<HTMLDialogElement>>('videoInfo');
   constructor() {
     // A seleção de destaques é feita pelo servidor, sem manter uma segunda lista de cursos aqui.
-    this.store.load({ featured: true });
+    this.store.load({ featured: true, pageSize: this.site.featuredCourseLimit });
   }
   /** Avança ou retorna a largura de um cartão mais seu espaçamento no carrossel. */
   move(direction: number): void {

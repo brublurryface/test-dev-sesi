@@ -25,7 +25,7 @@ export class Footer {
   readonly infoTitle = signal('');
   readonly info = viewChild.required<ElementRef<HTMLDialogElement>>('info');
   constructor() {
-    this.store.load();
+    this.store.load({ pageSize: this.site.footerCourseLimit });
   }
   openInfo(title: string): void {
     this.infoTitle.set(title);

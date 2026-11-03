@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CourseDetailStore } from '../../core/course-detail.store';
 import { SITE_CONFIG } from '../../core/site.config';
+import { categoryIcon, enrollmentLabel } from '../../core/course-presentation';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Benefits } from '../../shared/benefits/benefits';
@@ -32,6 +33,8 @@ import { Testimonials } from '../../shared/testimonials/testimonials';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseDetail {
+  readonly categoryIcon = categoryIcon;
+  readonly enrollmentLabel = enrollmentLabel;
   readonly site = SITE_CONFIG;
   readonly store = inject(CourseDetailStore);
   // A mesma rota pode exibir outro curso; o slug deve acompanhar essa troca de forma reativa.

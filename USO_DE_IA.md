@@ -1,6 +1,6 @@
 # Uso de inteligência artificial
 
-Projeto **TEST DEV SESI Indústria**. Registro referente à versão integrada, atualizado em 25/10/2026.
+Projeto **TEST DEV SESI Indústria**. Registro da versão integrada e de suas revisões em 03/11/2026.
 
 ## Ferramenta e contribuição
 
@@ -43,7 +43,27 @@ Bruna realiza a revisão integral dos commits antes de autorizar seu registro e 
 
 ## Validação dos resultados
 
-As verificações desta versão foram executadas pelo agente Nemo:
+### Revisão dos filtros — 03/11/2026
+
+Bruna identificou que as opções dos filtros estavam fixas e solicitou a revisão de sua extensibilidade e dos comportamentos relacionados. O agente Nemo implementou a consulta de opções distintas no SQLite, a validação por esses dados e o preenchimento dos seletores Angular pela API. A revisão também preserva seleções novas em links, distingue filtros inválidos de falhas de conexão e evita rótulos e ícones incorretos para valores novos.
+
+Os 15 testes do frontend e os 32 testes do backend passaram. Os casos novos alteram apenas bancos temporários, incluindo categorias, modalidades e status ausentes da carga inicial, combinação vazia, remoção de valores e validação do seeder. O alcance e as limitações da verificação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md). O registro em commits e a publicação seguem sujeitos à revisão da Bruna.
+
+### Revisão de dependências e navegação da AVA — 03/11/2026
+
+Bruna autorizou tratar três achados da revisão: dependências de desenvolvimento com alertas, numeração das aulas durante a busca e proteção de variantes dos arquivos de configuração local. O agente Nemo atualizou Angular CLI e build para 22.2.5, com Vite 8.3.5 no lockfile, extraiu a busca local para `learning-navigation.ts` e ampliou as regras do Git, permitindo arquivos `.env.example`.
+
+Os 19 testes do frontend passaram, incluindo quatro novos casos de navegação; o teste existente de normalização acompanha sua função no novo arquivo. A auditoria completa do npm retornou zero alertas, o build integrado passou e o servidor de desenvolvimento respondeu por HTTP, inclusive pelo proxy da API. As regras do Git foram verificadas em sete caminhos protegidos e três exemplos permitidos. A conferência visual permanece pendente, conforme [docs/VALIDACAO.md](docs/VALIDACAO.md). Bruna autorizou o registro dessas alterações em commits separados.
+
+### Paginação do catálogo — 03/11/2026
+
+Bruna compartilhou um apontamento de revisão sobre materializar toda a listagem e usar o tamanho do array como total. O agente Nemo implementou contagem independente e paginação no banco, validação dos limites, metadados no contrato HTTP, controles e página na URL do catálogo, além de limites próprios para destaques e rodapé. Os testes adicionais também corrigiram a resposta de parâmetros sem conversão, que retornavam 500 em desenvolvimento.
+
+Os 45 testes do backend e os 21 do frontend passaram, assim como o build integrado e a formatação. Um banco temporário com 100.000 registros sintéticos foi usado para verificar por HTTP páginas de 20 itens, total de 100.000 e sequência correta. Essa verificação funcional não é um teste de carga de produção; a conferência visual dos controles permanece pendente. O alcance está em [docs/VALIDACAO.md](docs/VALIDACAO.md). Bruna autorizou incluir essas alterações nos commits da revisão.
+
+### Verificações anteriores da versão integrada
+
+As verificações abaixo foram executadas pelo agente Nemo na preparação da versão integrada:
 
 - `npm run build` na raiz: compilação do Angular, restauração com lockfiles e publicação Release da API concluídas; frontend copiado para o pacote integrado.
 - `npm --prefix frontend test`: 12 testes de busca de aulas, progresso local e seleção da primeira aula pendente aprovados.

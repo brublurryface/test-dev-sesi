@@ -15,10 +15,28 @@ public sealed class CourseRepository(CatalogDbContext db)
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     /// <summary>
-    /// Combina todos os critérios preenchidos e retorna apenas os campos usados nos cartões.
-    /// Sem paginação neste catálogo: Total corresponde ao tamanho da lista filtrada.
+    /// Consulta valores distintos no banco, sem carregar cursos, módulos ou aulas completos.
+    /// Usa o catálogo inteiro para que uma combinação vazia não apague as opções dos seletores.
+    /// As consultas são sequenciais porque compartilham o mesmo DbContext.
     /// </summary>
-    public async Task<CoursePageDto> ListAsync(CourseQuery filter, CancellationToken cancellationToken)
+    public async Task<CourseFilterOptionsDto> GetFilterOptionsAsync(CancellationToken cancellationToken)
+    {
+        var courses = db.Courses.AsNoTracking();
+        var categories = await courses.Select(c => c.Category).Where(value => value.Trim() != "")
+            .Distinct().OrderBy(value => value).ToArrayAsync(cancellationToken);
+        var modalities = await courses.Select(c => c.Modality).Where(value => value.Trim() != "")
+            .Distinct().OrderBy(value => value).ToArrayAsync(cancellationToken);
+        var statuses = await courses.Select(c => c.Status).Where(value => value.Trim() != "")
+            .Distinct().OrderBy(value => value).ToArrayAsync(cancellationToken);
+        return new CourseFilterOptionsDto(categories, modalities, statuses);
+    }
+
+    /// <summary>
+    /// Combina todos os critérios preenchidos e retorna apenas os campos usados nos cartões.
+    /// Conta os resultados filtrados no banco e transfere somente a página solicitada.
+    /// </summary>
+    public async Task<CoursePageDto> ListAsync(CourseQuery filter, CourseFilterOptionsDto options,
+        CancellationToken cancellationToken)
     {
         // A consulta só lê dados; AsNoTracking evita manter objetos para futuras atualizações.
         var query = db.Courses.AsNoTracking();
@@ -29,10 +47,15 @@ public sealed class CourseRepository(CatalogDbContext db)
         if (!string.IsNullOrWhiteSpace(filter.Modality)) query = query.Where(c => c.Modality == filter.Modality);
         if (!string.IsNullOrWhiteSpace(filter.Status)) query = query.Where(c => c.Status == filter.Status);
         if (filter.Featured.HasValue) query = query.Where(c => c.Featured == filter.Featured.Value);
+        // A contagem é executada antes da paginação, sem materializar os cursos encontrados.
+        var total = await query.CountAsync(cancellationToken);
+        // A ordenação por uma chave única mantém a sequência determinística entre páginas.
+        // Skip/Take ainda pertencem ao IQueryable: LIMIT/OFFSET são aplicados pelo SQLite.
+        var page = query.OrderBy(c => c.Id).Skip((filter.Page - 1) * filter.PageSize).Take(filter.PageSize);
         // Select projeta o resumo sem carregar módulos/aulas. ToArrayAsync executa a consulta.
         // O EF parametriza os valores; a busca não é concatenada ao texto de um comando SQL.
         // O token permite sinalizar cancelamento se a requisição HTTP for interrompida.
-        var items = await query.OrderBy(c => c.Id).Select(c => new CourseSummaryDto
+        var items = await page.Select(c => new CourseSummaryDto
         {
             Id = c.Id,
             Slug = c.Slug,
@@ -49,7 +72,7 @@ public sealed class CourseRepository(CatalogDbContext db)
             AvailableAt = c.AvailableAt,
             Featured = c.Featured
         }).ToArrayAsync(cancellationToken);
-        return new CoursePageDto(items, items.Length);
+        return new CoursePageDto(items, total, options, filter.Page, filter.PageSize);
     }
 
     /// <summary>
