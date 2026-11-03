@@ -2,10 +2,8 @@ import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import type { HttpErrorResponse } from '@angular/common/http';
 import { Subscription, switchMap, timer } from 'rxjs';
 import type { CourseFilterOptions, CourseSummary } from './course.model';
-import type { CourseQuery } from './course-query';
+import type { CourseListQuery } from './course-query';
 import { CourseService } from './course.service';
-
-type ListQuery = Partial<CourseQuery> & { featured?: boolean };
 
 /**
  * Coordena a listagem e seus estados de tela: dados, contagem, carregamento e falha.
@@ -16,9 +14,10 @@ type ListQuery = Partial<CourseQuery> & { featured?: boolean };
 export class CourseListStore {
   private readonly api = inject(CourseService);
   private request?: Subscription;
-  private lastQuery: ListQuery = {};
+  private lastQuery: CourseListQuery = {};
   private readonly items = signal<CourseSummary[]>([]);
   private readonly count = signal(0);
+  private readonly pageCount = signal(0);
   private readonly pending = signal(true);
   private readonly failure = signal(false);
   private readonly invalid = signal(false);
@@ -31,6 +30,7 @@ export class CourseListStore {
   // A página lê os signals públicos, enquanto as mudanças de estado passam pelos métodos do store.
   readonly courses = this.items.asReadonly();
   readonly total = this.count.asReadonly();
+  readonly totalPages = this.pageCount.asReadonly();
   readonly loading = this.pending.asReadonly();
   readonly error = this.failure.asReadonly();
   readonly invalidQuery = this.invalid.asReadonly();
@@ -55,6 +55,7 @@ export class CourseListStore {
         next: (page) => {
           this.items.set(page.items);
           this.count.set(page.total);
+          this.pageCount.set(page.totalPages);
           this.options.set(page.filters);
           this.optionsReady.set(true);
           this.pending.set(false);
@@ -63,6 +64,7 @@ export class CourseListStore {
           // Uma falha limpa os resultados e habilita a mensagem de erro; não usa dados fictícios locais.
           this.items.set([]);
           this.count.set(0);
+          this.pageCount.set(0);
           this.failure.set(true);
           this.invalid.set(error.status === 400);
           // Preserva opções já recebidas: uma falha transitória não apaga os seletores.

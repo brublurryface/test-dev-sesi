@@ -9,10 +9,13 @@ namespace SesiIndustria.Api.Courses;
 /// Um valor nulo ou vazio deixa o filtro de texto correspondente sem seleção.
 /// Featured é opcional: null traz todos; true traz destaques; false traz os demais.
 /// </summary>
-public sealed record CourseQuery(string? Search, string? Category, string? Modality, string? Status, bool? Featured)
+public sealed record CourseQuery(string? Search, string? Category, string? Modality, string? Status, bool? Featured,
+    int Page = 1, int PageSize = CourseQuery.DefaultPageSize)
 {
     // Regra do contrato HTTP, também usada pelo limite do campo no frontend.
     public const int MaxSearchLength = 120;
+    public const int DefaultPageSize = 20;
+    public const int MaxPageSize = 100;
     /// <summary>
     /// Retorna erros por nome de parâmetro, no formato usado pelo HTTP 400 de validação.
     /// A API valida novamente mesmo quando a interface já restringe os campos.
@@ -21,6 +24,12 @@ public sealed record CourseQuery(string? Search, string? Category, string? Modal
     {
         var errors = new Dictionary<string, string[]>();
         if (Search?.Length > MaxSearchLength) errors["search"] = [$"A busca deve ter no máximo {MaxSearchLength} caracteres."];
+        if (Page < 1) errors["page"] = ["A página deve ser maior ou igual a 1."];
+        if (PageSize < 1 || PageSize > MaxPageSize)
+            errors["pageSize"] = [$"O tamanho da página deve estar entre 1 e {MaxPageSize}."];
+        // Skip recebe int: verifica o produto com long antes de calcular o deslocamento.
+        if (Page > 0 && PageSize > 0 && ((long)Page - 1) * PageSize > int.MaxValue)
+            errors["page"] = ["A página solicitada excede o limite de navegação."];
         Check("category", Category, options.Categories);
         Check("modality", Modality, options.Modalities);
         Check("status", Status, options.Statuses);

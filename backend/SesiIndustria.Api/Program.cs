@@ -41,7 +41,12 @@ builder.Services.AddScoped<MoodleImporter>();
 
 // 3. Construir a aplicação e definir o tratamento comum de erros HTTP.
 var app = builder.Build();
-app.UseExceptionHandler();
+// Falhas de conversão dos parâmetros também são entrada inválida, inclusive em desenvolvimento.
+app.UseExceptionHandler(new ExceptionHandlerOptions
+{
+    StatusCodeSelector = error => error is BadHttpRequestException requestError
+        ? requestError.StatusCode : StatusCodes.Status500InternalServerError
+});
 app.UseStatusCodePages();
 
 // 4. Preparar o banco antes de começar a receber requisições.
@@ -65,9 +70,10 @@ app.MapGet("/api/integrations/moodle", (MoodleImportStatus status) => Results.Ok
 // O ASP.NET fornece o repositório registrado acima e o sinal de cancelamento da requisição.
 // A função valida a entrada; CourseRepository monta e executa a consulta no banco.
 app.MapGet("/api/courses", async (string? search, string? category, string? modality, string? status,
-    bool? featured, CourseRepository repository, CancellationToken cancellationToken) =>
+    bool? featured, int? page, int? pageSize, CourseRepository repository, CancellationToken cancellationToken) =>
 {
-    var filter = new CourseQuery(search, category, modality, status, featured);
+    var filter = new CourseQuery(search, category, modality, status, featured,
+        page ?? 1, pageSize ?? CourseQuery.DefaultPageSize);
     // O mesmo conjunto vindo do banco valida a consulta e preenche os seletores no Angular.
     var options = await repository.GetFilterOptionsAsync(cancellationToken);
     var errors = filter.Validate(options);

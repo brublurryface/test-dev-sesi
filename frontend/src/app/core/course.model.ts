@@ -48,11 +48,14 @@ export interface Course extends CourseSummary {
   faqs: { question: string; answer: string }[];
   onlineInformation: ContentBlock[];
 }
-/** Resultado sem paginação: a contagem é fornecida pela API para a consulta atual. */
+/** Uma página de resumos; total conta todos os resultados compatíveis com os filtros. */
 export interface CoursePage {
   items: CourseSummary[];
   total: number;
   filters: CourseFilterOptions;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 /** Valores distintos do catálogo inteiro, fornecidos pela API junto aos resultados. */
