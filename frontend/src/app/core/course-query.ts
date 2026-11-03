@@ -27,15 +27,3 @@ export function readCourseQuery(
 export function filterOptionsForSelection(options: string[], selected: string): string[] {
   return selected && !options.includes(selected) ? [...options, selected] : options;
 }
-
-/**
- * Normaliza a busca local de aulas da AVA. A busca de cursos é feita pelo backend.
- * NFD separa os sinais de acentuação para comparar palavras com e sem acentos.
- */
-export function normalizeText(value: string): string {
-  return value
-    .trim()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLocaleLowerCase('pt-BR');
-}

@@ -1,12 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { filterOptionsForSelection, normalizeText, readCourseQuery } from './course-query.ts';
+import { filterOptionsForSelection, readCourseQuery } from './course-query.ts';
 import { categoryIcon, enrollmentLabel } from './course-presentation.ts';
-
-test('a busca de aulas ignora acentos, espaços externos e diferença de caixa', () => {
-  assert.equal(normalizeText('  INTRODUÇÃO  '), 'introducao');
-  assert.equal(normalizeText('Módulo 1'), 'modulo 1');
-});
 
 test('links aceitam categorias, modalidades e status novos sem uma lista fixa no frontend', () => {
   const params = new URLSearchParams({

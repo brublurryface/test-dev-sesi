@@ -67,7 +67,7 @@
     <details [open]="group.id === 'introducao' || !!search() || group.id === selectedGroupId()">
       <summary>{{ group.number }}. {{ group.title }}</summary>
       <ol>
-        @for (lesson of group.lessons; track lesson.id; let index = $index) {
+        @for (lesson of group.lessons; track lesson.id) {
         <li>
           <button
             type="button"
@@ -81,7 +81,7 @@
               aria-hidden="true"
               >{{ completed().includes(lesson.id) ? '✓' : lesson.id === selectedId() ? '▶' : ''
               }}</span
-            ><span>{{ group.number }}.{{ index + 1 }} {{ lesson.title }}</span
+            ><span>{{ group.number }}.{{ lesson.number }} {{ lesson.title }}</span
             ><span class="sr-only"
               >{{ completed().includes(lesson.id) ? ' — concluída' : '' }}</span
             >
