@@ -37,9 +37,9 @@ Para uma chamada `GET /api/courses?search=matematica`:
 
 1. O endpoint em `Program.cs` recebe `search` da URL e recebe `CourseRepository` pela injeção de dependência.
 2. `CourseRepository.GetFilterOptionsAsync()` consulta os valores distintos do catálogo inteiro. `CourseQuery.Validate(options)` valida a entrada contra essas opções. Erros produzem HTTP 400, com mensagens por parâmetro.
-3. `CourseRepository.ListAsync()` normaliza o termo e acrescenta os critérios à consulta. Os filtros preenchidos são combinados por AND.
-4. O EF Core traduz a consulta e seus valores em SQL parametrizado. `ToArrayAsync()` executa a leitura no SQLite.
-5. O repositório retorna `CoursePageDto`, com resumos, contagem e opções dos filtros; `Results.Ok()` produz HTTP 200 e a resposta JSON.
+3. `CourseRepository.ListAsync()` normaliza o termo e acrescenta os critérios à consulta. Os filtros preenchidos são combinados por AND. `CountAsync()` obtém o total filtrado no banco.
+4. `OrderBy(Id)`, `Skip()` e `Take()` definem uma página antes de executar a projeção. O EF Core traduz a consulta e seus valores em SQL parametrizado; `ToArrayAsync()` materializa somente esses resumos.
+5. O repositório retorna `CoursePageDto`, com resumos, total, metadados de paginação e opções dos filtros; `Results.Ok()` produz HTTP 200 e a resposta JSON.
 6. `CourseService` recebe o JSON no Angular; `CourseListStore` atualiza dados, contagem, opções e carregamento; o componente apresenta os cartões e os seletores.
 
 Uma consulta válida sem correspondência retorna `items: []` e `total: 0`. Um slug inexistente em `/api/courses/{slug}` retorna 404. Os estados de carregamento, ausência de resultado e falha são tratados separadamente na interface.
@@ -48,7 +48,7 @@ Uma consulta válida sem correspondência retorna `items: []` e `total: 0`. Um s
 
 | Contrato C#        | Tipo Angular    | Uso                                                             |
 | ------------------ | --------------- | --------------------------------------------------------------- |
-| `CoursePageDto`    | `CoursePage`    | Resumos e contagem da consulta atual, sem paginação; opções globais dos filtros |
+| `CoursePageDto`    | `CoursePage`    | Resumos da página, total filtrado, página/tamanho/total de páginas e opções globais dos filtros |
 | `CourseFilterOptionsDto` | `CourseFilterOptions` | Categorias, modalidades e status distintos do catálogo inteiro |
 | `CourseSummaryDto` | `CourseSummary` | Cartões do catálogo e destaques                                 |
 | `CourseDto`        | `Course`        | Detalhes completos do curso e conteúdo da AVA                   |
@@ -91,21 +91,26 @@ Os blocos de texto de aulas e orientações são persistidos em colunas JSON, ma
 | [course-detail.store.ts](../frontend/src/app/core/course-detail.store.ts) | Estado de um curso, distinguindo 404 e falha                  |
 | [catalog.ts](../frontend/src/app/pages/catalog/catalog.ts)                | Controles, URL e solicitação dos filtros ao servidor          |
 | [learning.ts](../frontend/src/app/pages/learning/learning.ts)             | Seleção, busca e conclusão demonstrativa de aulas             |
+| [learning-navigation.ts](../frontend/src/app/core/learning-navigation.ts) | Busca local com numeração original dos grupos e das aulas     |
 | [learning-progress.ts](../frontend/src/app/core/learning-progress.ts)     | Restauração dos identificadores e cálculo do percentual local |
 
 O serviço HTTP é compartilhado e não guarda os resultados. Cada componente que consulta o catálogo fornece sua própria instância do store, para não misturar os filtros e resultados do início, do catálogo e do rodapé. Os signals públicos são de leitura; os métodos do store coordenam as atualizações.
 
 No catálogo, os parâmetros públicos `busca`, `categoria`, `modalidade` e `status` são convertidos para `search`, `category`, `modality` e `status` no contrato HTTP. A digitação aguarda uma pausa de 250 ms; os seletores consultam imediatamente. Uma consulta nova cancela a inscrição anterior para evitar que uma resposta atrasada substitua a seleção atual.
 
+O parâmetro público `pagina` corresponde a `page` na API. Cada página do catálogo pede 20 cursos; alterar ou limpar filtros inicia na página 1. Anterior/Próxima preservam os critérios e participam do histórico, com rolagem manual. Uma página além da última recebe mensagem própria e acesso à primeira página. A API valida `pageSize` entre 1 e 100 e verifica overflow no deslocamento.
+
 As opções dos seletores vêm de `CoursePage.filters`, sem listas fixas no Angular ou no seeder. A seleção de um link fica visível antes da primeira resposta; se o valor deixou de existir, a API retorna 400 e a tela oferece limpar os filtros. Opções já carregadas são preservadas durante uma falha transitória. Categorias novas recebem um ícone neutro; status novos mantêm seu rótulo. Somente `Disponível` habilita o acesso demonstrativo de matrícula, preservando a regra existente.
 
 A busca de cursos ocorre no servidor. A busca de aulas da AVA ocorre no navegador, sobre o conteúdo do curso já recebido. A conclusão de aulas também é local: usa uma chave de armazenamento por curso, pode ser desfeita e não representa matrícula, avaliação ou progresso sincronizado.
+
+`filterLearningGroups()` atribui os números antes de aplicar a busca. Assim, Boas práticas continua sendo 1.2 quando é o único resultado; buscar pelo nome de um módulo mantém todas as suas aulas. Os números pertencem apenas à apresentação: os IDs das aulas, usados na seleção e no progresso, são preservados.
 
 Ao abrir um curso, `findInitialLesson()` escolhe a primeira aula ainda não concluída na ordem recebida da API. O componente usa os identificadores restaurados sem acompanhar o signal de conclusão nesse efeito, para que marcar uma aula não altere a seleção durante a leitura. Um curso já concluído abre na primeira aula para revisão; o grupo da aula retomada fica expandido.
 
 ## Configurações públicas e dados variáveis
 
-[site.config.ts](../frontend/src/app/core/site.config.ts) centraliza o nome do projeto usado nos títulos das rotas, o e-mail de contato, o curso de referência da demonstração e o limite de busca da interface. São configurações compiladas com o frontend; os dados das ofertas permanecem no banco e na API. `CourseQuery.MaxSearchLength` mantém a validação correspondente no servidor.
+[site.config.ts](../frontend/src/app/core/site.config.ts) centraliza o nome do projeto usado nos títulos das rotas, o e-mail de contato, o curso de referência, o limite de busca e os tamanhos das listas (catálogo 20, destaques 6 e rodapé 7). São configurações compiladas com o frontend; os dados das ofertas permanecem no banco e na API. `CourseQuery` valida os limites correspondentes no servidor.
 
 Nos detalhes, o header recebe o slug do curso atual por input para montar o link da área do aluno. Na página inicial e no catálogo, usa o curso de referência definido na configuração. O rodapé consulta os resumos da API e monta os links a partir de `slug` e `shortName`, com estado independente dos filtros da página.
 

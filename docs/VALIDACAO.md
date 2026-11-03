@@ -1,6 +1,45 @@
 # TEST DEV SESI Indústria — Validação
 
-Verificações executadas pelo agente Nemo, do ChatGPT/Codex. Este registro distingue a revisão de filtros de 03/11/2026 dos testes e revisões anteriores da versão integrada.
+Verificações executadas pelo agente Nemo, do ChatGPT/Codex. Este registro distingue as revisões de 03/11/2026 dos testes e revisões anteriores da versão integrada.
+
+## Paginação do catálogo — 03/11/2026
+
+Após o apontamento arquitetural compartilhado pela Bruna, a listagem passou a usar `CountAsync()` para o total filtrado e `OrderBy(Id)`, `Skip()` e `Take()` para materializar somente uma página. Padrão de 20 e máximo de 100 cursos por pedido. As opções dos filtros continuam sendo obtidas do catálogo inteiro. O registro desta etapa em commits foi autorizado pela Bruna na branch `fix/filtros-dinamicos`; publicação e conferência visual permanecem pendentes.
+
+| Verificação | Resultado observado |
+| --- | --- |
+| API e SQLite | 45 testes aprovados; 13 novos casos cobrem catálogo de 47 cursos, limites, sequência completa sem repetições/omissões, total filtrado, opções globais, página além da última e parâmetros inválidos |
+| Frontend | 21 testes aprovados; incluem leitura da página e preservação de busca/filtros ao montar e reabrir links |
+| Build integrado | Angular de produção com templates estritos e API em Release compilados com sucesso |
+| Formatação | Prettier e `git diff --check` passaram |
+| Volume por HTTP | Banco temporário com 100.000 cursos sintéticos; páginas 1, 2 e 5.000 retornaram 20 itens, total 100.000 e total de 5.000 páginas, com IDs na sequência esperada |
+| Transferência observada | As três respostas do teste de volume tiveram 8.947, 7.521 e 7.646 bytes, incluindo metadados e opções; não transferiram os demais resumos |
+| Outros pedidos HTTP | Limites de 6, 7 e 100 itens, página além da última, entrada inválida com 400 e rota direta Angular conferidos |
+
+Os testes detectaram que a conversão de parâmetros malformados, como `page=abc`, produzia 500 em desenvolvimento. O tratamento agora preserva o status de `BadHttpRequestException`, retornando 400; a regressão também inclui `featured=abc`. Falhas inesperadas continuam respondendo 500.
+
+O catálogo inicia na página 1 ao alterar ou limpar filtros e mantém a página no parâmetro público `pagina`. Anterior/Próxima usam a contagem de páginas da API e só aparecem quando há mais de uma página; páginas além da última recebem uma opção de retorno à primeira. Destaques e rodapé usam limites próprios de seis e sete cursos.
+
+A revisão visual dos controles e a interação com eles no navegador ainda estão pendentes pela limitação da prévia local. A leitura/montagem da URL foi testada como lógica e o template foi compilado. O exercício de 100.000 registros é uma verificação funcional local; não representa um teste de carga ou garantia de desempenho em produção. Deslocamentos profundos, alterações concorrentes, custo da contagem e índices continuam sendo considerações de evolução, conforme [paginação no EF Core](https://learn.microsoft.com/en-us/ef/core/querying/pagination).
+
+## Dependências, navegação da AVA e configurações locais — 03/11/2026
+
+Revisão preparada após os três commits de filtros, a partir de `deb6f8b`, na branch `fix/filtros-dinamicos`. O registro das alterações desta etapa em commits foi autorizado pela Bruna; a publicação permanece pendente.
+
+| Verificação | Resultado observado |
+| --- | --- |
+| Dependências de desenvolvimento | Angular CLI e build atualizados de 22.2.4 para 22.2.5; o lockfile passou a resolver Vite 8.3.5 |
+| Auditoria npm | Zero alertas na consulta completa após a atualização, incluindo ferramentas de desenvolvimento |
+| Testes do frontend | 19 testes aprovados; quatro novos casos cobrem números originais na busca, busca por módulo, limpeza sem alterar IDs/dados e ausência de resultados |
+| Formatação e compilação | Prettier, `git diff --check`, Angular de produção com templates estritos e publicação Release da API passaram |
+| Servidor de desenvolvimento | Angular CLI iniciou; página inicial e rota direta da AVA retornaram HTML; proxy `/api/courses` retornou sete cursos e opções dos filtros |
+| Regras do Git | Sete caminhos `.env`/`.env.*`, incluindo subdiretórios, foram ignorados; três caminhos `.env.example` permaneceram permitidos |
+
+Boas práticas permanece **1.2** e Extras permanece **1.3** quando cada uma é o único resultado da busca. Os números são atribuídos antes do filtro; a busca continua ignorando caixa, acentos e espaços externos. A extração da normalização para `learning-navigation.ts` mantém seu teste anterior. Os identificadores e os dados recebidos da API são preservados.
+
+O alerta original envolvia Vite 8.3.0 na ferramenta de desenvolvimento, com atualização disponível. A referência de segurança inclui [GHSA-587h-7wmj-h5pm](https://github.com/advisories/GHSA-587h-7wmj-h5pm), sobre Windows. A auditoria após a atualização foi executada em 03/11/2026.
+
+A numeração foi verificada por testes da lógica usada pelo componente e pela compilação estrita do template. A revisão visual permanece pendente pela limitação de acesso à prévia local descrita abaixo. Otimização das imagens, automação de testes nas PRs e cabeçalhos de proteção do navegador são melhorias identificadas para etapas seguintes.
 
 ## Filtros derivados do catálogo — 03/11/2026
 
@@ -17,7 +56,7 @@ Revisão preparada na branch `fix/filtros-dinamicos`, a partir da `main` em `a4e
 
 Os testes inseriram `Tecnologia & Inovação`, `Híbrido` e `Lista de espera` apenas em bancos temporários. Uma consulta combinando esses valores e a busca `MATEMATICA` retornou o curso esperado sem alterar código ou a carga de demonstração do projeto. A remoção de uma opção foi refletida na consulta seguinte; um link com o valor removido retornou 400.
 
-A lógica de leitura da URL foi verificada por teste, e as rotas diretas do pacote foram verificadas por HTTP. A conferência visual desta revisão, incluindo recarga no navegador e rótulos longos nos seletores, permanece pendente: o navegador do executor bloqueou o acesso à prévia local com `ERR_BLOCKED_BY_CLIENT`. As revisões visuais históricas abaixo não substituem essa conferência. A listagem continua sem paginação, conforme a decisão de volume demonstrativo.
+A lógica de leitura da URL foi verificada por teste, e as rotas diretas do pacote foram verificadas por HTTP. A conferência visual desta revisão, incluindo recarga no navegador e rótulos longos nos seletores, permanece pendente: o navegador do executor bloqueou o acesso à prévia local com `ERR_BLOCKED_BY_CLIENT`. As revisões visuais históricas abaixo não substituem essa conferência. Nesta etapa inicial de filtros a listagem ainda não tinha paginação; a evolução posterior está registrada na seção de paginação acima.
 
 ## Diferencial Moodle — 26/10/2026
 

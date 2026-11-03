@@ -61,6 +61,7 @@ O diretório `artifacts/publish` contém a publicação executável e o catálog
 - Carga inicial de sete cursos, três categorias, duas modalidades e três status.
 - Busca no servidor por nome completo ou curto, sem distinção entre acentos ou caixa.
 - Filtros combináveis por categoria, modalidade e status, com opções obtidas do banco; novos valores aparecem sem alterar o código. Contagem de resultados e limpeza.
+- Catálogo com 20 cursos por página, contagem total independente e página preservada na URL; mudar filtros retorna à primeira página.
 - Seleção preservada na URL, com atualização da listagem sem retorno ao topo.
 - Detalhes, módulos, aulas, descrições e textos do curso consultados na API.
 - AVA com busca de aulas, avanço e conclusão demonstrativa; progresso salvo neste navegador.
@@ -101,7 +102,7 @@ As páginas Angular são standalone e carregadas sob demanda. Signals representa
 
 | Método e caminho               | Resposta                                                                           |
 | ------------------------------ | ---------------------------------------------------------------------------------- |
-| `GET /api/courses`             | `{ items, total, filters }`; aceita `search`, `category`, `modality`, `status` e `featured` |
+| `GET /api/courses`             | `{ items, total, filters, page, pageSize, totalPages }`; aceita filtros, `page` e `pageSize` |
 | `GET /api/courses/{slug}`      | Curso com módulos, aulas, introdução, FAQ e blocos de texto                        |
 | `GET /api/health`              | Estado da conexão com o banco                                                      |
 | `GET /api/integrations/moodle` | Estado da importação Moodle nesta inicialização, sem credenciais                   |
@@ -115,7 +116,9 @@ Exemplo de consulta com os critérios combinados:
 
 O arquivo padrão é `backend/SesiIndustria.Api/App_Data/catalog.db` durante o desenvolvimento e `App_Data/catalog.db` dentro da publicação. A configuração `Database:Path`, ou a variável de ambiente `Database__Path`, permite escolher outro caminho. O diretório precisa permitir escrita.
 
-`filters` contém `categories`, `modalities` e `statuses`: valores distintos do catálogo inteiro, independentes da consulta atual. O servidor usa essas mesmas opções para validar os filtros. Uma combinação sem resultados mantém as opções disponíveis; um valor removido ou inexistente retorna 400 e a interface oferece limpar a seleção. A listagem continua sem paginação, adequada ao volume demonstrativo; o crescimento do catálogo exige revisar essa decisão.
+`filters` contém `categories`, `modalities` e `statuses`: valores distintos do catálogo inteiro, independentes da consulta e da página atual. O servidor usa essas mesmas opções para validar os filtros. Uma combinação sem resultados mantém as opções disponíveis; um valor removido ou inexistente retorna 400 e a interface oferece limpar a seleção.
+
+A API usa `page=1` e `pageSize=20` por padrão, com até 100 cursos por pedido. `CountAsync()` calcula o total filtrado no banco; `OrderBy(Id)`, `Skip()` e `Take()` limitam os resumos antes da materialização. Os controles Anterior/Próxima aparecem no catálogo quando há mais de uma página. Destaques e rodapé pedem no máximo seis e sete cursos, respectivamente, com limites definidos em `site.config.ts`. A paginação por deslocamento reduz a transferência e a memória usada, mas páginas profundas e a contagem ainda exigem trabalho do banco; o crescimento demanda avaliar índices e paginação por cursor.
 
 | Entidade     | Relações e dados principais                                                                                          |
 | ------------ | -------------------------------------------------------------------------------------------------------------------- |
@@ -137,7 +140,7 @@ dotnet test TestDevSesiIndustria.slnx --no-restore
 npm run build
 ```
 
-Os testes do frontend verificam busca de aulas, consistência do progresso e preservação de filtros novos em links. Os testes de integração exercitam requisições HTTP, migrations e consultas em arquivos SQLite temporários: opções derivadas dos dados, combinação de filtros, respostas vazias e inválidas, conteúdos, integridade e persistência após reinício. O alcance da revisão pelo navegador está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
+Os testes do frontend verificam busca de aulas com numeração estável, consistência do progresso e preservação de filtros e página em links. Os testes de integração exercitam requisições HTTP, migrations e consultas em arquivos SQLite temporários: opções derivadas dos dados, paginação e total independente, combinação de filtros, respostas vazias e inválidas, conteúdos, integridade e persistência após reinício. O alcance da revisão pelo navegador está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
 
 ## Responsividade e acessibilidade
 

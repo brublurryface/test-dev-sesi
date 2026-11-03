@@ -13,8 +13,10 @@ Base local em desenvolvimento: `http://localhost:5080`. O Angular usa caminhos r
 | `modality`         | Um dos valores de `filters.modalities` presentes no banco                                               |
 | `status`           | Um dos valores de `filters.statuses` presentes no banco                                                 |
 | `featured`         | `true` ou `false`                                                                                       |
+| `page`             | Inteiro maior ou igual a 1; padrão 1. O deslocamento calculado deve caber em um inteiro de 32 bits       |
+| `pageSize`         | Inteiro de 1 a 100; padrão 20                                                                          |
 
-Os critérios ativos são combinados com AND. Ausência de critérios retorna o catálogo completo, ordenado por ID. Não há paginação nesta coleção de sete cursos. `total` corresponde à quantidade de elementos de `items`.
+Os critérios ativos são combinados com AND. `total` conta todos os cursos compatíveis com os filtros; `items` contém somente a página solicitada, ordenada por ID. A contagem usa `CountAsync()` antes de `Skip()`/`Take()`, sem materializar a coleção completa. `page`, `pageSize` e `totalPages` descrevem a navegação; um total zero corresponde a zero páginas. Sem filtros e sem parâmetros de paginação, o pedido retorna os primeiros 20 cursos.
 
 As três listas de `filters` vêm dos valores distintos do catálogo inteiro, ordenados no banco. Não são reduzidas pela busca nem pelos demais filtros. Assim, novas categorias, modalidades e status persistidos aparecem sem alterar a API ou o Angular; uma combinação sem resultados não apaga as opções. Não há cache dessas listas. Em um catálogo vazio, as três listas também estão vazias.
 
@@ -43,11 +45,20 @@ As três listas de `filters` vêm dos valores distintos do catálogo inteiro, or
     "categories": ["Ciências da Natureza", "Matemática", "Sustentabilidade"],
     "modalities": ["Online", "Presencial"],
     "statuses": ["Disponível", "Em breve", "Encerrado"]
-  }
+  },
+  "page": 1,
+  "pageSize": 20,
+  "totalPages": 1
 }
 ```
 
 O exemplo representa uma consulta filtrada na carga inicial. A resposta real reflete o banco; imagens, textos e datas são demonstrativos. Uma busca sem correspondências retorna **200**, com `items: []`, `total: 0` e as opções do catálogo em `filters`. Um valor inexistente ou removido do banco continua retornando **400**; não é convertido silenciosamente em ausência de filtro.
+
+Uma página válida além da última retorna **200** com `items: []`, preservando `total`, `totalPages`, `page` solicitado e opções dos filtros. O catálogo oferece voltar à primeira página sem perder os filtros. Parâmetros de paginação fora dos limites, textos em campos numéricos e deslocamentos com overflow retornam **400**.
+
+Exemplo: `/api/courses?page=2&pageSize=20&category=Matem%C3%A1tica`. No Angular, a página aparece como `pagina` na URL pública e volta a 1 ao alterar ou limpar filtros. Destaques e rodapé solicitam suas próprias primeiras páginas, limitadas a seis e sete cursos; não percorrem o catálogo completo.
+
+O contrato usa paginação por deslocamento. Ordenação única evita ambiguidades, mas alterações concorrentes podem deslocar resultados entre pedidos. Páginas profundas e contagem continuam tendo custo no banco; índices, consultas de busca e paginação por cursor devem ser avaliados para grandes volumes. Referência: [paginação no EF Core](https://learn.microsoft.com/en-us/ef/core/querying/pagination).
 
 ## Detalhes e aulas
 
@@ -68,6 +79,7 @@ Os identificadores de aula são estáveis dentro do curso e permitem restaurar o
 | ---------------------------------------------- | --------------------------------------------------------------- |
 | Consulta válida, inclusive sem resultados      | 200, JSON                                                       |
 | Filtro fora dos valores aceitos ou busca longa | 400, Validation Problem Details                                 |
+| Página/tamanho inválido ou parâmetro sem conversão | 400, Problem Details                                           |
 | Slug ou endpoint de API inexistente            | 404, Problem Details                                            |
 | Falha inesperada durante uma requisição        | Tratamento padrão de exceções do ASP.NET Core e Problem Details |
 | `GET /api/health` com conexão disponível       | 200, `{ "status": "ok" }`                                       |
