@@ -15,10 +15,28 @@ public sealed class CourseRepository(CatalogDbContext db)
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     /// <summary>
+    /// Consulta valores distintos no banco, sem carregar cursos, módulos ou aulas completos.
+    /// Usa o catálogo inteiro para que uma combinação vazia não apague as opções dos seletores.
+    /// As consultas são sequenciais porque compartilham o mesmo DbContext.
+    /// </summary>
+    public async Task<CourseFilterOptionsDto> GetFilterOptionsAsync(CancellationToken cancellationToken)
+    {
+        var courses = db.Courses.AsNoTracking();
+        var categories = await courses.Select(c => c.Category).Where(value => value.Trim() != "")
+            .Distinct().OrderBy(value => value).ToArrayAsync(cancellationToken);
+        var modalities = await courses.Select(c => c.Modality).Where(value => value.Trim() != "")
+            .Distinct().OrderBy(value => value).ToArrayAsync(cancellationToken);
+        var statuses = await courses.Select(c => c.Status).Where(value => value.Trim() != "")
+            .Distinct().OrderBy(value => value).ToArrayAsync(cancellationToken);
+        return new CourseFilterOptionsDto(categories, modalities, statuses);
+    }
+
+    /// <summary>
     /// Combina todos os critérios preenchidos e retorna apenas os campos usados nos cartões.
     /// Sem paginação neste catálogo: Total corresponde ao tamanho da lista filtrada.
     /// </summary>
-    public async Task<CoursePageDto> ListAsync(CourseQuery filter, CancellationToken cancellationToken)
+    public async Task<CoursePageDto> ListAsync(CourseQuery filter, CourseFilterOptionsDto options,
+        CancellationToken cancellationToken)
     {
         // A consulta só lê dados; AsNoTracking evita manter objetos para futuras atualizações.
         var query = db.Courses.AsNoTracking();
@@ -49,7 +67,7 @@ public sealed class CourseRepository(CatalogDbContext db)
             AvailableAt = c.AvailableAt,
             Featured = c.Featured
         }).ToArrayAsync(cancellationToken);
-        return new CoursePageDto(items, items.Length);
+        return new CoursePageDto(items, items.Length, options);
     }
 
     /// <summary>

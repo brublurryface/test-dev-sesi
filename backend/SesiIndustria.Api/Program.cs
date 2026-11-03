@@ -68,11 +68,13 @@ app.MapGet("/api/courses", async (string? search, string? category, string? moda
     bool? featured, CourseRepository repository, CancellationToken cancellationToken) =>
 {
     var filter = new CourseQuery(search, category, modality, status, featured);
-    var errors = filter.Validate();
+    // O mesmo conjunto vindo do banco valida a consulta e preenche os seletores no Angular.
+    var options = await repository.GetFilterOptionsAsync(cancellationToken);
+    var errors = filter.Validate(options);
     // Consulta inválida retorna 400; consulta válida retorna 200, inclusive se items estiver vazio.
     return errors.Count > 0
         ? Results.ValidationProblem(errors, title: "Parâmetros de consulta inválidos")
-        : Results.Ok(await repository.ListAsync(filter, cancellationToken));
+        : Results.Ok(await repository.ListAsync(filter, options, cancellationToken));
 }).WithName("ListCourses").WithSummary("Consulta cursos com busca e filtros combinados.")
     .Produces<CoursePageDto>().ProducesValidationProblem();
 

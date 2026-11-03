@@ -96,10 +96,11 @@ public static class CatalogSeeder
             throw new InvalidDataException("A carga deve conter seis ou mais cursos com IDs e slugs únicos.");
         foreach (var course in courses)
         {
-            // Reutiliza as opções aceitas pela API e verifica as chaves de todas as aulas do curso.
-            var query = new CourseQuery(null, course.Category, course.Modality, course.Status, null);
+            // Categoria, modalidade e status são dados; novos valores não exigem mudar o código.
+            // A carga exige preenchimento, e a API valida a seleção contra os registros do banco.
             var lessons = course.Introduction.Concat(course.Modules.SelectMany(module => module.Lessons)).ToArray();
-            if (query.Validate().Count > 0 || course.Id <= 0 || course.Hours <= 0 ||
+            if (string.IsNullOrWhiteSpace(course.Category) || string.IsNullOrWhiteSpace(course.Modality) ||
+                string.IsNullOrWhiteSpace(course.Status) || course.Id <= 0 || course.Hours <= 0 ||
                 string.IsNullOrWhiteSpace(course.Name) || string.IsNullOrWhiteSpace(course.ShortName) ||
                 string.IsNullOrWhiteSpace(course.Slug) || string.IsNullOrWhiteSpace(course.Description) ||
                 string.IsNullOrWhiteSpace(course.Audience) || !course.Image.StartsWith("assets/", StringComparison.Ordinal) ||

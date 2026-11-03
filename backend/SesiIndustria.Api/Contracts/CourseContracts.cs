@@ -59,5 +59,8 @@ public sealed record ContentBlockDto(string Kind, string Text)
 {
     public string[] Items { get; init; } = [];
 }
-/// <summary>Resposta da listagem: resultados da consulta e sua contagem, sem paginação nesta versão.</summary>
-public sealed record CoursePageDto(CourseSummaryDto[] Items, int Total);
+/// <summary>Opções existentes no catálogo completo, independentes dos filtros selecionados.</summary>
+public sealed record CourseFilterOptionsDto(string[] Categories, string[] Modalities, string[] Statuses);
+
+/// <summary>Resultados, contagem e opções dos filtros, sem paginação nesta versão.</summary>
+public sealed record CoursePageDto(CourseSummaryDto[] Items, int Total, CourseFilterOptionsDto Filters);
