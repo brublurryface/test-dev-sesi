@@ -2,10 +2,6 @@
  * Contratos das respostas JSON de Contracts/CourseContracts.cs no backend.
  * Estes tipos descrevem os dados recebidos; não carregam nem persistem o catálogo.
  */
-export type Category = 'Matemática' | 'Ciências da Natureza' | 'Sustentabilidade';
-export type Modality = 'Online' | 'Presencial';
-export type CourseStatus = 'Disponível' | 'Em breve' | 'Encerrado';
-
 // O identificador da aula deve permanecer estável: o progresso local usa esse valor.
 export interface Lesson {
   id: string;
@@ -32,11 +28,11 @@ export interface CourseSummary {
   name: string;
   shortName: string;
   description: string;
-  category: Category;
-  modality: Modality;
+  category: string;
+  modality: string;
   hours: number;
   audience: string;
-  status: CourseStatus;
+  status: string;
   image: string;
   imageAlt: string;
   /** Data de calendário (YYYY-MM-DD), exibida com UTC para preservar o dia informado. */
@@ -56,9 +52,12 @@ export interface Course extends CourseSummary {
 export interface CoursePage {
   items: CourseSummary[];
   total: number;
+  filters: CourseFilterOptions;
 }
 
-// Opções dos controles da interface; CourseQuery.cs também valida esses valores no servidor.
-export const CATEGORIES: Category[] = ['Matemática', 'Ciências da Natureza', 'Sustentabilidade'];
-export const MODALITIES: Modality[] = ['Online', 'Presencial'];
-export const STATUSES: CourseStatus[] = ['Disponível', 'Em breve', 'Encerrado'];
+/** Valores distintos do catálogo inteiro, fornecidos pela API junto aos resultados. */
+export interface CourseFilterOptions {
+  categories: string[];
+  modalities: string[];
+  statuses: string[];
+}

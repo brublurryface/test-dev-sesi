@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { CourseSummary } from '../../core/course.model';
+import { categoryIcon } from '../../core/course-presentation';
 
 @Component({
   selector: 'app-course-card',
@@ -16,18 +17,9 @@ import type { CourseSummary } from '../../core/course.model';
         [class.nature]="course().category === 'Ciências da Natureza'"
         [class.sustainable]="course().category === 'Sustentabilidade'"
       >
-        <img
-          [src]="
-            course().category === 'Matemática'
-              ? 'assets/icon-matematica-20px.svg'
-              : course().category === 'Sustentabilidade'
-                ? 'assets/icon-sustentabilidade-20px.svg'
-                : 'assets/icon-ciencias-natureza-20px.svg'
-          "
-          width="20"
-          height="20"
-          alt=""
-        />{{ course().category }}
+        <img [src]="categoryIcon(course().category)" width="20" height="20" alt="" />{{
+          course().category
+        }}
       </span>
       <div class="card-copy">
         @if (showMeta()) {
@@ -44,6 +36,7 @@ import type { CourseSummary } from '../../core/course.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseCard {
+  readonly categoryIcon = categoryIcon;
   readonly course = input.required<CourseSummary>();
   readonly showMeta = input(false);
 }

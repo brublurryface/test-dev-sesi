@@ -1,6 +1,7 @@
 import { DestroyRef, Injectable, inject, signal } from '@angular/core';
+import type { HttpErrorResponse } from '@angular/common/http';
 import { Subscription, switchMap, timer } from 'rxjs';
-import type { CourseSummary } from './course.model';
+import type { CourseFilterOptions, CourseSummary } from './course.model';
 import type { CourseQuery } from './course-query';
 import { CourseService } from './course.service';
 
@@ -20,11 +21,21 @@ export class CourseListStore {
   private readonly count = signal(0);
   private readonly pending = signal(true);
   private readonly failure = signal(false);
+  private readonly invalid = signal(false);
+  private readonly options = signal<CourseFilterOptions>({
+    categories: [],
+    modalities: [],
+    statuses: [],
+  });
+  private readonly optionsReady = signal(false);
   // A página lê os signals públicos, enquanto as mudanças de estado passam pelos métodos do store.
   readonly courses = this.items.asReadonly();
   readonly total = this.count.asReadonly();
   readonly loading = this.pending.asReadonly();
   readonly error = this.failure.asReadonly();
+  readonly invalidQuery = this.invalid.asReadonly();
+  readonly filters = this.options.asReadonly();
+  readonly filtersLoaded = this.optionsReady.asReadonly();
   constructor() {
     // Descartar a página também interrompe a inscrição e a requisição HTTP em andamento.
     inject(DestroyRef).onDestroy(() => this.request?.unsubscribe());
@@ -36,6 +47,7 @@ export class CourseListStore {
     this.request?.unsubscribe();
     this.pending.set(true);
     this.failure.set(false);
+    this.invalid.set(false);
     // O catálogo pede 250 ms ao digitar; seletores e destaques usam consulta imediata (delay=0).
     this.request = timer(delay)
       .pipe(switchMap(() => this.api.list(query)))
@@ -43,13 +55,17 @@ export class CourseListStore {
         next: (page) => {
           this.items.set(page.items);
           this.count.set(page.total);
+          this.options.set(page.filters);
+          this.optionsReady.set(true);
           this.pending.set(false);
         },
-        error: () => {
+        error: (error: HttpErrorResponse) => {
           // Uma falha limpa os resultados e habilita a mensagem de erro; não usa dados fictícios locais.
           this.items.set([]);
           this.count.set(0);
           this.failure.set(true);
+          this.invalid.set(error.status === 400);
+          // Preserva opções já recebidas: uma falha transitória não apaga os seletores.
           this.pending.set(false);
         },
       });

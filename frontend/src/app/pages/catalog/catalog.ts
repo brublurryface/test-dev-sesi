@@ -9,8 +9,12 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CATEGORIES, MODALITIES, STATUSES } from '../../core/course.model';
-import { EMPTY_QUERY, type CourseQuery } from '../../core/course-query';
+import {
+  EMPTY_QUERY,
+  filterOptionsForSelection,
+  readCourseQuery,
+  type CourseQuery,
+} from '../../core/course-query';
 import { CourseListStore } from '../../core/course-list.store';
 import { SITE_CONFIG } from '../../core/site.config';
 import { Header } from '../../shared/header/header';
@@ -19,7 +23,7 @@ import { CourseCard } from '../../shared/course-card/course-card';
 
 /**
  * Página de consulta: sincroniza controles e URL e solicita os resultados ao CourseListStore.
- * A URL pública usa busca/categoria/modalidade; o contrato HTTP usa search/category/modality.
+ * A URL pública usa busca/categoria/modalidade/status; a API usa search/category/modality/status.
  */
 @Component({
   selector: 'app-catalog',
@@ -34,10 +38,19 @@ export class Catalog {
   readonly store = inject(CourseListStore);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  readonly categories = CATEGORIES;
-  readonly modalities = MODALITIES;
-  readonly statuses = STATUSES;
   readonly query = signal<CourseQuery>(this.readQuery());
+  readonly categories = computed(() =>
+    filterOptionsForSelection(this.store.filters().categories, this.query().category)
+  );
+  readonly modalities = computed(() =>
+    filterOptionsForSelection(this.store.filters().modalities, this.query().modality)
+  );
+  readonly statuses = computed(() =>
+    filterOptionsForSelection(this.store.filters().statuses, this.query().status)
+  );
+  readonly filterOptionsLoading = computed(
+    () => this.store.loading() && !this.store.filtersLoaded()
+  );
   // Mantém o nome usado no template; a coleção já chega filtrada e contada pelo servidor.
   readonly filtered = this.store.courses;
   readonly hasFilters = computed(() => Object.values(this.query()).some((value) => value.trim()));
@@ -86,20 +99,7 @@ export class Catalog {
   }
   /** Reconstrói os controles ao abrir um link ou navegar pelo histórico. */
   private readQuery(): CourseQuery {
-    // Parâmetros externos só ativam opções presentes nos conjuntos de valores do catálogo.
-    const params = this.route.snapshot.queryParamMap;
-    return {
-      search: (params.get('busca') ?? '').slice(0, this.site.courseSearchMaxLength),
-      category: this.categories.some((value) => value === params.get('categoria'))
-        ? params.get('categoria')!
-        : '',
-      modality: this.modalities.some((value) => value === params.get('modalidade'))
-        ? params.get('modalidade')!
-        : '',
-      status: this.statuses.some((value) => value === params.get('status'))
-        ? params.get('status')!
-        : '',
-    };
+    return readCourseQuery(this.route.snapshot.queryParamMap, this.site.courseSearchMaxLength);
   }
   private toParams(query: CourseQuery): Record<string, string | null> {
     // Valores nulos removem o parâmetro e mantêm os endereços de consulta enxutos.
