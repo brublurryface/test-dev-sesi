@@ -1,6 +1,6 @@
 # Decisões da integração
 
-Este registro complementa as decisões de interface e documenta a versão integrada de 23/10/2026.
+Este registro complementa as decisões de interface da versão integrada de 23/10/2026, com a revisão dos filtros em 03/11/2026.
 
 | Decisão                                 | Motivo e consequência                                                                                                                                                                                      |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -10,6 +10,7 @@ Este registro complementa as decisões de interface e documenta a versão integr
 | Entidades e DTOs distintos              | A resposta não expõe navegações do EF, chaves internas ou ciclos; a listagem transfere somente os dados utilizados nos cartões                                                                             |
 | Relacionamentos no banco                | Slugs únicos, carga horária positiva e chaves estrangeiras protegem a consistência; uma aula não pode pertencer ao módulo de outro curso                                                                   |
 | Busca normalizada e filtros no SQL      | Acentos e caixa são tratados no servidor; todos os critérios são combinados e parametrizados pelo EF, sem concatenar a busca em SQL                                                                        |
+| Opções dos filtros derivadas do banco    | A mesma lista de valores distintos valida a API e preenche o Angular, sem carregar detalhes dos cursos. Reflete o catálogo inteiro, inclusive em resultados vazios, e acompanha novos valores sem alterar código |
 | Sem paginação na demonstração           | Sete cursos permitem entregar a coleção inteira e uma contagem simples; paginação passa a ser necessária com o crescimento do catálogo                                                                     |
 | Textos estruturados fornecidos pela API | Introdução, aulas, FAQ e orientações ficam associados ao curso no banco; o Angular interpola texto em elementos HTML, sem inserir HTML remoto                                                              |
 | Stores locais às páginas                | Home, catálogo, detalhes e AVA mantêm estados de carregamento e erro próprios; uma consulta não sobrescreve os resultados de outra página                                                                  |

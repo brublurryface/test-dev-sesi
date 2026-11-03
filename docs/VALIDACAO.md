@@ -1,6 +1,23 @@
 # TEST DEV SESI Indústria — Validação
 
-Verificações executadas pelo agente Nemo, do ChatGPT/Codex, entre 22 e 25/10/2026. Este registro distingue os testes da versão integrada, a revisão visual inicial do frontend e a conferência da aplicação publicada no Render.
+Verificações executadas pelo agente Nemo, do ChatGPT/Codex. Este registro distingue a revisão de filtros de 03/11/2026 dos testes e revisões anteriores da versão integrada.
+
+## Filtros derivados do catálogo — 03/11/2026
+
+Revisão preparada na branch `fix/filtros-dinamicos`, a partir da `main` em `a4ea107`. Os resultados desta seção pertencem ao código local da revisão; sua publicação depende da revisão da Bruna.
+
+| Verificação | Resultado observado |
+| --- | --- |
+| Frontend | 15 testes aprovados; incluem leitura de links com valores novos, preservação da seleção e apresentação de categorias e status novos |
+| API e SQLite | 32 testes aprovados; sete casos novos verificam opções do banco inteiro, combinação vazia, valores novos e removidos, catálogo vazio e validação da carga inicial |
+| Build integrado | Angular compilado com templates estritos e API publicada em Release, sem avisos ou erros de compilação |
+| Formatação | Prettier e `git diff --check` passaram |
+| Pacote Release por HTTP | Oito grupos de verificações aprovados: saúde; quatro rotas Angular diretas; JavaScript e ícone genérico; catálogo e resultado vazio; novos valores combinados e consulta repetida; filtro inválido e recuperação; contrato OpenAPI; 404 de API |
+| Estado da listagem | Exercício adicional com cliente HTTP simulado verificou primeira carga, opções no resultado vazio, falha de conexão, filtro inválido, recuperação e descarte de resposta antiga. Esta verificação complementar foi executada no executor e não integra o comando de testes do frontend |
+
+Os testes inseriram `Tecnologia & Inovação`, `Híbrido` e `Lista de espera` apenas em bancos temporários. Uma consulta combinando esses valores e a busca `MATEMATICA` retornou o curso esperado sem alterar código ou a carga de demonstração do projeto. A remoção de uma opção foi refletida na consulta seguinte; um link com o valor removido retornou 400.
+
+A lógica de leitura da URL foi verificada por teste, e as rotas diretas do pacote foram verificadas por HTTP. A conferência visual desta revisão, incluindo recarga no navegador e rótulos longos nos seletores, permanece pendente: o navegador do executor bloqueou o acesso à prévia local com `ERR_BLOCKED_BY_CLIENT`. As revisões visuais históricas abaixo não substituem essa conferência. A listagem continua sem paginação, conforme a decisão de volume demonstrativo.
 
 ## Diferencial Moodle — 26/10/2026
 

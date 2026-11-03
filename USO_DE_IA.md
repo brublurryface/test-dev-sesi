@@ -1,6 +1,6 @@
 # Uso de inteligência artificial
 
-Projeto **TEST DEV SESI Indústria**. Registro referente à versão integrada, atualizado em 25/10/2026.
+Projeto **TEST DEV SESI Indústria**. Registro da versão integrada e de sua revisão de filtros em 03/11/2026.
 
 ## Ferramenta e contribuição
 
@@ -43,7 +43,15 @@ Bruna realiza a revisão integral dos commits antes de autorizar seu registro e 
 
 ## Validação dos resultados
 
-As verificações desta versão foram executadas pelo agente Nemo:
+### Revisão dos filtros — 03/11/2026
+
+Bruna identificou que as opções dos filtros estavam fixas e solicitou a revisão de sua extensibilidade e dos comportamentos relacionados. O agente Nemo implementou a consulta de opções distintas no SQLite, a validação por esses dados e o preenchimento dos seletores Angular pela API. A revisão também preserva seleções novas em links, distingue filtros inválidos de falhas de conexão e evita rótulos e ícones incorretos para valores novos.
+
+Os 15 testes do frontend e os 32 testes do backend passaram. Os casos novos alteram apenas bancos temporários, incluindo categorias, modalidades e status ausentes da carga inicial, combinação vazia, remoção de valores e validação do seeder. O alcance e as limitações da verificação estão em [docs/VALIDACAO.md](docs/VALIDACAO.md). O registro em commits e a publicação seguem sujeitos à revisão da Bruna.
+
+### Verificações anteriores da versão integrada
+
+As verificações abaixo foram executadas pelo agente Nemo na preparação da versão integrada:
 
 - `npm run build` na raiz: compilação do Angular, restauração com lockfiles e publicação Release da API concluídas; frontend copiado para o pacote integrado.
 - `npm --prefix frontend test`: 12 testes de busca de aulas, progresso local e seleção da primeira aula pendente aprovados.

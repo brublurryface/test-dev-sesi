@@ -7,7 +7,7 @@ Este documento localiza os pontos de entrada, as responsabilidades dos arquivos 
 | Responsabilidade                    | Arquivo                                                                         | O que localizar                                                  |
 | ----------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Iniciar o backend                   | [Program.cs](../backend/SesiIndustria.Api/Program.cs)                           | Configuração, registro de serviços, banco, endpoints e servidor  |
-| Validar os filtros                  | [CourseQuery.cs](../backend/SesiIndustria.Api/Courses/CourseQuery.cs)           | Opções aceitas, limite da busca e normalização de texto          |
+| Validar os filtros                  | [CourseQuery.cs](../backend/SesiIndustria.Api/Courses/CourseQuery.cs)           | Validação contra opções do banco, limite da busca e normalização |
 | Consultar o catálogo                | [CourseRepository.cs](../backend/SesiIndustria.Api/Courses/CourseRepository.cs) | `ListAsync` para resumos e `FindAsync` para detalhes             |
 | Definir as respostas HTTP           | [CourseContracts.cs](../backend/SesiIndustria.Api/Contracts/CourseContracts.cs) | DTOs de cursos, módulos, aulas e blocos de texto                 |
 | Representar registros persistidos   | [Entities.cs](../backend/SesiIndustria.Api/Data/Entities.cs)                    | Entidades, chaves estrangeiras e relações de navegação           |
@@ -36,11 +36,11 @@ O escopo de requisição mantém contexto e repositório disponíveis durante um
 Para uma chamada `GET /api/courses?search=matematica`:
 
 1. O endpoint em `Program.cs` recebe `search` da URL e recebe `CourseRepository` pela injeção de dependência.
-2. `CourseQuery.Validate()` verifica a entrada. Erros produzem HTTP 400, com mensagens por parâmetro.
+2. `CourseRepository.GetFilterOptionsAsync()` consulta os valores distintos do catálogo inteiro. `CourseQuery.Validate(options)` valida a entrada contra essas opções. Erros produzem HTTP 400, com mensagens por parâmetro.
 3. `CourseRepository.ListAsync()` normaliza o termo e acrescenta os critérios à consulta. Os filtros preenchidos são combinados por AND.
 4. O EF Core traduz a consulta e seus valores em SQL parametrizado. `ToArrayAsync()` executa a leitura no SQLite.
-5. O repositório retorna `CoursePageDto`, com resumos e contagem; `Results.Ok()` produz HTTP 200 e a resposta JSON.
-6. `CourseService` recebe o JSON no Angular; `CourseListStore` atualiza dados, contagem e carregamento; o componente apresenta os cartões.
+5. O repositório retorna `CoursePageDto`, com resumos, contagem e opções dos filtros; `Results.Ok()` produz HTTP 200 e a resposta JSON.
+6. `CourseService` recebe o JSON no Angular; `CourseListStore` atualiza dados, contagem, opções e carregamento; o componente apresenta os cartões e os seletores.
 
 Uma consulta válida sem correspondência retorna `items: []` e `total: 0`. Um slug inexistente em `/api/courses/{slug}` retorna 404. Os estados de carregamento, ausência de resultado e falha são tratados separadamente na interface.
 
@@ -48,7 +48,8 @@ Uma consulta válida sem correspondência retorna `items: []` e `total: 0`. Um s
 
 | Contrato C#        | Tipo Angular    | Uso                                                             |
 | ------------------ | --------------- | --------------------------------------------------------------- |
-| `CoursePageDto`    | `CoursePage`    | Resumos e contagem da consulta atual, sem paginação             |
+| `CoursePageDto`    | `CoursePage`    | Resumos e contagem da consulta atual, sem paginação; opções globais dos filtros |
+| `CourseFilterOptionsDto` | `CourseFilterOptions` | Categorias, modalidades e status distintos do catálogo inteiro |
 | `CourseSummaryDto` | `CourseSummary` | Cartões do catálogo e destaques                                 |
 | `CourseDto`        | `Course`        | Detalhes completos do curso e conteúdo da AVA                   |
 | `LessonDto`        | `Lesson`        | Identificador estável, título, descrição e conteúdo de uma aula |
@@ -94,7 +95,9 @@ Os blocos de texto de aulas e orientações são persistidos em colunas JSON, ma
 
 O serviço HTTP é compartilhado e não guarda os resultados. Cada componente que consulta o catálogo fornece sua própria instância do store, para não misturar os filtros e resultados do início, do catálogo e do rodapé. Os signals públicos são de leitura; os métodos do store coordenam as atualizações.
 
-No catálogo, os parâmetros públicos `busca`, `categoria` e `modalidade` são convertidos para `search`, `category` e `modality` no contrato HTTP. A digitação aguarda uma pausa de 250 ms; os seletores consultam imediatamente. Uma consulta nova cancela a inscrição anterior para evitar que uma resposta atrasada substitua a seleção atual.
+No catálogo, os parâmetros públicos `busca`, `categoria`, `modalidade` e `status` são convertidos para `search`, `category`, `modality` e `status` no contrato HTTP. A digitação aguarda uma pausa de 250 ms; os seletores consultam imediatamente. Uma consulta nova cancela a inscrição anterior para evitar que uma resposta atrasada substitua a seleção atual.
+
+As opções dos seletores vêm de `CoursePage.filters`, sem listas fixas no Angular ou no seeder. A seleção de um link fica visível antes da primeira resposta; se o valor deixou de existir, a API retorna 400 e a tela oferece limpar os filtros. Opções já carregadas são preservadas durante uma falha transitória. Categorias novas recebem um ícone neutro; status novos mantêm seu rótulo. Somente `Disponível` habilita o acesso demonstrativo de matrícula, preservando a regra existente.
 
 A busca de cursos ocorre no servidor. A busca de aulas da AVA ocorre no navegador, sobre o conteúdo do curso já recebido. A conclusão de aulas também é local: usa uma chave de armazenamento por curso, pode ser desfeita e não representa matrícula, avaliação ou progresso sincronizado.
 

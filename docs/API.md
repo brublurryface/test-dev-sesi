@@ -9,12 +9,14 @@ Base local em desenvolvimento: `http://localhost:5080`. O Angular usa caminhos r
 | Parâmetro opcional | Valores ou regra                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------------- |
 | `search`           | Até 120 caracteres; busca parcial em nome completo e curto, ignorando caixa, acentos e espaços externos |
-| `category`         | `Matemática`, `Ciências da Natureza`, `Sustentabilidade`                                                |
-| `modality`         | `Online`, `Presencial`                                                                                  |
-| `status`           | `Disponível`, `Em breve`, `Encerrado`                                                                   |
+| `category`         | Um dos valores de `filters.categories` presentes no banco                                               |
+| `modality`         | Um dos valores de `filters.modalities` presentes no banco                                               |
+| `status`           | Um dos valores de `filters.statuses` presentes no banco                                                 |
 | `featured`         | `true` ou `false`                                                                                       |
 
 Os critérios ativos são combinados com AND. Ausência de critérios retorna o catálogo completo, ordenado por ID. Não há paginação nesta coleção de sete cursos. `total` corresponde à quantidade de elementos de `items`.
+
+As três listas de `filters` vêm dos valores distintos do catálogo inteiro, ordenados no banco. Não são reduzidas pela busca nem pelos demais filtros. Assim, novas categorias, modalidades e status persistidos aparecem sem alterar a API ou o Angular; uma combinação sem resultados não apaga as opções. Não há cache dessas listas. Em um catálogo vazio, as três listas também estão vazias.
 
 ```json
 {
@@ -36,11 +38,16 @@ Os critérios ativos são combinados com AND. Ausência de critérios retorna o 
       "featured": true
     }
   ],
-  "total": 1
+  "total": 1,
+  "filters": {
+    "categories": ["Ciências da Natureza", "Matemática", "Sustentabilidade"],
+    "modalities": ["Online", "Presencial"],
+    "statuses": ["Disponível", "Em breve", "Encerrado"]
+  }
 }
 ```
 
-O exemplo representa uma consulta filtrada. A resposta real contém os valores da carga inicial persistida; imagens, textos e datas são demonstrativos. Uma busca sem correspondências retorna **200**, com `items: []` e `total: 0`.
+O exemplo representa uma consulta filtrada na carga inicial. A resposta real reflete o banco; imagens, textos e datas são demonstrativos. Uma busca sem correspondências retorna **200**, com `items: []`, `total: 0` e as opções do catálogo em `filters`. Um valor inexistente ou removido do banco continua retornando **400**; não é convertido silenciosamente em ausência de filtro.
 
 ## Detalhes e aulas
 

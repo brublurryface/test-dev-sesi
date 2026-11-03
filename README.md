@@ -58,9 +58,9 @@ O diretório `artifacts/publish` contém a publicação executável e o catálog
 ## Funcionalidades
 
 - Landing page com seis cursos em destaque, carrosséis e seções do protótipo.
-- Catálogo de sete cursos, três categorias, duas modalidades e três status.
+- Carga inicial de sete cursos, três categorias, duas modalidades e três status.
 - Busca no servidor por nome completo ou curto, sem distinção entre acentos ou caixa.
-- Filtros combináveis por categoria, modalidade e status; contagem de resultados e limpeza.
+- Filtros combináveis por categoria, modalidade e status, com opções obtidas do banco; novos valores aparecem sem alterar o código. Contagem de resultados e limpeza.
 - Seleção preservada na URL, com atualização da listagem sem retorno ao topo.
 - Detalhes, módulos, aulas, descrições e textos do curso consultados na API.
 - AVA com busca de aulas, avanço e conclusão demonstrativa; progresso salvo neste navegador.
@@ -101,7 +101,7 @@ As páginas Angular são standalone e carregadas sob demanda. Signals representa
 
 | Método e caminho               | Resposta                                                                           |
 | ------------------------------ | ---------------------------------------------------------------------------------- |
-| `GET /api/courses`             | `{ items, total }`; aceita `search`, `category`, `modality`, `status` e `featured` |
+| `GET /api/courses`             | `{ items, total, filters }`; aceita `search`, `category`, `modality`, `status` e `featured` |
 | `GET /api/courses/{slug}`      | Curso com módulos, aulas, introdução, FAQ e blocos de texto                        |
 | `GET /api/health`              | Estado da conexão com o banco                                                      |
 | `GET /api/integrations/moodle` | Estado da importação Moodle nesta inicialização, sem credenciais                   |
@@ -114,6 +114,8 @@ Exemplo de consulta com os critérios combinados:
 ```
 
 O arquivo padrão é `backend/SesiIndustria.Api/App_Data/catalog.db` durante o desenvolvimento e `App_Data/catalog.db` dentro da publicação. A configuração `Database:Path`, ou a variável de ambiente `Database__Path`, permite escolher outro caminho. O diretório precisa permitir escrita.
+
+`filters` contém `categories`, `modalities` e `statuses`: valores distintos do catálogo inteiro, independentes da consulta atual. O servidor usa essas mesmas opções para validar os filtros. Uma combinação sem resultados mantém as opções disponíveis; um valor removido ou inexistente retorna 400 e a interface oferece limpar a seleção. A listagem continua sem paginação, adequada ao volume demonstrativo; o crescimento do catálogo exige revisar essa decisão.
 
 | Entidade     | Relações e dados principais                                                                                          |
 | ------------ | -------------------------------------------------------------------------------------------------------------------- |
@@ -135,7 +137,7 @@ dotnet test TestDevSesiIndustria.slnx --no-restore
 npm run build
 ```
 
-Os testes do frontend verificam busca de aulas e consistência do progresso. Os testes de integração exercitam requisições HTTP, migrations e consultas em arquivos SQLite temporários: combinação de filtros, respostas vazias e inválidas, conteúdos, integridade e persistência após reinício. O alcance da revisão pelo navegador está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
+Os testes do frontend verificam busca de aulas, consistência do progresso e preservação de filtros novos em links. Os testes de integração exercitam requisições HTTP, migrations e consultas em arquivos SQLite temporários: opções derivadas dos dados, combinação de filtros, respostas vazias e inválidas, conteúdos, integridade e persistência após reinício. O alcance da revisão pelo navegador está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
 
 ## Responsividade e acessibilidade
 
