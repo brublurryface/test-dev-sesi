@@ -134,7 +134,7 @@ public sealed class CatalogApiTests
             Assert.NotEmpty(module.Topics);
         });
         Assert.Equal(["introducao", "boas-praticas", "extras"], course.Introduction.Select(l => l.Id).ToArray());
-        var guide = course.Introduction.Single(l => l.Id == "boas-praticas");
+        var guide = (await client.GetFromJsonAsync<LessonDto>("/api/courses/matematica-para-a-precisao/lessons/boas-praticas"))!;
         Assert.Equal(8, guide.Content.Length);
         Assert.Contains(guide.Content, block => block.Kind == "heading" && block.Text == "Recomendações");
         Assert.Contains(course.OnlineInformation, block => block.Kind == "list" && block.Items.Length > 0);
@@ -145,8 +145,11 @@ public sealed class CatalogApiTests
             Assert.NotEmpty(detail!.Modules);
             Assert.All(detail.Modules, module => Assert.StartsWith("Exemplo fictício:", Assert.Single(module.Lessons).Description));
             // Itens sem texto de referência também têm uma descrição demonstrativa identificada.
-            Assert.All(detail.Introduction.Where(lesson => lesson.Content.Length == 0),
-                lesson => Assert.StartsWith("Exemplo fictício:", lesson.Description));
+            foreach (var item in detail.Introduction)
+            {
+                var lesson = (await client.GetFromJsonAsync<LessonDto>($"/api/courses/{summary.Slug}/lessons/{item.Id}"))!;
+                if (lesson.Content.Length == 0) Assert.StartsWith("Exemplo fictício:", lesson.Description);
+            }
         }
     }
 
@@ -190,10 +193,11 @@ public sealed class CatalogApiTests
             var math = await client.GetFromJsonAsync<CourseDto>("/api/courses/matematica-para-a-precisao");
             Assert.StartsWith("Exemplo fictício:", math!.Introduction.Single(lesson => lesson.Id == "introducao").Description);
             Assert.StartsWith("Exemplo fictício:", math.Introduction.Single(lesson => lesson.Id == "extras").Description);
-            Assert.Equal(8, math.Introduction.Single(lesson => lesson.Id == "boas-praticas").Content.Length);
+            Assert.Equal(8, (await client.GetFromJsonAsync<LessonDto>("/api/courses/matematica-para-a-precisao/lessons/boas-praticas"))!.Content.Length);
             var geometry = await client.GetFromJsonAsync<CourseDto>("/api/courses/geometria-e-modelagem");
             Assert.Equal("Apresentação preservada no banco.", geometry!.Introduction.Single(lesson => lesson.Id == "introducao").Description);
-            Assert.Equal("Material preservado no banco.", Assert.Single(geometry.Introduction.Single(lesson => lesson.Id == "extras").Content).Text);
+            var extras = (await client.GetFromJsonAsync<LessonDto>("/api/courses/geometria-e-modelagem/lessons/extras"))!;
+            Assert.Equal("Material preservado no banco.", Assert.Single(extras.Content).Text);
             Assert.StartsWith("Exemplo fictício:", geometry.Introduction.Single(lesson => lesson.Id == "boas-praticas").Description);
         }
         finally

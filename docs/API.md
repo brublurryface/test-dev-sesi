@@ -67,11 +67,30 @@ O contrato usa paginação por deslocamento. Ordenação única evita ambiguidad
 Além dos campos da listagem, retorna `about`, `certification`, `modules`, `introduction`, `faqs` e `onlineInformation`.
 
 - Módulo: `title`, `description`, `topics` e `lessons`.
-- Aula: `id`, `title`, `description` e `content`.
+- Aula no índice: `id`, `title` e `description`; a descrição é uma prévia de até 240 caracteres, seguida de reticências quando cortada. Não inclui `content`.
 - FAQ: `question` e `answer`.
 - Bloco de texto: `kind`, `text` e `items`. Os tipos utilizados são `paragraph`, `heading`, `list` e `note`.
 
 Os identificadores de aula são estáveis dentro do curso e permitem restaurar o progresso local. Os três itens introdutórios de cada curso também vêm da API. Textos da FAQ, orientação de estudos e informações sobre aulas online são armazenados no banco; o Angular renderiza os blocos como texto, sem inserir HTML recebido da API.
+
+`GET /api/courses/{slug}/lessons/{lessonId}`
+
+Retorna somente a aula solicitada, com `id`, `title`, `description` completa e `content`. A busca combina o slug do curso e a chave da aula: uma chave como `m1-a1` pode existir em outros cursos sem compartilhar seu conteúdo. A ordem dos módulos e das aulas permanece no índice; progresso, busca local, retomada e próxima aula usam esse índice.
+
+```json
+{
+  "id": "m1-a1",
+  "title": "Aula 1",
+  "description": "Exemplo fictício: descrição demonstrativa da aula.",
+  "content": []
+}
+```
+
+O exemplo demonstra uma aula fictícia sem blocos adicionais; a resposta real vem do SQLite. Curso ou aula inexistente retorna **404**, com Problem Details. O endpoint do índice usa projeção sem ler a coluna `Lessons.ContentJson`; a rota de aula lê somente o registro correspondente.
+
+**Mudança de contrato:** `modules[].lessons[]` e `introduction[]` deixaram de conter `content`. Clientes que utilizavam esse campo devem consultar a rota de aula. Frontend e API atualizados devem ser publicados juntos. O formato completo de `Data/Seed/courses.json` é preservado e lido pelo tipo separado `CatalogSeedCourse`; o banco não exige nova migration.
+
+O cache é do cliente e dura somente enquanto a AVA está aberta: até dez entradas e 2 MiB de JSON serializado, por chave composta de curso e aula. A entrada menos recentemente acessada é removida ao atingir os limites; uma aula maior pode ser exibida, mas não fica em cache. Recarregar o índice ou sair da AVA limpa o cache. Não há política de cache HTTP adicional nem sincronização de conteúdo em tempo real nesta etapa.
 
 ## Erros e disponibilidade
 

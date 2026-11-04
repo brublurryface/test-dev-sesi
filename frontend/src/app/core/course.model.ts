@@ -3,10 +3,14 @@
  * Estes tipos descrevem os dados recebidos; não carregam nem persistem o catálogo.
  */
 // O identificador da aula deve permanecer estável: o progresso local usa esse valor.
-export interface Lesson {
+export interface LessonSummary {
   id: string;
   title: string;
+  /** No índice é uma prévia; a resposta de uma aula traz a descrição completa. */
   description: string;
+}
+/** Conteúdo consultado somente ao selecionar a aula. */
+export interface Lesson extends LessonSummary {
   content: ContentBlock[];
 }
 /** Blocos de texto estruturado evitam inserir HTML recebido da API. */
@@ -19,7 +23,7 @@ export interface CourseModule {
   title: string;
   description: string;
   topics: string[];
-  lessons: Lesson[];
+  lessons: LessonSummary[];
 }
 /** A listagem não precisa transferir módulos, aulas e textos de cada curso. */
 export interface CourseSummary {
@@ -44,7 +48,7 @@ export interface Course extends CourseSummary {
   about: string;
   certification: string;
   modules: CourseModule[];
-  introduction: Lesson[];
+  introduction: LessonSummary[];
   faqs: { question: string; answer: string }[];
   onlineInformation: ContentBlock[];
 }

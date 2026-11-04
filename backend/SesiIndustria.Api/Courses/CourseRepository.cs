@@ -13,6 +13,8 @@ namespace SesiIndustria.Api.Courses;
 public sealed class CourseRepository(CatalogDbContext db)
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+    // O painel de módulos recebe uma prévia; a rota da aula preserva a descrição completa.
+    private const int LessonDescriptionPreviewLength = 240;
 
     /// <summary>
     /// Consulta valores distintos no banco, sem carregar cursos, módulos ou aulas completos.
@@ -76,20 +78,34 @@ public sealed class CourseRepository(CatalogDbContext db)
     }
 
     /// <summary>
-    /// Carrega um curso e seus relacionamentos; retorna null quando o slug não existe.
+    /// Projeta detalhes e índice de um curso sem ler ContentJson das aulas.
     /// O chamador transforma essa ausência em 404, sem confundi-la com uma lista vazia.
     /// </summary>
     public async Task<CourseDto?> FindAsync(string slug, CancellationToken cancellationToken)
     {
-        // Include solicita os relacionamentos que serão usados no DTO.
-        // AsSplitQuery evita multiplicar linhas ao combinar várias coleções em um único JOIN.
-        // Aulas de introdução pertencem ao curso diretamente e têm ModuleId nulo.
+        // A projeção seleciona somente as colunas necessárias; não materializa entidades LessonRecord.
+        // AsSplitQuery evita multiplicar linhas entre as coleções do índice.
         var course = await db.Courses.AsNoTracking().AsSplitQuery()
-            .Include(c => c.Modules).ThenInclude(m => m.Topics)
-            .Include(c => c.Modules).ThenInclude(m => m.Lessons)
-            .Include(c => c.Lessons.Where(l => l.ModuleId == null))
-            .Include(c => c.Faqs)
-            .SingleOrDefaultAsync(c => c.Slug == slug, cancellationToken);
+            .Where(c => c.Slug == slug)
+            .Select(c => new
+            {
+                c.Id, c.Slug, c.Name, c.ShortName, c.Description, c.About, c.Category, c.Modality,
+                c.Hours, c.Audience, c.Status, c.Image, c.ImageAlt, c.AvailableAt, c.Featured,
+                c.Certification, c.OnlineInformationJson,
+                Modules = c.Modules.OrderBy(m => m.Position).ThenBy(m => m.Id).Select(m => new CourseModuleDto(
+                    m.Title, m.Description,
+                    m.Topics.OrderBy(t => t.Position).ThenBy(t => t.Id).Select(t => t.Text).ToArray(),
+                    m.Lessons.OrderBy(l => l.Position).ThenBy(l => l.Id)
+                        .Select(l => new LessonSummaryDto(l.Key, l.Title,
+                            l.Description.Length > LessonDescriptionPreviewLength
+                                ? l.Description.Substring(0, LessonDescriptionPreviewLength) + "…" : l.Description)).ToArray())).ToArray(),
+                Introduction = c.Lessons.Where(l => l.ModuleId == null).OrderBy(l => l.Position).ThenBy(l => l.Id)
+                    .Select(l => new LessonSummaryDto(l.Key, l.Title,
+                        l.Description.Length > LessonDescriptionPreviewLength
+                            ? l.Description.Substring(0, LessonDescriptionPreviewLength) + "…" : l.Description)).ToArray(),
+                Faqs = c.Faqs.OrderBy(f => f.Position).ThenBy(f => f.Id).Select(f => new FaqDto(f.Question, f.Answer)).ToArray()
+            })
+            .SingleOrDefaultAsync(cancellationToken);
         if (course is null) return null;
         // Position preserva a ordem da referência, independentemente da ordem física das tabelas.
         return new CourseDto
@@ -110,21 +126,25 @@ public sealed class CourseRepository(CatalogDbContext db)
             AvailableAt = course.AvailableAt,
             Featured = course.Featured,
             Certification = course.Certification,
-            Modules = course.Modules.OrderBy(m => m.Position).Select(m => new CourseModuleDto(
-                m.Title, m.Description,
-                m.Topics.OrderBy(t => t.Position).Select(t => t.Text).ToArray(),
-                m.Lessons.OrderBy(l => l.Position).Select(ToLesson).ToArray())).ToArray(),
-            Introduction = course.Lessons.Where(l => l.ModuleId == null).OrderBy(l => l.Position).Select(ToLesson).ToArray(),
-            Faqs = course.Faqs.OrderBy(f => f.Position).Select(f => new FaqDto(f.Question, f.Answer)).ToArray(),
+            Modules = course.Modules,
+            Introduction = course.Introduction,
+            Faqs = course.Faqs,
             OnlineInformation = ReadBlocks(course.OnlineInformationJson)
         };
     }
 
-    // Envia a chave estável da aula ao navegador, onde ela identifica a conclusão no progresso local.
-    private static LessonDto ToLesson(LessonRecord lesson) => new(lesson.Key, lesson.Title, lesson.Description)
+    /// <summary>Consulta uma única aula, sempre limitada ao curso solicitado.</summary>
+    public async Task<LessonDto?> FindLessonAsync(string slug, string lessonId, CancellationToken cancellationToken)
     {
-        Content = ReadBlocks(lesson.ContentJson)
-    };
+        var lesson = await db.Lessons.AsNoTracking()
+            .Where(l => l.Course.Slug == slug && l.Key == lessonId)
+            .Select(l => new { l.Key, l.Title, l.Description, l.ContentJson })
+            .SingleOrDefaultAsync(cancellationToken);
+        return lesson is null ? null : new LessonDto(lesson.Key, lesson.Title, lesson.Description)
+        {
+            Content = ReadBlocks(lesson.ContentJson)
+        };
+    }
     // Os blocos persistidos como JSON voltam como dados estruturados; o frontend renderiza texto.
     private static ContentBlockDto[] ReadBlocks(string json) =>
         JsonSerializer.Deserialize<ContentBlockDto[]>(json, JsonOptions) ?? [];

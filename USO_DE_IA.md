@@ -61,6 +61,12 @@ Bruna compartilhou um apontamento de revisão sobre materializar toda a listagem
 
 Os 45 testes do backend e os 21 do frontend passaram, assim como o build integrado e a formatação. Um banco temporário com 100.000 registros sintéticos foi usado para verificar por HTTP páginas de 20 itens, total de 100.000 e sequência correta. Essa verificação funcional não é um teste de carga de produção; a conferência visual dos controles permanece pendente. O alcance está em [docs/VALIDACAO.md](docs/VALIDACAO.md). Bruna autorizou incluir essas alterações nos commits da revisão.
 
+### Índice e conteúdo de aula separados — 03/11/2026
+
+Bruna compartilhou uma revisão sobre antecipar todos os conteúdos e sobre a corrida entre seleções rápidas de aulas. O agente Nemo preparou a projeção do índice sem ler `ContentJson`, a rota de uma aula por curso e chave e o formato separado de carga inicial. No Angular, `allLessons()` preserva o índice para progresso e navegação; `LessonContentLoader` usa `switchMap`, tratamento de erro por seleção e cache LRU limitado por entradas e bytes. A tela também valida a seleção antes de mostrar ou concluir a aula.
+
+Passaram 53 testes do backend e 33 do frontend, além do build integrado e da formatação. As verificações cobrem a resposta tardia da 728 depois da 729, retorno a uma aula em cache durante outro pedido, chaves iguais em cursos diferentes, erros e limites de cache. Um índice com mais 500 aulas manteve a quantidade de consultas e não leu os blocos das aulas. Por HTTP, um corpo de 1.000.000 de caracteres alterou somente a resposta da aula selecionada, preservando o índice byte a byte. Os dados maiores foram temporários; IDs, progresso local e textos de referência foram preservados. Bruna autorizou os dois commits, a PR e a publicação após a conferência; a revisão visual da versão publicada permanece pendente neste registro. O alcance está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
+
 ### Verificações anteriores da versão integrada
 
 As verificações abaixo foram executadas pelo agente Nemo na preparação da versão integrada:

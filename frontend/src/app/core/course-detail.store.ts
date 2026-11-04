@@ -5,7 +5,7 @@ import type { Course } from './course.model';
 import { CourseService } from './course.service';
 
 /**
- * Carrega um curso completo para detalhes ou AVA, com uma instância por página.
+ * Carrega detalhes e índice de um curso, com uma instância por página.
  * course=null representa ausência de dados; error distingue falha da API de um curso inexistente.
  */
 @Injectable()

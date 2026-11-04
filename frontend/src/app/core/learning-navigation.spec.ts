@@ -2,13 +2,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { filterLearningGroups, normalizeText } from './learning-navigation.ts';
 import type { LearningGroup } from './learning-navigation.ts';
-import type { Lesson } from './course.model.ts';
+import type { LessonSummary } from './course.model.ts';
 
-const lesson = (id: string, title: string): Lesson => ({
+const lesson = (id: string, title: string): LessonSummary => ({
   id,
   title,
   description: '',
-  content: [],
 });
 const groups: LearningGroup[] = [
   {

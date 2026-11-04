@@ -1,10 +1,10 @@
-import type { Lesson } from './course.model';
+import type { LessonSummary } from './course.model';
 
 /** Grupos da navegação local; não altera os módulos ou as aulas recebidos da API. */
 export interface LearningGroup {
   id: string;
   title: string;
-  lessons: readonly Lesson[];
+  lessons: readonly LessonSummary[];
 }
 
 /**
