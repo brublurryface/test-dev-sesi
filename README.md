@@ -65,6 +65,7 @@ O diretório `artifacts/publish` contém a publicação executável e o catálog
 - Seleção preservada na URL, com atualização da listagem sem retorno ao topo.
 - Detalhes, módulos, aulas, descrições e textos do curso consultados na API.
 - AVA com busca de aulas, avanço e conclusão demonstrativa; progresso salvo neste navegador.
+- Índice de aulas separado do conteúdo: uma aula é consultada ao ser selecionada, com cancelamento de seleções anteriores e cache limitado em memória.
 - Abertura na primeira aula pendente, respeitando a ordem do curso e o progresso salvo.
 - Área do aluno vinculada ao curso exibido nos detalhes e links de cursos do rodapé fornecidos pela API.
 - Estados de carregamento, erro com nova tentativa, resultado vazio e curso não encontrado.
@@ -103,7 +104,8 @@ As páginas Angular são standalone e carregadas sob demanda. Signals representa
 | Método e caminho               | Resposta                                                                           |
 | ------------------------------ | ---------------------------------------------------------------------------------- |
 | `GET /api/courses`             | `{ items, total, filters, page, pageSize, totalPages }`; aceita filtros, `page` e `pageSize` |
-| `GET /api/courses/{slug}`      | Curso com módulos, aulas, introdução, FAQ e blocos de texto                        |
+| `GET /api/courses/{slug}`      | Detalhes e índice ordenado de módulos/aulas; sem os blocos de conteúdo das aulas |
+| `GET /api/courses/{slug}/lessons/{lessonId}` | Descrição completa e blocos de uma aula pertencente ao curso solicitado |
 | `GET /api/health`              | Estado da conexão com o banco                                                      |
 | `GET /api/integrations/moodle` | Estado da importação Moodle nesta inicialização, sem credenciais                   |
 | `GET /openapi/v1.json`         | Descrição OpenAPI dos endpoints                                                    |
@@ -140,7 +142,7 @@ dotnet test TestDevSesiIndustria.slnx --no-restore
 npm run build
 ```
 
-Os testes do frontend verificam busca de aulas com numeração estável, consistência do progresso e preservação de filtros e página em links. Os testes de integração exercitam requisições HTTP, migrations e consultas em arquivos SQLite temporários: opções derivadas dos dados, paginação e total independente, combinação de filtros, respostas vazias e inválidas, conteúdos, integridade e persistência após reinício. O alcance da revisão pelo navegador está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
+Os testes do frontend verificam busca de aulas com numeração estável, consistência do progresso, cancelamento e cache do conteúdo, além da preservação de filtros e página em links. Os testes de integração exercitam requisições HTTP, migrations e SQLite: filtros e paginação, separação entre índice e conteúdo, quantidade constante de consultas do índice, integridade e persistência após reinício. O alcance da revisão pelo navegador está em [docs/VALIDACAO.md](docs/VALIDACAO.md).
 
 ## Responsividade e acessibilidade
 

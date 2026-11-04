@@ -2,6 +2,31 @@
 
 Verificações executadas pelo agente Nemo, do ChatGPT/Codex. Este registro distingue as revisões de 03/11/2026 dos testes e revisões anteriores da versão integrada.
 
+## Conteúdo de aula sob demanda — 03/11/2026
+
+Revisão preparada na branch `feat/aulas-sob-demanda`, a partir de `edf4e6b`, após a integração da PR #4. O índice mantém os IDs e a ordem utilizados no progresso e recebe apenas prévias de descrição. Os blocos completos são consultados por aula. Bruna autorizou o registro em dois commits, a abertura da PR e a publicação após a conferência da alteração. A verificação da versão publicada permanece pendente neste registro.
+
+| Verificação | Resultado observado |
+| --- | --- |
+| Frontend | 33 testes aprovados; 12 novos casos usam RxJS real para seleção, resposta tardia, cache, limites, recuperação após erro e destruição |
+| Backend e SQLite | 53 testes aprovados; oito casos novos verificam projeção, quantidade constante de consultas, escopo por curso, conteúdos preservados, prévias e 404 |
+| Corrida 728 → 729 | A inscrição de 728 foi cancelada; sua resposta posterior não substituiu 729 nem foi armazenada no cache |
+| Retorno a aula em cache | Não repetiu o pedido e cancelou uma requisição pendente de outra aula |
+| Chaves compartilhadas entre cursos | Mesmo ID não reutilizou conteúdo de outro curso; a API consulta slug e chave juntos |
+| Cache | Evicção LRU por quantidade e bytes verificada; conteúdo acima do limite foi exibido sem cache; falhas e respostas com ID divergente não foram reaproveitadas |
+| Índice maior | Mais 500 aulas inseridas somente no banco temporário: índice com 513 aulas conservou a quantidade de consultas da versão com 13, sem consultar `ContentJson` |
+| Consulta selecionada | Uma única consulta para a aula solicitada; Boas práticas manteve seus oito blocos de referência |
+| Descrições longas | Prévia de 240 caracteres com reticências no índice; descrição de 50.000 caracteres preservada integralmente na rota da aula, tanto para módulo quanto para introdução |
+| Build e formatação | Angular de produção com templates estritos, publicação Release da API, Prettier e `git diff --check` passaram |
+
+O pacote integrado também foi iniciado em produção no executor e consultado por HTTP. O índice de Matemática manteve exatamente 10.384 bytes antes e depois de acrescentar um corpo de 1.000.000 de caracteres a uma aula de teste. Somente a rota dessa aula retornou o corpo maior, em uma resposta de 1.000.189 bytes. Catálogo, escopo por curso, 404, OpenAPI, rota direta da AVA e JavaScript publicado foram conferidos. Os dados maiores existiram apenas em bancos temporários.
+
+O índice completo continua disponível para `allLessons()`, mas seus itens são `LessonSummary`, sem os blocos de conteúdo. Os testes anteriores de seleção inicial, retomada, numeração e progresso permanecem aprovados. As chaves locais de progresso e o esquema SQLite foram preservados; `CatalogSeedCourse` mantém o formato completo usado pela carga inicial e pelos testes Moodle.
+
+A tela confere curso e ID antes de exibir a resposta e só permite concluir uma aula cujo conteúdo corresponde à seleção atual. O cache é técnico, em memória por AVA, limitado a dez entradas e 2 MiB de JSON serializado. Recarregar o índice e destruir o componente encerram a seleção e limpam o cache. O cancelamento de inscrição evita aplicar a resposta antiga no cliente; não desfaz trabalho que já tenha terminado no servidor.
+
+Os testes do carregador usam respostas HTTP simuladas, com RxJS real. A conexão HTTP do pacote foi verificada separadamente; a interação completa da tela com cliques rápidos, foco, leitores de tela e rede lenta ainda requer conferência no navegador. O índice cresce com o número de aulas e ainda reúne os tópicos necessários aos detalhes do curso; esta etapa não implementa virtualização do índice, cache persistente, invalidação em tempo real nem pré-carregamento de aulas vizinhas.
+
 ## Paginação do catálogo — 03/11/2026
 
 Após o apontamento arquitetural compartilhado pela Bruna, a listagem passou a usar `CountAsync()` para o total filtrado e `OrderBy(Id)`, `Skip()` e `Take()` para materializar somente uma página. Padrão de 20 e máximo de 100 cursos por pedido. As opções dos filtros continuam sendo obtidas do catálogo inteiro. O registro desta etapa em commits foi autorizado pela Bruna na branch `fix/filtros-dinamicos`; publicação e conferência visual permanecem pendentes.

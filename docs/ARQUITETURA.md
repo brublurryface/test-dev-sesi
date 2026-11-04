@@ -8,7 +8,7 @@ Este documento localiza os pontos de entrada, as responsabilidades dos arquivos 
 | ----------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Iniciar o backend                   | [Program.cs](../backend/SesiIndustria.Api/Program.cs)                           | Configuração, registro de serviços, banco, endpoints e servidor  |
 | Validar os filtros                  | [CourseQuery.cs](../backend/SesiIndustria.Api/Courses/CourseQuery.cs)           | Validação contra opções do banco, limite da busca e normalização |
-| Consultar o catálogo                | [CourseRepository.cs](../backend/SesiIndustria.Api/Courses/CourseRepository.cs) | `ListAsync` para resumos e `FindAsync` para detalhes             |
+| Consultar o catálogo                | [CourseRepository.cs](../backend/SesiIndustria.Api/Courses/CourseRepository.cs) | `ListAsync` para resumos, `FindAsync` para índice e `FindLessonAsync` para conteúdo |
 | Definir as respostas HTTP           | [CourseContracts.cs](../backend/SesiIndustria.Api/Contracts/CourseContracts.cs) | DTOs de cursos, módulos, aulas e blocos de texto                 |
 | Representar registros persistidos   | [Entities.cs](../backend/SesiIndustria.Api/Data/Entities.cs)                    | Entidades, chaves estrangeiras e relações de navegação           |
 | Configurar tabelas e restrições     | [CatalogDbContext.cs](../backend/SesiIndustria.Api/Data/CatalogDbContext.cs)    | Mapeamento do EF Core, índices e integridade dos relacionamentos |
@@ -51,11 +51,12 @@ Uma consulta válida sem correspondência retorna `items: []` e `total: 0`. Um s
 | `CoursePageDto`    | `CoursePage`    | Resumos da página, total filtrado, página/tamanho/total de páginas e opções globais dos filtros |
 | `CourseFilterOptionsDto` | `CourseFilterOptions` | Categorias, modalidades e status distintos do catálogo inteiro |
 | `CourseSummaryDto` | `CourseSummary` | Cartões do catálogo e destaques                                 |
-| `CourseDto`        | `Course`        | Detalhes completos do curso e conteúdo da AVA                   |
+| `CourseDto`        | `Course`        | Detalhes do curso e índice ordenado, sem blocos das aulas        |
+| `LessonSummaryDto` | `LessonSummary` | ID, título e prévia da descrição; navegação e painel de módulos |
 | `LessonDto`        | `Lesson`        | Identificador estável, título, descrição e conteúdo de uma aula |
 | `ContentBlockDto`  | `ContentBlock`  | Parágrafos, títulos, listas e notas renderizados como texto     |
 
-DTOs definem o contrato de transporte; entidades definem a persistência. A listagem projeta apenas o resumo, enquanto os detalhes carregam os relacionamentos necessários. `AsNoTracking()` evita o acompanhamento de alterações em consultas de leitura. `AsSplitQuery()` evita multiplicar as linhas ao carregar várias coleções relacionadas nos detalhes.
+DTOs definem o contrato de transporte; entidades definem a persistência. A listagem projeta resumos e os detalhes projetam metadados e índice, sem materializar entidades de aula nem ler `ContentJson`. A prévia de descrição é limitada no SQL; a aula selecionada mantém sua descrição completa. `AsNoTracking()` evita acompanhar alterações em leituras. `AsSplitQuery()` evita multiplicar linhas entre as coleções do índice, mantendo um número de consultas independente da quantidade de aulas. `FindLessonAsync()` consulta uma aula por slug do curso e chave da aula, em uma única consulta.
 
 Os métodos assíncronos recebem o `CancellationToken` do pedido HTTP e o encaminham ao EF Core. Isso permite sinalizar interrupção do trabalho quando a requisição é cancelada.
 
@@ -73,7 +74,7 @@ Os métodos assíncronos recebem o `CancellationToken` do pedido HTTP e o encami
 
 O banco impõe slugs únicos, horas positivas e integridade das relações. A chave estrangeira de aula para módulo inclui o curso: uma aula não pode apontar para um módulo de outro curso. A posição ordena módulos, tópicos, aulas e perguntas; a chave pública da aula permanece estável para permitir recuperar o progresso local.
 
-`Data/Seed/courses.json` é a fonte da primeira carga. O seeder verifica a estrutura e importa os registros em uma transação. Se já existe algum curso no banco, a importação é ignorada. Alterar esse JSON depois da carga não atualiza os registros existentes; as consultas HTTP leem o SQLite.
+`Data/Seed/courses.json` é a fonte da primeira carga, lida por [CatalogSeedCourse.cs](../backend/SesiIndustria.Api/Data/CatalogSeedCourse.cs). Esse formato inclui os conteúdos completos e é separado do índice público. O seeder verifica a estrutura e importa os registros em uma transação. Se já existe algum curso no banco, a importação é ignorada. Alterar esse JSON depois da carga não atualiza os registros existentes; as consultas HTTP leem o SQLite.
 
 Atualizações específicas de dados existentes também podem ser versionadas por migration. `DescribeIntroductoryLessons` preenche as descrições demonstrativas dos itens introdutórios ainda vazios, preservando conteúdo de referência e textos já preenchidos. A carga inicial contém esses mesmos textos para bancos novos.
 
@@ -86,13 +87,15 @@ Os blocos de texto de aulas e orientações são persistidos em colunas JSON, ma
 | [main.ts](../frontend/src/main.ts)                                        | Inicialização Angular, cliente HTTP e navegação               |
 | [app.routes.ts](../frontend/src/app/app.routes.ts)                        | Rotas de tela e carregamento sob demanda                      |
 | [course.model.ts](../frontend/src/app/core/course.model.ts)               | Tipos correspondentes às respostas JSON da API                |
-| [course.service.ts](../frontend/src/app/core/course.service.ts)           | Chamadas HTTP de listagem e detalhes                          |
+| [course.service.ts](../frontend/src/app/core/course.service.ts)           | Chamadas HTTP de listagem, índice e conteúdo de aula            |
 | [course-list.store.ts](../frontend/src/app/core/course-list.store.ts)     | Estado da listagem, cancelamento e nova tentativa             |
 | [course-detail.store.ts](../frontend/src/app/core/course-detail.store.ts) | Estado de um curso, distinguindo 404 e falha                  |
 | [catalog.ts](../frontend/src/app/pages/catalog/catalog.ts)                | Controles, URL e solicitação dos filtros ao servidor          |
 | [learning.ts](../frontend/src/app/pages/learning/learning.ts)             | Seleção, busca e conclusão demonstrativa de aulas             |
 | [learning-navigation.ts](../frontend/src/app/core/learning-navigation.ts) | Busca local com numeração original dos grupos e das aulas     |
 | [learning-progress.ts](../frontend/src/app/core/learning-progress.ts)     | Restauração dos identificadores e cálculo do percentual local |
+| [lesson-content.loader.ts](../frontend/src/app/core/lesson-content.loader.ts) | Seleção com `switchMap`, recuperação de erros e cache limitado |
+| [lesson-content.store.ts](../frontend/src/app/core/lesson-content.store.ts) | Estado do conteúdo por AVA, exposto por signals de leitura |
 
 O serviço HTTP é compartilhado e não guarda os resultados. Cada componente que consulta o catálogo fornece sua própria instância do store, para não misturar os filtros e resultados do início, do catálogo e do rodapé. Os signals públicos são de leitura; os métodos do store coordenam as atualizações.
 
@@ -102,7 +105,11 @@ O parâmetro público `pagina` corresponde a `page` na API. Cada página do cat�
 
 As opções dos seletores vêm de `CoursePage.filters`, sem listas fixas no Angular ou no seeder. A seleção de um link fica visível antes da primeira resposta; se o valor deixou de existir, a API retorna 400 e a tela oferece limpar os filtros. Opções já carregadas são preservadas durante uma falha transitória. Categorias novas recebem um ícone neutro; status novos mantêm seu rótulo. Somente `Disponível` habilita o acesso demonstrativo de matrícula, preservando a regra existente.
 
-A busca de cursos ocorre no servidor. A busca de aulas da AVA ocorre no navegador, sobre o conteúdo do curso já recebido. A conclusão de aulas também é local: usa uma chave de armazenamento por curso, pode ser desfeita e não representa matrícula, avaliação ou progresso sincronizado.
+A busca de cursos ocorre no servidor. A busca de aulas da AVA ocorre no navegador, sobre o índice já recebido. `allLessons()` mantém os IDs e a ordem para progresso, retomada e próxima aula; não contém os blocos das aulas. A conclusão também é local: usa uma chave de armazenamento por curso, pode ser desfeita e não representa matrícula, avaliação ou progresso sincronizado.
+
+Ao mudar a seleção, `LessonContentLoader` usa `switchMap` para encerrar a inscrição anterior antes de consultar a nova aula ou ler o cache. A resposta precisa corresponder ao ID solicitado e a tela também confere curso e ID atuais antes de exibir conteúdo. Assim, uma resposta tardia não é mostrada sob o título da nova seleção. `catchError` pertence à consulta interna: um erro não encerra o fluxo de seleções; nova tentativa e próxima aula continuam disponíveis.
+
+O cache LRU é por instância da AVA, em memória, com chave composta de curso e aula. Seus limites técnicos ficam centralizados no carregador: dez entradas e 2 MiB de JSON serializado. Aulas acima desse limite são exibidas sem cache. Recarregar o índice cancela a seleção e limpa o cache; destruir o componente também encerra a inscrição. O botão de concluir fica desabilitado enquanto o conteúdo não estiver pronto, e seu método valida novamente a seleção. O cancelamento evita aplicar uma resposta antiga no cliente; não desfaz trabalho que o servidor já tenha concluído.
 
 `filterLearningGroups()` atribui os números antes de aplicar a busca. Assim, Boas práticas continua sendo 1.2 quando é o único resultado; buscar pelo nome de um módulo mantém todas as suas aulas. Os números pertencem apenas à apresentação: os IDs das aulas, usados na seleção e no progresso, são preservados.
 
