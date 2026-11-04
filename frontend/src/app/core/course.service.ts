@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import type { Observable } from 'rxjs';
-import type { Course, CoursePage } from './course.model';
+import type { Course, CoursePage, Lesson } from './course.model';
 import type { CourseListQuery } from './course-query';
 
 /**
@@ -23,8 +23,14 @@ export class CourseService {
     return this.http.get<CoursePage>('/api/courses', { params });
   }
 
-  /** Obtém módulos, aulas e demais textos usados pelos detalhes e pela AVA. */
+  /** Obtém detalhes e índice de aulas; os blocos de uma aula têm consulta própria. */
   getCourse(slug: string): Observable<Course> {
     return this.http.get<Course>(`/api/courses/${encodeURIComponent(slug)}`);
+  }
+  /** O curso e a chave da aula delimitam a consulta; o índice não transfere esses blocos. */
+  getLesson(slug: string, lessonId: string): Observable<Lesson> {
+    return this.http.get<Lesson>(
+      `/api/courses/${encodeURIComponent(slug)}/lessons/${encodeURIComponent(lessonId)}`
+    );
   }
 }

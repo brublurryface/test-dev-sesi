@@ -9,7 +9,6 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import type { Lesson } from '../../core/course.model';
 import { filterLearningGroups } from '../../core/learning-navigation';
 import {
   calculateLearningProgress,
@@ -17,6 +16,7 @@ import {
   restoreLearningProgress,
 } from '../../core/learning-progress';
 import { CourseDetailStore } from '../../core/course-detail.store';
+import { LessonContentStore } from '../../core/lesson-content.store';
 import { SITE_CONFIG } from '../../core/site.config';
 
 /**
@@ -26,13 +26,14 @@ import { SITE_CONFIG } from '../../core/site.config';
 @Component({
   selector: 'app-learning',
   imports: [RouterLink],
-  providers: [CourseDetailStore],
+  providers: [CourseDetailStore, LessonContentStore],
   templateUrl: './learning.html',
   styleUrl: './learning.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Learning {
   readonly store = inject(CourseDetailStore);
+  readonly lessonStore = inject(LessonContentStore);
   // Os parâmetros reativos permitem trocar de curso sem depender de uma recarga da página.
   private readonly params = toSignal(inject(ActivatedRoute).paramMap);
   private readonly title = inject(Title);
@@ -60,12 +61,24 @@ export class Learning {
         ?.id
   );
   readonly visibleGroups = computed(() => filterLearningGroups(this.groups(), this.search()));
-  // Enquanto não há curso/aulas, o objeto vazio mantém o template seguro; não cria uma aula no banco.
-  readonly lesson = computed(
-    () =>
-      this.allLessons().find((lesson) => lesson.id === this.selectedId()) ??
-      this.allLessons()[0] ??
-      ({ id: '', title: 'Aula', description: '', content: [] } satisfies Lesson)
+  // O índice mantém a seleção e a navegação sem carregar os conteúdos de todas as aulas.
+  readonly selectedLesson = computed(
+    () => this.allLessons().find((lesson) => lesson.id === this.selectedId()) ?? null
+  );
+  private readonly matchesSelection = computed(() => {
+    const selection = this.lessonStore.state().selection;
+    return (
+      selection?.courseSlug === this.course()?.slug && selection?.lessonId === this.selectedId()
+    );
+  });
+  readonly lesson = computed(() =>
+    this.matchesSelection() ? this.lessonStore.state().lesson : null
+  );
+  readonly lessonLoading = computed(
+    () => !!this.selectedLesson() && (!this.matchesSelection() || this.lessonStore.state().loading)
+  );
+  readonly lessonError = computed(() =>
+    this.matchesSelection() ? this.lessonStore.state().error : null
   );
   readonly progress = computed(() =>
     calculateLearningProgress(
@@ -73,7 +86,7 @@ export class Learning {
       this.completed()
     )
   );
-  readonly isComplete = computed(() => this.completed().includes(this.lesson().id));
+  readonly isComplete = computed(() => this.completed().includes(this.selectedId()));
 
   constructor() {
     // Mudança no slug carrega o curso; os demais estados dependem da resposta desse pedido.
@@ -100,7 +113,17 @@ export class Learning {
       this.completed.set(completed);
       this.selectedId.set(findInitialLesson(lessonIds, completed));
     });
-    effect(() => this.title.setTitle(`${this.lesson().title} | AVA ${SITE_CONFIG.projectName}`));
+    effect(() => {
+      const slug = this.course()?.slug;
+      const lesson = this.selectedLesson();
+      if (slug && lesson) this.lessonStore.load(slug, lesson.id);
+      else this.lessonStore.reset();
+    });
+    effect(() =>
+      this.title.setTitle(
+        `${this.selectedLesson()?.title ?? 'Aula'} | AVA ${SITE_CONFIG.projectName}`
+      )
+    );
   }
   setSearch(event: Event): void {
     this.search.set((event.target as HTMLInputElement).value);
@@ -113,7 +136,8 @@ export class Learning {
   }
   /** Interação adicional ao protótipo para demonstrar marcação e atualização do progresso local. */
   toggleComplete(): void {
-    const id = this.lesson().id;
+    const id = this.selectedId();
+    if (!id || this.lessonLoading() || this.lesson()?.id !== id) return;
     this.completed.update((ids) =>
       ids.includes(id) ? ids.filter((item) => item !== id) : [...ids, id]
     );
@@ -121,15 +145,14 @@ export class Learning {
   }
   /** Segue a ordem completa do curso; a busca da barra lateral não altera a sequência das aulas. */
   next(): void {
-    const current = this.allLessons().findIndex((lesson) => lesson.id === this.lesson().id);
+    const current = this.allLessons().findIndex((lesson) => lesson.id === this.selectedId());
     const next = this.allLessons()[current + 1];
     if (next) this.selectLesson(next.id);
   }
-  readonly hasNext = computed(
-    () =>
-      this.allLessons().findIndex((lesson) => lesson.id === this.lesson().id) <
-      this.allLessons().length - 1
-  );
+  readonly hasNext = computed(() => {
+    const current = this.allLessons().findIndex((lesson) => lesson.id === this.selectedId());
+    return current >= 0 && current < this.allLessons().length - 1;
+  });
   resetProgress(): void {
     this.completed.set([]);
     this.persist();

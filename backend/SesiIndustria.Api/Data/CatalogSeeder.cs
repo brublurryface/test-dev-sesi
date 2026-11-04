@@ -21,9 +21,9 @@ public static class CatalogSeeder
     {
         // O catálogo existente é preservado em cada reinício; o JSON só cria a carga inicial.
         if (await db.Courses.AnyAsync(cancellationToken)) return;
-        // O arquivo distribuído com a API é a fonte inicial; os DTOs reaproveitam seu formato de dados.
+        // O formato de importação inclui os conteúdos completos, separados do índice público.
         await using var stream = File.OpenRead(sourcePath);
-        var courses = await JsonSerializer.DeserializeAsync<CourseDto[]>(stream, JsonOptions, cancellationToken)
+        var courses = await JsonSerializer.DeserializeAsync<CatalogSeedCourse[]>(stream, JsonOptions, cancellationToken)
             ?? throw new InvalidDataException("A carga inicial não contém cursos.");
         Validate(courses);
 
@@ -89,7 +89,7 @@ public static class CatalogSeeder
 
     // Falhas da fonte inicial impedem a carga. Não há correção silenciosa de IDs ou textos.
     // Este método verifica a estrutura usada na importação; as FKs e índices completam a integridade.
-    private static void Validate(CourseDto[] courses)
+    private static void Validate(CatalogSeedCourse[] courses)
     {
         if (courses.Length < 6 || courses.Select(c => c.Id).Distinct().Count() != courses.Length ||
             courses.Select(c => c.Slug).Distinct().Count() != courses.Length)

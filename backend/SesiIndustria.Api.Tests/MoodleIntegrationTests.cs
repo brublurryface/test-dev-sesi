@@ -92,7 +92,7 @@ public sealed class MoodleIntegrationTests
             await fixture.Db.Database.MigrateAsync();
             var seed = Path.GetFullPath("../../../../SesiIndustria.Api/Data/Seed/courses.json", AppContext.BaseDirectory);
             await CatalogSeeder.SeedAsync(fixture.Db, seed);
-            var course = JsonSerializer.Deserialize<CourseDto[]>(await File.ReadAllTextAsync(seed),
+            var course = JsonSerializer.Deserialize<CatalogSeedCourse[]>(await File.ReadAllTextAsync(seed),
                 new JsonSerializerOptions(JsonSerializerDefaults.Web))!.Single(c => c.Id == 1);
             fixture.Handler = new MoodleHandler(course, failure);
             fixture.http = new HttpClient(fixture.Handler);
@@ -111,7 +111,7 @@ public sealed class MoodleIntegrationTests
         }
     }
 
-    private sealed class MoodleHandler(CourseDto course, string? failure) : HttpMessageHandler
+    private sealed class MoodleHandler(CatalogSeedCourse course, string? failure) : HttpMessageHandler
     {
         public List<string> Functions { get; } = [];
         public List<string> Urls { get; } = [];

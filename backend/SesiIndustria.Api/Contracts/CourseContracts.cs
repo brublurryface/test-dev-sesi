@@ -26,7 +26,7 @@ public record CourseSummaryDto
 }
 
 /// <summary>
-/// Detalhes completos do curso, reutilizando o resumo e acrescentando conteúdo para detalhes e AVA.
+/// Detalhes do curso e índice ordenado das aulas. Os blocos de uma aula têm endpoint próprio.
 /// Coleções vazias representam conteúdo não fornecido na referência.
 /// </summary>
 public sealed record CourseDto : CourseSummaryDto
@@ -35,13 +35,16 @@ public sealed record CourseDto : CourseSummaryDto
     public string Certification { get; init; } = "SESI";
     public CourseModuleDto[] Modules { get; init; } = [];
     // Itens de introdução ficam fora dos módulos na navegação da AVA.
-    public LessonDto[] Introduction { get; init; } = [];
+    public LessonSummaryDto[] Introduction { get; init; } = [];
     public FaqDto[] Faqs { get; init; } = [];
     public ContentBlockDto[] OnlineInformation { get; init; } = [];
 }
 
 /// <summary>Módulo com tópicos e aulas já ordenados pelo repositório.</summary>
-public sealed record CourseModuleDto(string Title, string Description, string[] Topics, LessonDto[] Lessons);
+public sealed record CourseModuleDto(string Title, string Description, string[] Topics, LessonSummaryDto[] Lessons);
+
+/// <summary>Índice de uma aula, com prévia da descrição para o painel de módulos e sem blocos de conteúdo.</summary>
+public sealed record LessonSummaryDto(string Id, string Title, string Description);
 
 /// <summary>Aula identificada por uma chave estável dentro do curso; inclui descrição e blocos de texto.</summary>
 public sealed record LessonDto(string Id, string Title, string Description)

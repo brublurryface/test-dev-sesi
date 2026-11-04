@@ -85,15 +85,25 @@ app.MapGet("/api/courses", async (string? search, string? category, string? moda
     .Produces<CoursePageDto>().ProducesValidationProblem();
 
 // Detalhes: {slug} é o identificador legível da URL, como matematica-para-a-precisao.
-// O DTO inclui módulos, aulas e textos necessários à página do curso e à AVA.
+// O DTO inclui módulos e índice de aulas; o conteúdo completo é consultado pela seleção da AVA.
 app.MapGet("/api/courses/{slug}", async (string slug, CourseRepository repository, CancellationToken cancellationToken) =>
 {
     var course = await repository.FindAsync(slug, cancellationToken);
     return course is null
         ? Results.Problem(statusCode: 404, title: "Curso não encontrado")
         : Results.Ok(course);
-}).WithName("GetCourse").WithSummary("Retorna detalhes, módulos, aulas e conteúdos de um curso.")
+}).WithName("GetCourse").WithSummary("Retorna detalhes e índice de aulas, sem seus blocos de conteúdo.")
     .Produces<CourseDto>().ProducesProblem(404);
+
+app.MapGet("/api/courses/{slug}/lessons/{lessonId}", async (string slug, string lessonId,
+    CourseRepository repository, CancellationToken cancellationToken) =>
+{
+    var lesson = await repository.FindLessonAsync(slug, lessonId, cancellationToken);
+    return lesson is null
+        ? Results.Problem(statusCode: 404, title: "Aula não encontrada neste curso")
+        : Results.Ok(lesson);
+}).WithName("GetCourseLesson").WithSummary("Retorna o conteúdo de uma aula do curso selecionado.")
+    .Produces<LessonDto>().ProducesProblem(404);
 
 // Verifica a conexão com o banco sem transferir a listagem de cursos: 200 ou 503.
 app.MapGet("/api/health", async (CatalogDbContext db, CancellationToken cancellationToken) =>

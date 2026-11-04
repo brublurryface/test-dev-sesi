@@ -113,9 +113,30 @@
     <div class="lesson-topline">
       <span>Aula demonstrativa</span><span>{{ course.shortName }}</span>
     </div>
-    <h2>{{ lesson().title }}</h2>
-    @if (lesson().content.length) { @for (block of lesson().content; track $index) { @switch
-    (block.kind) { @case ('heading') {
+    <h2>{{ selectedLesson()?.title ?? 'Aula' }}</h2>
+    @if (lessonLoading()) {
+    <div class="state-panel" role="status">
+      <span class="loading-spinner" aria-hidden="true"></span>
+      <p>Carregando a aula…</p>
+    </div>
+    } @else if (lessonError()) {
+    <div class="state-panel" role="alert">
+      <p>
+        {{ lessonError() === 'not-found' ? 'Esta aula não está mais disponível no curso.' : 'Não foi
+        possível carregar esta aula.' }}
+      </p>
+      @if (lessonError() === 'not-found') {
+      <button type="button" class="button button-dark" (click)="store.load()">
+        Atualizar curso
+      </button>
+      } @else {
+      <button type="button" class="button button-dark" (click)="lessonStore.retry()">
+        Tentar novamente
+      </button>
+      }
+    </div>
+    } @else if (lesson(); as lesson) { @if (lesson.content.length) { @for (block of lesson.content;
+    track $index) { @switch (block.kind) { @case ('heading') {
     <h3>{{ block.text }}</h3>
     } @case ('list') {
     <ul>
@@ -125,8 +146,10 @@
     </ul>
     } @default {
     <p>{{ block.text }}</p>
-    } } } } @else if (lesson().description) {
-    <p>{{ lesson().description }}</p>
+    } } } } @else if (lesson.description) {
+    <p>{{ lesson.description }}</p>
+    } } @else {
+    <p>Nenhuma aula disponível neste curso.</p>
     }
     <div class="lesson-actions">
       <button
@@ -134,6 +157,7 @@
         class="button"
         [class.button-dark]="!isComplete()"
         [class.button-outline]="isComplete()"
+        [disabled]="!lesson() || lessonLoading() || !!lessonError()"
         (click)="toggleComplete()"
       >
         {{ isComplete() ? '✓ Aula concluída' : 'Marcar como concluída' }}</button
